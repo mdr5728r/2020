@@ -94,7 +94,7 @@ Type 'license()' or 'licence()' for distribution details.
  
 <p>
 <center>
-    <img src="jupyter_notebook_open.jpg"
+    <img src="jupyter_notebook_open.png"
      alt="Jupyter Notebook Openning windows"
      style="float: center; margin-right: 0px"
      width="750"/>
