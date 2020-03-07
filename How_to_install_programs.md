@@ -1,7 +1,7 @@
 # Como instalar R, RStudio e Jupyter Notebook
 
 ## Introdução
-Ao longo deste curso, Bioestatística em R  para Métodos Diagnósticos de Medicina utilizaremos um software estatístico, <img src="https://www.r-project.org/logo/Rlogo.svg" width="20"/> , e dois ambientes interativos para desenvolvimento de programas em R e análise de dados estatísticos. Além de apresentar conceitos e instrumentos estatísticos aplicados a dados em medicina, nosso intuito é instrumentae os alunos a torná-los capazes de desenvolver e aplicar os conceitos de reproducibilidade na ciência experimental. Segue uma breve descrição desses três programas:
+Ao longo deste curso, Bioestatística em R  para Métodos Diagnósticos de Medicina, utilizaremos um software estatístico, <img src="https://www.r-project.org/logo/Rlogo.svg" width="20"/> , e dois ambientes interativos para desenvolvimento de programas em R e análise de dados estatísticos. Além de apresentar conceitos e instrumentos estatísticos aplicados a dados em medicina, nosso intuito é instrumentae os alunos a torná-los capazes de desenvolver e aplicar os conceitos de reproducibilidade na ciência experimental. Segue uma breve descrição desses três programas:
 
 1. <img src="https://www.r-project.org/logo/Rlogo.svg" width="40"/> é uma linguagem computacional e ambiente integrado para cálculo científico voltada para resolução de problemas em estatística com grande capacidade e flexibilidade para criação de gráficos científicos com qualidade de publicação. R é resultado de trabalho colaborativo por cientistas iniciado em 1997 no Departamento de Estatística da Universidade de Auckland na Nova Zelândia, e depois continuado por centenas e milhares de colaboradores no mundo todo. R se tornou uma espécie de língua franca entre os estatísticos e cientistas de dados (ou _data scientists_) [(What is R?)](https://www.r-project.org/about.html)
 2. <img src="https://rstudio.com/wp-content/uploads/2018/10/RStudio-Logo.svg" width="40"/> é um ambiente integrado de desenvolvimento que fornece facilidades no uso de R para análise e processamento de dados, bem como de desenvolvimento de programas em R, que foi desenvolvido pela empresa de mesmo nome [RStudio](https://www.rstudio.com).
@@ -90,7 +90,7 @@ Type 'license()' or 'licence()' for distribution details.
 </center>
 </p>
     
-    Clique no botão New no canto superior direito, para o que deve aparecer opções de tipos de notebooks, enter  os quais o "**R**".
+    Clique no botão New no canto superior direito, para o que deve aparecer opções de tipos de notebooks, entre os quais o "**R**".
  
 <p>
 <center>
@@ -105,6 +105,6 @@ Type 'license()' or 'licence()' for distribution details.
 
 Para criar um notebook basta clicar na opção **R**. Por outro lado, se você já tiver arquivos de notebook do jupyter disponíveis (que têm terminação "**.ipynb**) poderá abrir via janela de interface de arquivo (File), bastando clicr para abri-lo.
 
-**Importante**: não feche o terminal de comando por onde você inicializaou **jupyter notebook**, pois isso **mata (kill)** os programas que estarão rodando na retaguarda para manter o notebook ativo no navegador, além do próprio **R**. Deixe o terminal aberto. Feche-o somente quando terminar suas tarefas, salvando e fechando o notebook. 
+**Importante**: não feche o terminal de comando por onde você inicializaou **jupyter notebook**, pois o fechamento do terminal **mata (kill)** os programas/processo iniciados neste terminal que estão rodando na retaguarda para manter o notebook ativo no navegador, além do próprio **R**. Portanto mantenha o terminal aberto. Feche-o somente quando tiver terminado suas tarefas, salvado e fechado o notebook. 
 ***
 Parabéns, você tem quase tudo que precisa para aprender R e realizar os exercícios do nosso curso. 
