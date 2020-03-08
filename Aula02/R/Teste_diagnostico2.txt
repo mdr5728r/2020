@@ -1,0 +1,68 @@
+
+
+-------------------------------------------------
+          Outcome +    Outcome -      Total
+Test +         80.5          523        603
+Test -         56.0         1966       2022
+Total         136.5         2488       2625
+
+Point estimates and 95 % CIs:
+---------------------------------------------------------
+Apparent prevalence                    0.23 (0.21, 0.25)
+True prevalence                        0.05 (0.04, 0.06)
+Sensitivity                            0.59 (0.50, 0.67)
+Specificity                            0.79 (0.77, 0.81)
+Positive predictive value              0.13 (0.11, 0.16)
+Negative predictive value              0.97 (0.96, 0.98)
+Positive likelihood ratio              2.81 (2.40, 3.29)
+Negative likelihood ratio              0.52 (0.42, 0.64)
+---------------------------------------------------------
+                                  estimative IC-4 [lower     upper]
+aprev: apparent prevalence, P(T+)  0.2297600  0.21378508 0.24633981
+tprev: (true) prevalence, P(D+)    0.0520000  0.04381975 0.06119662
+se: sensitivity                    0.5900000  0.50262341 0.67338419
+sp: specificity                    0.7900000  0.77345926 0.80585539
+diag.acc: diag. accuracy           0.7796000  0.76324512 0.79532889
+diag.or: diag. odds ratio          5.4134727  3.79781941 7.71645083
+nnd: number needed to diag.        2.6315789  2.08663901 3.62210345
+youden: Youden's index             0.3800000  0.27608267 0.47923958
+ppv: pos. pred. value              0.1335306  0.10740399 0.16330570
+npv: neg. pred. value              0.9723203  0.96420190 0.97902678
+plr: positive LR                   2.8095238  2.39588953 3.29456927
+nlr: negative LR                   0.5189873  0.42395267 0.63532532
+
+Sob H0 espera-se (em proporcoes):
+                     
+       D +   D -     
+ T + 0.012 0.218 0.23
+ T -  0.04  0.73 0.77
+     0.052 0.948     
+
+Sob H1 espera-se (em proporcoes):
+                     
+       D +   D -     
+ T + 0.031 0.199 0.23
+ T - 0.021 0.749 0.77
+     0.052 0.948     
+
+
+amostra = 2625
+alfa = 0.05
+iteracoes = 1000
+
+Terminado:
+alfa: 5%
+beta: 0%
+poder do teste: 100%
+
+valor-p:
+mediana(p): 0 
+IC-4% (p): [0, 0]
+
+OR:
+mediana(OR): 5.451939 
+IC-4% (OR): [3.784, 7.777]
+
+V de Cramer:
+mediana(V): 0.2017925 
+IC-4% (V): [0.154, 0.247]
