@@ -1,11 +1,11 @@
 # Como instalar R, RStudio e Jupyter Notebook
 
 ## Introdução
-Ao longo deste curso, Bioestatística em R  para Métodos Diagnósticos de Medicina, utilizaremos um software estatístico, <img src="https://www.r-project.org/logo/Rlogo.svg" width="20"/> , e dois ambientes interativos para desenvolvimento de programas em R e análise de dados estatísticos. Além de apresentar conceitos e instrumentos estatísticos aplicados a dados em medicina, nosso intuito é instrumentae os alunos a torná-los capazes de desenvolver e aplicar os conceitos de reproducibilidade na ciência experimental. Segue uma breve descrição desses três programas:
+Ao longo deste curso, Bioestatística em R  para Métodos Diagnósticos de Medicina, utilizaremos o software estatístico <img src="https://www.r-project.org/logo/Rlogo.svg" width="20"/>  juntamente com dois ambientes interativos para desenvolvimento de programas em R e análise de dados estatísticos. Além de apresentar conceitos e instrumentos estatísticos aplicados a dados em medicina, nosso intuito é instrumentar os alunos e torná-los capazes de desenvolver e aplicar os conceitos de reproducibilidade na análise estatística nas ciências experimentais, incluindo a ciência médica. Segue uma breve descrição desses três programas:
 
-1. <img src="https://www.r-project.org/logo/Rlogo.svg" width="40"/> é uma linguagem computacional e ambiente integrado para cálculo científico voltada para resolução de problemas em estatística com grande capacidade e flexibilidade para criação de gráficos científicos com qualidade de publicação. R é resultado de trabalho colaborativo por cientistas iniciado em 1997 no Departamento de Estatística da Universidade de Auckland na Nova Zelândia, e depois continuado por centenas e milhares de colaboradores no mundo todo. R se tornou uma espécie de língua franca entre os estatísticos e cientistas de dados (ou _data scientists_) [(What is R?)](https://www.r-project.org/about.html)
-2. <img src="https://rstudio.com/wp-content/uploads/2018/10/RStudio-Logo.svg" width="40"/> é um ambiente integrado de desenvolvimento que fornece facilidades no uso de R para análise e processamento de dados, bem como de desenvolvimento de programas em R, que foi desenvolvido pela empresa de mesmo nome [RStudio](https://www.rstudio.com).
-3. <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Jupyter_logo.svg" width="40">O terceiro recurso é o Jupyter Notebook, que como diz o nome é um ambiente em forma de caderno de notas em que se pode mesclar anotações e códigos de programs, bem como resultados de análises em que as sequências das operações em R, descrições, impressões são anotadas ao longo do **notebook**. Talvez o aspecto mais interessante dos conceitos desenvolvidos no Jupyter Notebook e mais recentemente Jupyter Lab são os modernos ambientes interativos baseados em web que pode ser rodado ou reproduzido em qualquer browser/navegador para análise ou visualização das análises científicas. O notebook é um documento que contém código, equações, visualizações e narrativas em que se pode mostrar claramente as sequencias de operações realizadas para análise dos dados de modo que qualquer pessoa poderá reproduzir as análises realizadas. 
+1. <img src="https://www.r-project.org/logo/Rlogo.svg" width="40"/> é uma linguagem computacional e ambiente integrado para cálculo científico voltada para resolução de problemas em estatística com grande capacidade e flexibilidade para criação de gráficos científicos com qualidade de publicação. R é o resultado de um longo trabalho colaborativo de cientistas iniciado em 1997 no Departamento de Estatística da Universidade de Auckland na Nova Zelândia, que foi dado continuidade por centenas e milhares de colaboradores da comunidade internacional. R se tornou uma língua franca computacional entre os estatísticos e cientistas de dados (ou _data scientists_) no mundo todo [(What is R?)](https://www.r-project.org/about.html). Além de contar com contínuo aprefeiçoamento do programa, as potencialidade do R são complementadas por meio de publicações de bibliotecas ou pacotes ("packages")  em códigos abertos e livres que estendem e acrescentam novos métodos de análises estatísticos. Por ser de código aberto e livre, esses pacotes são testáveis e checáveis por seu pares estatísticos, pesquisadore e usuários.
+2. <img src="https://rstudio.com/wp-content/uploads/2018/10/RStudio-Logo.svg" width="40"/> é um ambiente integrado de desenvolvimento que provê facilidades no uso de R para análise, processamento de dados e documentação pelo uso do Markdown em R, bem como para desenvolvimento de programas em R. RStudio é um produto desenvolvido pela empresa de mesmo nome [RStudio](https://www.rstudio.com).
+3. <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Jupyter_logo.svg" width="40">O terceiro recurso é o Jupyter Notebook, que como diz o nome é um ambiente com interface via browser em forma de caderno de notas em que se pode mesclar anotações e códigos de programs, bem como incluir resultados de análises em sequências de operações ou comandos em R que são anotadas ao longo do caderno, **notebook**. Talvez o aspecto mais interessante dos recursos incorporados no **Jupyter Notebook** e mais recentemente **Jupyter Lab* são os modernos ambientes interativos baseados no **web** que pode ser acessado ou reproduzido em qualquer browser/navegador para análise ou visualização das análises científicas em computador local ou remotamente em servidores e recursos computacionais localizadas nas nuvens. O notebook é um documento que pode conter códigos, equações, gráficos e figuras para visualização e narrativas em texto, vídeo ou animações no qual se pode mostrar e documentra claramente as sequências de operações realizadas para análise e manipulação dos dados de modo que outras pessoas poderão reproduzir as análises realizadas. O uso do Jupyter não está restrito ao uso da linguagem R. Atualmente ele suporta várias dezenas de linguagens computacionais, tais como Python, Matlab, Julia, C, C++, etc, a lista completa de "kernel" de Jupyter pode ser vista [aqui](https://github.com/jupyter/jupyter/wiki/Jupyter-kernels).
 
 
 ## Instalação dos três programas
@@ -13,16 +13,16 @@ Há vários caminhos para instalação inicial desses três programas. Teoricame
 
 ### Passos para instalação de R, RStudio e Jupyter usando Miniconda
 
-Os passos seguintes para instalação do Miniconda foram tirados deste [site](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html), onde há mais detalhes e opções de instalação,  inclusive do Anaconda. Há instruções de como **desinstalar o Miniconda**.
+Os passos seguintes para instalação do Miniconda foram tirados deste [site](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html), onde há mais detalhes e opções de instalação,  inclusive do Anaconda. Há instruções também de como **desinstalar o Miniconda**.
 ***
 #### 1. Instalando Miniconda
 Miniconda é uma versão mais enxuta do Anaconda, que mostrado como instalar no primeiro dia de Aula na sala e se usou o Anaconda Navigator para se criar  um ambiente linguagem R, e depois instalar Jupyter Notebook e RStudio. Esperamos que o caminho que tomaremos aqui será mais curto e mais rápido. A instalação será mais enxuta, i.e. tomará bem menos espaço em disco. 
 
 * **Passo 1.** Certifique-se de que sua máquina está rodando versão Windows de 64 bits ([este site explica como verificar isso](https://www.lifewire.com/am-i-running-a-32-bit-or-64-bit-version-of-windows-2624475)). Todos os computadores modernos usam processadores de 64 bits.  Baixe o instalador do site do [Miniconda](https://conda.io/miniconda.html) ou use o link seguinte para baixar diretamente [Miniconda3-latest-Windows-x86_64.exe](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe). Para aquele que estiver usando máquinas antigas e rodando versão de Windows de 32 bits, baixe esta outra versão de [Miniconda para Windows 32 bits](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86.exe). Verifique onde  o arquivo foi salvo, começando pelo no diretório "\Home\Downloads". Verifique isso via **Explorador de Arquivos** do Windows
 
-* **Passo 2.** Execute o instalador clicando o arquivo Miniconda-xxx-Windows-xxx.exe.
+* **Passo 2.** Execute o instalador clicando o arquivo Miniconda-xxx-Windows-xxx.exe. (**Talvez você precise executar este passo, bem como as seguintes instalações com direito de Administrador da máquina. Neste caso clique o arquivo Miniconda-xxx-Windows-xxx.exe com o botão direito do mouse e escolha executar como Administrator**).
     
-* **Passo 3.** Teste a instalação. Clique a janela de terminal ou procure por Anaconda prompt no menu do Windows. No terminal execute  > **conda list**. Com isso você deve estar vendo uma lista dos pacotes já instalados. Os nomes de pacotes iniciados com prefixo "r-" são pacotes ou bibliotecas do R e os outros da linguagem Python, que é automaticamente instalado com Miniconda ou Anaconda. Se o comando **conda list** executado no terminal não gerou mensagem de erro significa que a instalação realizada no **Passo 2** a foi realizada com sucesso.
+* **Passo 3.** Teste a instalação. Clique a janela de terminal ou procure por Anaconda prompt no menu do Windows (**da mesma forma que no Passo 2, abra o terminal como Administrador**). No terminal execute  > **conda list**. Com isso você deve estar vendo uma lista dos pacotes já instalados. Os nomes de pacotes iniciados com prefixo "r-" são pacotes ou bibliotecas do R e os outros da linguagem Python, que é automaticamente instalado com Miniconda ou Anaconda. Se o comando **conda list** executado no terminal não gerou mensagem de erro significa que a instalação realizada no **Passo 2** a foi realizada com sucesso.
 ***    
 #### 2. Instalando R e seus pacotes essenciais
     
@@ -64,11 +64,11 @@ Type 'license()' or 'licence()' for distribution details.
 ***
 #### 3. Instalando RStudio Desktop
     
-* **Passo 5.** Para instalar o RStudio execute no Terminal
+* **Passo 5.** Para instalar o RStudio execute no Terminal,
     
     **> conda install -c r rstudio**
     
-    Para verificar se a instalação foi reaizada a termo com sucesso, execute RStudio a partir do menu do Windows. Faça isso agora antes de proceder.
+    Para verificar se a instalação foi reaizada a termo com sucesso, execute RStudio a partir do menu do Windows. Faça isso agora antes de prosseguir.
 
 ***
     
@@ -77,12 +77,12 @@ Type 'license()' or 'licence()' for distribution details.
 * **Passo 6.** Utilizaremos o comando conda para instalar o ambiente Jupyter:
     **> conda install -c conda-forge jupyterlab
     
-    Em cada uma das etapas de instalação leia com cuidados as mensagens para verificar se a instalação ocorreu sem problemas ou erros. 
+    Em cada uma das etapas de instalação, leia com cuidados as mensagens emitida no Terminal para verificar se a instalação ocorreu sem problemas ou com erros. 
     Verifique se a instalação foi realizada com sucesso executando [(vide manual)](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html):
     
     **> jupyter notebook**
     
-    Após algum tempo, você deverá estar observando em seu browser preferido uma janela com o Jupyter Notebook carregado:
+    Após uma breve lapso, você deverá estar observando em seu navegador preferido uma janela com o Jupyter Notebook:
     
 <p>
 <center>
@@ -90,21 +90,21 @@ Type 'license()' or 'licence()' for distribution details.
 </center>
 </p>
     
-    Clique no botão New no canto superior direito, para o que deve aparecer opções de tipos de notebooks, entre os quais o "**R**".
+Clique no botão **New** no canto superior direito, para o que deve aparecer opções de tipos de notebooks ou "kernels" do Jupyter, entre os quais você deve estar vendo **R**.
  
 <p>
 <center>
-    <img src="jupyter_notebook_open.png"
+    <img src="Aula01/img/jupyter_notebook_open.png"
      alt="Jupyter Notebook Openning windows"
      style="float: center; margin-right: 0px"
      width="750"/>
 </center>
 </p>
 
-    Pronto.
+Pronto !
 
-Para criar um notebook basta clicar na opção **R**. Por outro lado, se você já tiver arquivos de notebook do jupyter disponíveis (que têm terminação "**.ipynb**) poderá abrir via janela de interface de arquivo (File), bastando clicr para abri-lo.
+Para criar um notebook basta clicar na opção **R**. Por outro lado, se você já tiver arquivos de notebook do Jupyter disponíveis (os quais têm terminação "**.ipynb**), você poderá abri-lo via janela de interface de arquivo (File), bastando clicar no nome do arquivo para abri-lo.
 
 **Importante**: não feche o terminal de comando por onde você inicializaou **jupyter notebook**, pois o fechamento do terminal **mata (kill)** os programas/processo iniciados neste terminal que estão rodando na retaguarda para manter o notebook ativo no navegador, além do próprio **R**. Portanto mantenha o terminal aberto. Feche-o somente quando tiver terminado suas tarefas, salvado e fechado o notebook. 
 ***
-Parabéns, você tem quase tudo que precisa para aprender R e realizar os exercícios do nosso curso. 
+Parabéns, você tem em mãos um poderoso ambiente de análise estatístico com o que poderá se iniciar nos segredos do R e realizar os exercícios do nosso curso. 
