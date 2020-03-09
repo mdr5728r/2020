@@ -103,8 +103,8 @@ Clique no botão **New** no canto superior direito, para o que deve aparecer op�
 
 Pronto !
 
-Para criar um notebook basta clicar na opção **R**. Por outro lado, se você já tiver arquivos de notebook do Jupyter disponíveis (os quais têm terminação "**.ipynb**), você poderá abri-lo via janela de interface de arquivo (File), bastando clicar no nome do arquivo para abri-lo.
+Para criar um notebook  clique na opção **R**. Se você já tiver arquivo de notebook do Jupyter disponível (com terminação "**.ipynb**") e quiser editá-lo ou visualizá-lo, você poderá abri-lo via janela de interface de arquivo (File), clique no nome do arquivo para abri-lo.
 
-**Importante**: não feche o terminal de comando por onde você inicializaou **jupyter notebook**, pois o fechamento do terminal **mata (kill)** os programas/processo iniciados neste terminal que estão rodando na retaguarda para manter o notebook ativo no navegador, além do próprio **R**. Portanto mantenha o terminal aberto. Feche-o somente quando tiver terminado suas tarefas, salvado e fechado o notebook. 
+**Importante**: não feche o terminal de comando por onde você iniciou o **jupyter notebook**, pois o seu fechamento **matará (kill)** os programas/processos iniciados neste terminal e estão rodando na retaguarda para manter o notebook ativo no navegador, além do próprio programa **R**. Portanto mantenha o terminal aberto. Feche-o somente quando tiver terminado suas tarefas, salvo e fechado o notebook. 
 ***
-Parabéns, você tem em mãos um poderoso ambiente de análise estatístico com o que poderá se iniciar nos segredos do R e realizar os exercícios do nosso curso. 
+Parabéns, você tem em mãos um poderoso ambiente de análise estatístico com o que poderá desfrutar dos recursos do R, RStudio e Jupyter, além de realizar os exercícios do nosso curso. 
