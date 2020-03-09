@@ -5,9 +5,9 @@ options(warn=-1)
 # remove all variables
 rm(list=ls())
 
-filename <- "CAProstata_USG"
+# filename <- "Teste_diagnostico"
 # use filename <- NA para ecoar na tela
-# filename <- NA
+filename <- NA
 
 # cat ("\n\nVoce pode ecoar a saida no console enquanto a simulacao ocorre") 
 # cat ("\nou guardar os resultados em arquivos. Neste ultimo caso, ")
@@ -227,7 +227,7 @@ out <- epi.tests(tabela2x2, conf.level = 1-alfa)
 print(out)
 sumario <- summary(out)
 names(sumario)[1] <- "estimative"
-names(sumario)[2] <- paste("IC",round((1-alfa)*100,0)," [lower",sep="" )
+names(sumario)[2] <- paste("IC",round(1-alfa*100,0)," [lower",sep="" )
 names(sumario)[3] <- paste("upper]",sep="" )
 row.names(sumario)[ 1] <- paste(row.names(sumario)[ 1],": apparent prevalence, P(T+)",sep="")
 row.names(sumario)[ 2] <- paste(row.names(sumario)[ 2],": (true) prevalence, P(D+)",sep="")
@@ -629,7 +629,7 @@ if (num_iteracoes > 0)
       legend ("topleft",	
               c("LR- simul.",	
                 paste("mediana = ",round(mediananlr,5),sep=""),	
-                paste("IC",round((1-alfa)*100,1),"% [",round(h1_ICnlr[1],2),", ",round(h1_ICnlr[2],2),"]",sep="")	
+                paste("IC",round(1-alfa*100,1),"% [",round(h1_ICnlr[1],2),", ",round(h1_ICnlr[2],2),"]",sep="")	
               ),	
               pch=c(NA,NA,NA,19),	
               lwd=c(3,1,2,NA),	
@@ -666,7 +666,7 @@ if (num_iteracoes > 0)
       legend ("topleft",	
               c("LR+ simul.",	
                 paste("mediana = ",round(medianaplr,5),sep=""),	
-                paste("IC",round((1-alfa)*100,1),"% [",round(h1_ICplr[1],2),", ",round(h1_ICplr[2],2),"]",sep="")	
+                paste("IC",round(1-alfa*100,1),"% [",round(h1_ICplr[1],2),", ",round(h1_ICplr[2],2),"]",sep="")	
               ),	
               pch=c(NA,NA,NA,19),	
               lwd=c(3,1,2,NA),	
@@ -700,7 +700,7 @@ if (num_iteracoes > 0)
   legend ("topleft",
           c("OR simul.",
             "mediana",
-            paste("IC",round((1-alfa)*100,1),"%",sep=""),
+            paste("IC",round(1-alfa*100,1),"%",sep=""),
             "referencia"), 
           pch=c(NA,NA,NA,19), 
           lwd=c(3,1,2,NA), 
@@ -827,7 +827,7 @@ if (num_iteracoes > 0)
   legend ("topleft",
           c("ln(OR) simul.",
             "mediana",
-            paste("IC",round((1-alfa)*100,1),"%",sep="")
+            paste("IC",round(1-alfa*100,1),"%",sep="")
           ), 
           pch=c(NA,NA,NA), 
           lwd=c(3,1,2), 
@@ -941,7 +941,7 @@ if (num_iteracoes > 0)
   legend ("topright",
           c("V simul.",
             "mediana",
-            paste("IC",round((1-alfa)*100,1),"%",sep="")
+            paste("IC",round(1-alfa*100,1),"%",sep="")
           ), 
           pch=c(NA,NA,NA), 
           lwd=c(3,1,2), 
@@ -1049,7 +1049,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("Prev. Ap. simul.",	
             paste("mediana = ",round(medianaaprev,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1082,7 +1082,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("Prev. Obs. simul.",	
             paste("mediana = ",round(medianatprev,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1115,7 +1115,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("Sensibilidade simul.",	
             paste("mediana = ",round(medianase,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1148,7 +1148,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("Especificidade simul.",	
             paste("mediana = ",round(medianasp,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1181,7 +1181,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("Acuracia simul.",	
             paste("mediana = ",round(medianadiag.acc,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1214,7 +1214,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("Odds ratio simul.",	
             paste("mediana = ",round(medianadiag.or,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1247,7 +1247,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("nnd simul.",	
             paste("mediana = ",round(medianannd,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1280,7 +1280,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("Youden's index. simul.",	
             paste("mediana = ",round(medianayouden,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1313,7 +1313,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("VPP simul.",	
             paste("mediana = ",round(medianappv,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1346,7 +1346,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("VPN simul.",	
             paste("mediana = ",round(mediananpv,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep="")	
+            paste("IC",round(1-alfa*100,1),"%",sep="")	
           ),	
           pch=c(NA,NA,NA,19),	
           lwd=c(3,1,2,NA),	
@@ -1379,7 +1379,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("LR+ simul.",	
             paste("mediana = ",round(medianaplr,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep=""),
+            paste("IC",round(1-alfa*100,1),"%",sep=""),
             "referencia"
           ),	
           pch=c(NA,NA,NA,19),	
@@ -1413,7 +1413,7 @@ if (num_iteracoes > 0)
   legend ("topleft",	
           c("LR- simul.",	
             paste("mediana = ",round(mediananlr,5),sep=""),	
-            paste("IC",round((1-alfa)*100,1),"%",sep=""),
+            paste("IC",round(1-alfa*100,1),"%",sep=""),
             "referencia"
           ),	
           pch=c(NA,NA,NA,19),	
@@ -1455,7 +1455,7 @@ if (num_iteracoes > 0)
   legend ("topright",
           c("H0","H1",
             "mediana H1",
-            paste("IC(p|H1)",round((1-alfa)*100,1),"%",sep="")
+            paste("IC(p|H1)",round(1-alfa*100,1),"%",sep="")
           ), 
           pch=c(NA,NA,NA,NA), 
           lwd=c(3,3,1,1), 
@@ -1606,15 +1606,15 @@ if (num_iteracoes > 0)
   
   cat("\nvalor-p:\n")
   cat("mediana(p):", medianap_h1,"\n")
-  cat("IC",round((1-alfa)*100,1),"% (p): [",round(h1_ICp[1],3),", ",round(h1_ICp[2],3),"]\n", sep="")
+  cat("IC",round(1-alfa*100,1),"% (p): [",round(h1_ICp[1],3),", ",round(h1_ICp[2],3),"]\n", sep="")
   
   cat("\nOR:\n")
   cat("mediana(OR):", medianaOR,"\n")
-  cat("IC",round((1-alfa)*100,1),"% (OR): [",round(h1_ICOR[1],3),", ",round(h1_ICOR[2],3),"]\n", sep="")
+  cat("IC",round(1-alfa*100,1),"% (OR): [",round(h1_ICOR[1],3),", ",round(h1_ICOR[2],3),"]\n", sep="")
   
   cat("\nV de Cramer:\n")
   cat("mediana(V):", medianaV,"\n")
-  cat("IC",round((1-alfa)*100,1),"% (V): [",round(h1_ICV[1],3),", ",round(h1_ICV[2],3),"]\n", sep="")
+  cat("IC",round(1-alfa*100,1),"% (V): [",round(h1_ICV[1],3),", ",round(h1_ICV[2],3),"]\n", sep="")
 
 }
 
