@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583962070112.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "60850235",
+    "id" : "7A93E95F",
+    "lastKnownWriteTime" : 1583975285,
+    "last_content_update" : 1583975285467,
+    "path" : "~/ps20200114/MSP1290_2020/Aula 2 - Distribuicoes de probabilidade e teste de hipotese nula/Rmd/Distribuicoes_de_probabilidade.Rmd",
+    "project_path" : "Distribuicoes_de_probabilidade.Rmd",
+    "properties" : {
+        "chunk_output_type" : "inline",
+        "cursorPosition" : "144,0",
+        "last_setup_crc32" : "B8070E46bb338d19",
+        "scrollLine" : "134"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

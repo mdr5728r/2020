@@ -1,0 +1,66 @@
+<!--    
+  ioslides_presentation
+
+beamer_presentation
+
+output: html_document 
+runtime: shiny
+
+output: 
+  html_document: 
+    df_print: paged
+  word_document: default
+  pdf_document: default
+
+output: 
+  html_document: 
+    df_print: tibble
+    theme: cerulean
+    highlight: pygments
+
+  
+  <!--
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+-->
+  
+  
+
+
+# R Markdown
+
+## Exemplos
+- $x_2^3$
+- Atribuir pi^[`pi = 3.14...`] à variável x: `x <- pi`
+  - $\pi = 3.14...$
+  
+1. x~2~^3^
+2. Atribuir pi^[`pi = 3.14...`] à variável x: `x <- pi`
+```{r, echo=TRUE} 
+   pi
+```  
+   
+> "Herrar é umano."
+> 
+> --- Anônimo
+
+## Introdução
+This is an **_R Markdown_** document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using [R Markdown](http://rmarkdown.rstudio.com).
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r datasets, cols.print=3, rows.print=3}
+datasets::iris
+summary(datasets::iris)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+```{r echo=TRUE}
+plot(iris$Sepal.Length[iris$Species=='setosa'], iris$Sepal.Width[iris$Species=='setosa'])
+```
+
+
+

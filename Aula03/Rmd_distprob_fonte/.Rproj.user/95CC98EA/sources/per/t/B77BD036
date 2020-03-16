@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583974588780.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3086043831",
+    "id" : "B77BD036",
+    "lastKnownWriteTime" : 1583974594,
+    "last_content_update" : 1583974594441,
+    "path" : "~/ps20200114/MSP1290_2020/Aula 2 - Distribuicoes de probabilidade e teste de hipotese nula/Rmd/gestantes.R",
+    "project_path" : "gestantes.R",
+    "properties" : {
+        "cursorPosition" : "40,0",
+        "scrollLine" : "19",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
