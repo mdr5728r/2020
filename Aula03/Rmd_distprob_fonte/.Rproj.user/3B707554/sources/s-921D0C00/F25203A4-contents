@@ -1,0 +1,16 @@
+amostra <- c(1, 2, 3, 4, 5)
+n <- length(amostra)
+cat("amostra: ", amostra, 
+           ": média =", round(mean(amostra),2), 
+           "e dp =", round(sd(amostra),2), 
+           "\n")
+# 10 reamostragens com reposicao
+for (r in 1:9)
+{
+  # *** replace=FALSE por default ***
+  reamostra <- sample(amostra,n)
+  cat("reamostra",r,": ", reamostra, 
+             ": média =", round(mean(reamostra),2), 
+             "e dp =", round(sd(reamostra),2), 
+             "\n")
+}

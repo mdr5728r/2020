@@ -1,0 +1,4 @@
+v <- ""
+v <- paste(v,cat("Populacao:\n"))
+v <- paste(v,cat("\tmedia populacional:",round(mean_pop,3),"\n"))
+

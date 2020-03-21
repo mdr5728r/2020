@@ -1,0 +1,2592 @@
+---
+title: "| Distribuições de probabilidade, \n| hipótese nula e valor p\n"
+author: |
+  | Paulo S. P Silveira (paulo.silveira@fm.usp.br)
+  | Koichi Sameshima (koichi.sameshima@fm.usp.br)
+  | José O. Siqueira (jose.siqueira@fm.usp.br)
+output:
+  html_document:
+    df_print: tibble
+    highlight: pygments
+    theme: cerulean
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+---
+<!-- https://bookdown.org/yihui/rmarkdown/html-document.html#data_frame_printing -->
+<!-- theme: https://bootswatch.com/3/ -->
+<!--
+    df_print: tibble
+    theme: cerulean
+    highlight: pygments
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: true
+      smooth_scroll: false       
+-->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.width=6, fig.height=5,
+                      fig.align = "center")
+```
+
+# Objetivos desta aula
+Ao final desta aula o aluno deve ser capaz de:
+
+- definir distribuição de probabilidades;
+- definir e aplicar a distribuição Binomial;
+- definir hipóteses estatísticas (hipótese nula e alternativa);
+- diferenciar erros do tipo I e II (alfa e beta);
+- interpretar o valor-p;
+
+## Binomial
+![](binomial.png)
+
+## Poisson
+![](poisson.png)
+
+## Normal
+![](normal.png)
+
+# Continuando a deformação...
+```{r, echo=FALSE}
+knitr::include_graphics("./monstromedico.png", dpi=300)
+```
+
+
+# Exemplo hipotético
+Suponha que foi feito um levantamento sobre o número de drogas em uso por gestantes .
+
+```{r echo=TRUE}
+DrgGrv <- read.table("Drogas_Gravidez.txt", header=TRUE, sep="\t")
+print(DrgGrv)
+```
+
+O arquivo _Drogas_Gravidez.txt_ tem duas colunas:
+
+ - a primeira linha tem os nomes das variáveis (header=TRUE), 
+ - as colunas estão separadas por _tab_ (sep="\\t")
+ 
+A variável **DrgGrv** é um _data frame_:
+```{r echo=TRUE}
+is.data.frame(DrgGrv)
+```
+
+## Gráfico (contagens)
+ 
+```{r echo=TRUE}
+plot (DrgGrv)
+```
+
+#### No estilo _histogram-like (vertical lines)_
+```{r echo=TRUE}
+plot (DrgGrv,type="h")
+```
+
+Como foi que eu descobri isto? [Quick-R: Line charts](https://www.statmethods.net/graphs/line.html)
+
+### Para manter as bolinhas
+```{r echo=TRUE}
+plot (DrgGrv,type="h")
+points(DrgGrv)
+```
+
+### Colorir
+Encontrei mais em 
+[Quick-R: Graphical Parameters](https://www.statmethods.net/advgraphs/parameters.html)
+
+```{r echo=TRUE}
+plot (DrgGrv,type="h", col="#994F88", lwd=3)
+points(DrgGrv, pch=21, col="#994F88", bg="#994F88")
+```
+
+### Cores amigáveis para daltônicos:
+```{r echo=TRUE}
+source("friendlycolor.R")
+plot (DrgGrv,type="h", col=friendlycolor(8), lwd=3)
+points(DrgGrv, pch=21, col=friendlycolor(8), bg=friendlycolor(12))
+```
+
+#### <font style="background-color:#F7CB45;"> friendlydemo.R </font>
+Exibindo todas as cores da função friendlycolor():
+```{r echo=TRUE}
+# friendlydemo.R
+# exibe as 46 cores disponíveis em friendlycolor.R
+source("friendlycolor.R")
+indice <- 1 # primeiro indice
+# plota um gráfico vazio
+plot(NA, xlim=c(0,9), ylim=c(0,7), 
+     xlab=NA, ylab=NA, axes = FALSE)
+for (x in 1:8)
+{
+  for (y in 1:6)
+  {
+    # pula se acabaram as cores
+    if (indice > 46) {next} 
+    points ( x, 7-y, 
+             pch=21, cex=5, 
+             col="black", 
+             bg=friendlycolor(indice)
+           )
+    
+    cortexto <- "black"
+    
+    if (
+        (indice >= 25 & indice <= 27)
+        |
+        (indice >= 31 & indice <= 36)
+       )
+    {
+      cortexto <- "white"
+    }
+    text(x, 7-y, indice, col=cortexto)
+    # incrementa (proxima cor)
+    indice <- indice+1
+  }
+}
+```
+
+## Distribuição de probabilidades
+```{r echo=TRUE}
+DrgGrv <- read.table("Drogas_Gravidez.txt", header=TRUE, sep="\t")
+print(DrgGrv)
+```
+
+### nomes das colunas
+```{r echo=TRUE}
+names(DrgGrv)
+```
+
+### criando coluna com as porcentagens
+```{r echo=TRUE}
+DrgGrv$Porcentagem <- round(DrgGrv$Pacientes/sum(DrgGrv$Pacientes)*100,2)
+names(DrgGrv)
+print(DrgGrv)
+```
+
+### Características de uma distribuição de probabilidades
+
+ - a coluna "Porcentagem" soma 1 ou 100%
+```{r echo=TRUE}
+sum(DrgGrv$Porcentagem)
+```
+ - todos os valores são positivos
+```{r echo=TRUE}
+DrgGrv$Porcentagem < 0
+```
+```{r echo=TRUE}
+sum(DrgGrv$Porcentagem < 0)
+```
+
+ - todos os valores ficam entre 0 e 1 (ou entre 0% e 100%)
+```{r echo=TRUE}
+DrgGrv$Porcentagem >= 0 & DrgGrv$Porcentagem <= 100
+```
+
+```{r echo=TRUE}
+sum (DrgGrv$Porcentagem >= 0 & DrgGrv$Porcentagem <= 100)
+```
+
+## Gráfico em porcentagem
+Como *DrgGrv* agora tem três colunas, precisamos indicar quais colunas quero usar como $x$ (**DrgGrv$Drogas**) e $y$ (**DrgGrv$Porcentagem**)
+
+```{r echo=TRUE}
+source("friendlycolor.R")
+plot (DrgGrv$Drogas, DrgGrv$Porcentagem,
+      type="h", col=friendlycolor(20), lwd=3)
+points(DrgGrv$Drogas, DrgGrv$Porcentagem,
+       pch=21, 
+       col=friendlycolor(20), bg=friendlycolor(23))
+```
+
+### Corrigindo os eixos
+... consequentemente, os nomes das variáveis aparecem nos eixos. Isto é corrigido assim:
+
+```{r echo=TRUE}
+source("friendlycolor.R")
+plot (DrgGrv$Drogas, DrgGrv$Porcentagem,
+      type="h", col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+points(DrgGrv$Drogas, DrgGrv$Porcentagem,
+       pch=21, 
+       col=friendlycolor(20), bg=friendlycolor(23))
+```
+
+### _Density plots_
+O número de drogas utilizadas é uma variável quantitativa discreta. 
+
+Apenas para demonstrar (não é a forma apropriada), caso a variável fosse quantitativa contínua, poderíamos usar um _density plot_
+
+Primeiro criamos uma variável para conter a densidade de probabilidades
+```{r echo=TRUE}
+# desdobra a quantidade de pacientes
+populacao <- c() # cria um vetor vazio
+for (r in 1:nrow(DrgGrv))
+{
+  # acumula no vetor o número de drogas
+  populacao <- c(populacao, rep(DrgGrv$Drogas, times=DrgGrv$Pacientes))
+}
+# usa a funcao R que transforma em densidade de probabilidade
+densidade <- density(populacao)
+```
+```{r echo=TRUE}
+source("friendlycolor.R")
+plot (densidade,
+      col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+```
+
+#### Dando nome ao gráfico
+A função _plot()_ tem muitos parâmetros; aqui usamos o parâmetro _main_.
+```{r echo=TRUE}
+source("friendlycolor.R")
+# note o titulo em duas linhas usando-se \\n
+plot (densidade,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+```
+
+## Juntando tudo no Rscript <font style="background-color:#F7CB45;">gestantes.R</font>
+Tudo o que foi feito até agora pode ser colocado em um único _Rscript_
+
+```{r eval=FALSE}
+# gestantes.R
+#   le os dados e cria os graficos
+
+source("friendlycolor.R")
+
+# le os dados
+DrgGrv <- read.table("Drogas_Gravidez.txt", 
+                     header=TRUE, sep="\t")
+
+# cria coluna para a porcentagem
+DrgGrv$Porcentagem <- round(DrgGrv$Pacientes/
+                            sum(DrgGrv$Pacientes)*100,2)
+
+# exibe a tabela de dados
+cat("Utilização de drogas em gestantes\n")
+print(DrgGrv)
+
+# exibe o grafico no estilo 'histograma'
+# (variavel quantitativa discreta)
+plot (DrgGrv$Drogas, DrgGrv$Porcentagem,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      type="h", col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+points(DrgGrv$Drogas, DrgGrv$Porcentagem,
+       pch=21, 
+       col=friendlycolor(20), bg=friendlycolor(23))
+
+# tratando a variavel como quantitativa continua
+# (apenas por exemplo; nao eh apropriado fazer isto)
+# cria uma populacao com as quantidades 
+# de drogas utilizadas pelas pacientes
+populacao <- c() # cria um vetor vazio
+for (r in 1:nrow(DrgGrv))
+{
+  # acumula no vetor o número de drogas
+  populacao <- c(populacao, 
+                 rep(DrgGrv$Drogas, times=DrgGrv$Pacientes))
+}
+# usa a funcao R que transforma 
+# em densidade de probabilidade
+densidade <- density(populacao)
+# exibe o grafico no estilo 'density plot'
+plot (densidade,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+```
+
+```{r echo=FALSE}
+# gestantes.R
+#   le os dados e cria os graficos
+
+source("friendlycolor.R")
+
+# le os dados
+DrgGrv <- read.table("Drogas_Gravidez.txt", 
+                     header=TRUE, sep="\t")
+
+# cria coluna para a porcentagem
+DrgGrv$Porcentagem <- round(DrgGrv$Pacientes/
+                            sum(DrgGrv$Pacientes)*100,2)
+
+# exibe a tabela de dados
+cat("Utilização de drogas em gestantes\n")
+print(DrgGrv)
+
+# exibe o grafico no estilo 'histograma'
+# (variavel quantitativa discreta)
+plot (DrgGrv$Drogas, DrgGrv$Porcentagem,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      type="h", col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+points(DrgGrv$Drogas, DrgGrv$Porcentagem,
+       pch=21, 
+       col=friendlycolor(20), bg=friendlycolor(23))
+
+# tratando a variavel como quantitativa continua
+# (apenas por exemplo; nao eh apropriado fazer isto)
+# cria uma populacao com as quantidades 
+# de drogas utilizadas pelas pacientes
+populacao <- c() # cria um vetor vazio
+for (r in 1:nrow(DrgGrv))
+{
+  # acumula no vetor o número de drogas
+  populacao <- c(populacao, 
+                 rep(DrgGrv$Drogas, times=DrgGrv$Pacientes))
+}
+# usa a funcao R que transforma 
+# em densidade de probabilidade
+densidade <- density(populacao)
+# exibe o grafico no estilo 'density plot'
+plot (densidade,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+```
+
+# Novamente, a incerteza
+```{r, echo=FALSE}
+knitr::include_graphics("./moeda400reis.png", dpi=300)
+```
+<!-- ![](moeda400reis.png) -->
+
+## Moeda é um exemplo em saúde?
+```{r, echo=FALSE}
+knitr::include_graphics("./moedasHeadTail.png", dpi=150)
+knitr::include_graphics("./moedasHeadTailTexto.png", dpi=150)
+```
+
+# Distribuição binomial
+```{r, echo=FALSE}
+# necessarias para incluir as imagens
+# nos graficos (nao precisa dela para
+# os codigos da distribuicao binomial)
+library(ggplot2, verbose = FALSE)
+library(png)
+library(grid)
+library(ggimage)
+```
+## Distribuição binomial: 1 jogada
+```{r, echo=FALSE}
+layout(matrix(1:2,nrow=1),widths=c(1,2))
+# imagem das moedas
+plot(NA,NA,xlim=c(0,10),ylim=c(0,10), 
+     xlab="", ylab="", axes=FALSE)
+img <- readPNG("moeda_1jogada.png")
+rasterImage(img,0,0,10,5)
+# grafico
+source("friendlycolor.R")
+jogadas <- 1
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucesso <- 0:jogadas
+plot(sucesso, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogada", sep=""),
+     ylim = c(0,0.5),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+par(mfrow=c(1,1))
+```
+
+## Distribuição binomial: 2 jogadas
+```{r, echo=FALSE}
+layout(matrix(1:2,nrow=1),widths=c(1,2))
+# imagem das moedas
+plot(NA,NA,xlim=c(0,10),ylim=c(0,10), 
+     xlab="", ylab="", axes=FALSE)
+img <- readPNG("moeda_2jogadas.png")
+rasterImage(img,0,0,10,5.5)
+# grafico
+source("friendlycolor.R")
+jogadas <- 2
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucesso <- 0:jogadas
+plot(sucesso, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     ylim = c(0,0.5),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+par(mfrow=c(1,1))
+```
+
+## Distribuição binomial: 3 jogadas
+```{r, echo=FALSE}
+layout(matrix(1:2,nrow=1),widths=c(1,2))
+# imagem das moedas
+plot(NA,NA,xlim=c(0,10),ylim=c(0,10), 
+     xlab="", ylab="", axes=FALSE)
+img <- readPNG("moeda_3jogadas.png")
+rasterImage(img,0,0,10,8)
+# grafico
+source("friendlycolor.R")
+jogadas <- 3
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucesso <- 0:jogadas
+plot(sucesso, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     ylim = c(0,0.5),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+par(mfrow=c(1,1))
+```
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+A função R é **dbinom(x, size, prob)**, indicando, respectivamente, quantas jogadas, o total de
+jogadas e a probabilidade de sucesso de uma jogada.
+
+Para uma moeda balanceada (prob=0.5), a probabilidade de 0 sucesso (x=0) em 3 jogadas (size=3) é:
+```{r, echo=TRUE}
+dbinom(0, 3, 0.5)
+```
+1 sucesso em 3 jogadas:
+```{r, echo=TRUE}
+dbinom(1, 3, 0.5)
+```
+2 sucesso em 3 jogadas:
+```{r, echo=TRUE}
+dbinom(2,3,0.5)
+```
+3 sucesso em 3 jogadas:
+```{r, echo=TRUE}
+dbinom(3,3,0.5)
+```
+</td></tr></table>
+***
+
+## Distribuição binomial: 5 jogadas
+
+Os gráficos foram produzidos utilizando o seguinte código:
+```{r, echo=TRUE}
+source("friendlycolor.R")
+jogadas <- 5
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,0.5)
+plot(sucesso, probabilidade,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas", sep=""),
+     ylim = c(0,0.5),
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+```
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("coruja.png", dpi=150) 
+```
+<table style="width:100%; border:1; background-color:#CAE0AB;"><tr><td>
+É possível ver todos os valores em uma tabela:
+```{r, echo=TRUE, eval=FALSE}
+jogadas <- 5
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,0.5)
+cat ("Sucesso\tProbabilidade\n")
+for (i in 1:(jogadas+1))
+{
+  cat (sucesso[i],"\t",probabilidade[i],"\n")
+}
+```
+```{r, echo=FALSE}
+jogadas <- 5
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,0.5)
+cat ("Sucesso\tProbabilidade\n")
+for (i in 1:(jogadas+1))
+{
+  cat (sucesso[i],"\t",probabilidade[i],"\n")
+}
+```
+... ou, mais facilmente ainda, criando um _data frame_:
+```{r, echo=TRUE}
+jogadas <- 5
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,0.5)
+binomial <- data.frame(sucesso,probabilidade)
+print(binomial)
+```
+... as colunas do _data frame_ podem ser renomeadas:
+```{r, echo=TRUE}
+names(binomial) <- c("Sucesso","FR")
+print(binomial)
+```
+</td></tr></table>
+***
+
+## Distribuição binomial: 15 jogadas
+
+Este código foi modificado para usar um _data frame_.
+
+```{r, echo=TRUE}
+source("friendlycolor.R")
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,0.5)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso","FR")
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas", sep=""),
+     ylim = c(0,0.5),
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(binomial$Sucesso, 
+       binomial$FR,
+       pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+```
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Observe que a soma de todas as colunas é igual a 1. Então, quanto mais jogadas, maior a dispesão e menor a altura das distribuições.
+</td></tr>
+<tr><td>
+
+```{r fig.height=2.5, echo=FALSE}
+layout(matrix(1:5,nrow=1,ncol=5))
+source("friendlycolor.R")
+p.sucesso <- 0.5
+for (jogadas in c(1,2,3,5,15))
+{
+  probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+  sucesso <- 0:jogadas
+  plot(sucesso, probabilidade,
+       axes = FALSE,
+       main = paste("Bin(",jogadas,", ",p.sucesso,")", sep=""),
+       xlab=NA, ylab=NA,
+       xlim= c(0,15), ylim = c(0,0.5),
+       type="h", col=friendlycolor(8), lwd=3)
+  points(sucesso,probabilidade, pch=21, col=friendlycolor(8), 
+         bg=friendlycolor(12))
+}
+par(mfrow=c(1,1))
+```
+</td></tr>
+</table>
+***
+
+#### (alterando a escala)
+```{r, echo=TRUE}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     ylim = c(0,max(binomial$FR)),
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(binomial$Sucesso, 
+       binomial$FR,
+       pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+```
+
+#### Distribuição binomial: 15 jogadas, moeda desbalanceada
+```{r, echo=TRUE}
+source("friendlycolor.R")
+p.sucesso <- 0.7 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+plot(sucesso, probabilidade,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[s] = ", p.sucesso, 
+                  sep=""),
+     ylim = c(0,max(probabilidade)), 
+     type="h", 
+     col=friendlycolor(20), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(20), 
+       bg=friendlycolor(23))
+```
+
+#### Cauda = 1
+```{r, echo=TRUE}
+source("friendlycolor.R")
+p.sucesso <- 0.5 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+# criando um data frame
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso", "FR")
+# grafico
+cauda <- 1 # a partir de onde hachurar
+# largura da hachura
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+plot(binomial$Sucesso, 
+     binomial$FR, # *** usando o dataframe
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     ylim = c(0,max(probabilidade)), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda esquerda
+lines (binomial$Sucesso[binomial$Sucesso<cauda], 
+       binomial$FR[binomial$Sucesso<cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita
+lines (binomial$Sucesso[binomial$Sucesso>15-cauda], 
+       binomial$FR[binomial$Sucesso>15-cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+```
+```{r, echo=TRUE}
+total <- sum(dbinom(c(0,15),jogadas,p.sucesso))
+cat("Total = ", total, sep="")
+```
+$P[s \le 0] + P[s \ge 15] \approx 6/10000$
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("coruja.png", dpi=150) 
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Note que o _data frame_ facilitou a construção do gráfico e hachura de suas caudas. No entanto, os eixos dos gráficos receberam o nome das variáveis (o que não é conveniente).
+Dois parâmetros de _plot()_ resolvem o problema:
+```{r, echo=TRUE}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     xlab = "Sucesso", # label do eixo x
+     ylab = "Probabilidade", # label do eixo y
+     ylim = c(0,max(probabilidade)), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda esquerda
+lines (binomial$Sucesso[binomial$Sucesso<cauda], 
+       binomial$FR[binomial$Sucesso<cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita
+lines (binomial$Sucesso[binomial$Sucesso>15-cauda], 
+       binomial$FR[binomial$Sucesso>15-cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+```
+</td></tr></table>
+***
+
+#### Cauda = 2
+```{r, echo=FALSE}
+source("friendlycolor.R")
+p.sucesso <- 0.5 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso", "FR")
+
+# grafico
+cauda <- 2 # a partir de onde hachurar
+# largura da hachura
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(probabilidade)), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda esquerda
+lines (binomial$Sucesso[binomial$Sucesso<cauda], 
+       binomial$FR[binomial$Sucesso<cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita
+lines (binomial$Sucesso[binomial$Sucesso>15-cauda], 
+       binomial$FR[binomial$Sucesso>15-cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+```
+```{r, echo=TRUE}
+total <- sum(dbinom(c(0:1,14:15),jogadas,p.sucesso))
+cat("Total = ", total, sep="")
+```
+$P[s \le 1] + P[s \ge 14] \approx 1/1000$
+
+
+#### Cauda = 3
+```{r, echo=FALSE}
+source("friendlycolor.R")
+p.sucesso <- 0.5 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso", "FR")
+
+# grafico
+cauda <- 3 # a partir de onde hachurar
+# largura da hachura
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(probabilidade)), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda esquerda
+lines (binomial$Sucesso[binomial$Sucesso<cauda], 
+       binomial$FR[binomial$Sucesso<cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita
+lines (binomial$Sucesso[binomial$Sucesso>15-cauda], 
+       binomial$FR[binomial$Sucesso>15-cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+```
+```{r, echo=TRUE}
+total <- sum(dbinom(c(0:2,13:15),jogadas,p.sucesso))
+cat("Total = ", total, sep="")
+```
+$P[s \le 2] + P[s \ge 13] \approx 0.7\%$
+
+#### Cauda = 4
+```{r, echo=FALSE}
+source("friendlycolor.R")
+p.sucesso <- 0.5 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso", "FR")
+
+# grafico
+cauda <- 4 # a partir de onde hachurar
+# largura da hachura
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(probabilidade)), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda esquerda
+lines (binomial$Sucesso[binomial$Sucesso<cauda], 
+       binomial$FR[binomial$Sucesso<cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita
+lines (binomial$Sucesso[binomial$Sucesso>15-cauda], 
+       binomial$FR[binomial$Sucesso>15-cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+```
+```{r, echo=TRUE}
+total <- sum(dbinom(c(0:3,12:15),jogadas,p.sucesso))
+cat("Total = ", total, sep="")
+```
+$P[s \le 3] + P[s \ge 12] \approx 3.52\%$
+
+#### Cauda = 5
+```{r, echo=FALSE}
+source("friendlycolor.R")
+p.sucesso <- 0.5 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso", "FR")
+
+# grafico
+cauda <- 5 # a partir de onde hachurar
+# largura da hachura
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(probabilidade)), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda esquerda
+lines (binomial$Sucesso[binomial$Sucesso<cauda], 
+       binomial$FR[binomial$Sucesso<cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita
+lines (binomial$Sucesso[binomial$Sucesso>15-cauda], 
+       binomial$FR[binomial$Sucesso>15-cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+```
+```{r, echo=TRUE}
+total <- sum(dbinom(c(0:4,11:15),jogadas,p.sucesso))
+cat("Total = ", total, sep="")
+```
+$P[s \le 4] + P[s \ge 11] \approx 11.85\%$
+
+
+#### Cauda = 6
+```{r, echo=FALSE}
+source("friendlycolor.R")
+p.sucesso <- 0.5 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso", "FR")
+
+# grafico
+cauda <- 6 # a partir de onde hachurar
+# largura da hachura
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(probabilidade)), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda esquerda
+lines (binomial$Sucesso[binomial$Sucesso<cauda], 
+       binomial$FR[binomial$Sucesso<cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita
+lines (binomial$Sucesso[binomial$Sucesso>15-cauda], 
+       binomial$FR[binomial$Sucesso>15-cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+```
+```{r, echo=TRUE}
+total <- sum(dbinom(c(0:5,10:15),jogadas,p.sucesso))
+cat("Total = ", total, sep="")
+```
+$P[s \le 5] + P[s \ge 10] \approx 30.18\%$
+
+### Voltando para cauda = 4
+
+$P[s \le 3] + P[s \ge 12] \approx 3.52\%$
+
+$H_0: P[sucesso] = 0.5$
+
+$H_1: P[sucesso] \ne 0.5$
+
+
+```{r, echo=FALSE}
+source("friendlycolor.R")
+p.sucesso <- 0.5 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso", "FR")
+
+# grafico
+cauda <- 4 # a partir de onde hachurar
+# largura da hachura
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(probabilidade)*1.2), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda esquerda
+lines (binomial$Sucesso[binomial$Sucesso<cauda], 
+       binomial$FR[binomial$Sucesso<cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita
+lines (binomial$Sucesso[binomial$Sucesso>15-cauda], 
+       binomial$FR[binomial$Sucesso>15-cauda],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# areas e labels das áreas
+y <- max(binomial$FR[binomial$Sucesso<cauda])*3
+x <- cauda-0.5
+polygon(x=c(-1,x,x,-1,-1), 
+        y=c(-1,-1,y,y,-1), 
+        col=paste(friendlycolor(30),"88",sep=""),
+        bg=paste(friendlycolor(30),"88",sep=""))
+abline(v=x,lty=2)
+x <- 15-cauda+0.5
+polygon(x=c(jogadas+1,x,x,jogadas+1,jogadas+1), 
+        y=c(-1,-1,y,y,-1), 
+        col=paste(friendlycolor(30),"88",sep=""),
+        bg=paste(friendlycolor(30),"88",sep=""))
+abline(v=x,lty=2)
+text(max(binomial$Sucesso)*1/2,
+     max(binomial$FR)*1.1,
+     "não rejeição\nde H0")
+x <- mean(binomial$Sucesso[binomial$Sucesso<cauda])
+y <- max(binomial$FR[binomial$Sucesso<cauda])*5
+text(x, y, "rejeição\nde H0")
+x <- mean(binomial$Sucesso[binomial$Sucesso>jogadas-cauda])
+y <- max(binomial$FR[binomial$Sucesso>jogadas-cauda])*5
+text(x, y, "rejeição\nde H0")
+```
+
+<table  align="center" style="border:1; background-color:#dddddd;"><tr><td>
+$\alpha$ ... probabilidade do erro do tipo I
+
+(rejeitar $H_0$ incorretamente)
+</td></tr></table>
+
+
+## Simulação 1 com <font style="background-color:#F7CB45;"> Goodcoin.R</font>
+Dado um valor a receber em moedas de R$1.00, metade da quantia
+eh oferecida em moedas com um balanceamento de referencia,
+e metade em moedas falsas, conhecidas por balanceamento distinto.
+Seu desafio eh distinguir os dois conjuntos atraves de experimentos.
+Numero de moedas (inteiro, default=10000): **10000**
+
+Para testar se a moeda eh verdadeira, joga-se
+cara ou coroa certo numero de vezes cada moeda (um experimento).
+Numero de lancamentos por experimento (numero inteiro, default=15): **15**
+
+Qual a proporcao maxima de moedas verdadeiras
+que voce aceita perder, i.e. alfa = probabilidade do
+erro do tipo I ou de falso-positivo).
+(numero entre 0 e 1).
+alfa (default=0.05): **0.05**
+
+As moedas verdadeiras tem balanceamento de referencia (H0).
+(caso queira moedas balanceadas, escolha o valor igual a 0.5)
+Qual a probabilidade de sortear coroa para uma moeda verdadeira?
+(número entre 0 e 1).
+P[coroa|H0] (default=0.5): **0.5**
+
+```{r, echo=TRUE, eval=FALSE}
+source("Goodcoin.R")
+```
+```{r, echo=FALSE}
+knitr::include_graphics("SimulaMoedas01.png", dpi=100)
+```
+
+## Binomial adaptada a um tratamento
+
+Certo método educacional consegue ensinar higiene pessoal a 50% dos pacientes com autismo. 
+
+Com o novo método proposto pelo Instituto Ayres Soares, no entanto, entre 15 crianças acompanhadas, 10 (66.66%) conseguiram aprender a cuidar de sua higiene. 
+
+Se os métodos fossem iguais, somente metade das crianças (7 ou 8) deveriam aprender. 
+
+O novo método é melhor?
+
+```{r, echo=FALSE}
+knitr::include_graphics("jornalista01.png", dpi=150)
+knitr::include_graphics("jornalista02.png", dpi=150)
+knitr::include_graphics("jornalista03.png", dpi=150)
+knitr::include_graphics("jornalista04.png", dpi=150)
+knitr::include_graphics("jornalista05.png", dpi=150)
+```
+
+## Hipótese nula e alternativa
+
+<font style="font-size:150%;">
+$H_0: \mu_{novo} = 0.5$
+
+$H_1: \mu_{novo} > 0.5$
+
+$\alpha = 0.05 = 5\%$
+
+(este teste é unicaudal, tem direção)
+</font>
+
+## Experimento único
+```{r, echo=FALSE}
+library(ggplot2, verbose = FALSE)
+library(png)
+library(grid)
+library(ggimage)
+plot(NA,NA,xlim=c(0,15),ylim=c(0,10), 
+     xlab="", ylab="", axes=FALSE)
+axis(1)
+img <- readPNG("moedas10.png")
+rasterImage(img,9,0,11,3)
+text(5,9,"Resultado: 10 crianças em 15\naprenderam com o novo método.",cex=1)
+text(10,4,"10",cex=2)
+```
+
+```{r, echo=FALSE}
+source("friendlycolor.R")
+p.sucesso <- 0.5 # *** probabilidade de sucesso ***
+jogadas <- 15
+sucesso <- 0:jogadas
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso", "FR")
+```
+
+### valor-p 
+Probabilidade de observar a melhora de 10 crianças em 15 testadas, sob $H_0$ (i.e., assumindo-se que o novo tratamento tem o mesmo efeito que o tratamento antigo).
+```{r, echo=TRUE}
+p <- sum(binomial$FR[binomial$Sucesso>=10])
+cat("p = ",p,"\n")
+```
+$P[s \ge 10] \approx 15.09\%$
+
+### alfa ($\alpha$)
+Probabilidade do erro do tipo I: critério escolhido pelo pesquisador. 
+```{r, echo=TRUE}
+alfa <- sum(binomial$FR[binomial$Sucesso>=12])
+cat("alfa = ",alfa,"\n")
+```
+$P[s \le 3] + P[s \ge 12] \approx 1.78\%$
+```{r, echo=FALSE}
+# grafico
+cauda <- 4 # a partir de onde hachurar
+# largura da hachura
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+plot(binomial$Sucesso, 
+     binomial$FR,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas, ", 
+                  "P[sucesso] = ", p.sucesso, 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(probabilidade)*1.2), 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso,probabilidade, pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# cauda direita (alfa)
+lines (binomial$Sucesso[binomial$Sucesso>=12], 
+       binomial$FR[binomial$Sucesso>=12],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+# cauda direita (p)
+lines (binomial$Sucesso[binomial$Sucesso>=10], 
+       binomial$FR[binomial$Sucesso>=10],
+       col=paste(friendlycolor(27),"88",sep=""), 
+       lwd=hachura/2, type="h")
+# areas e labels das áreas
+y <- max(binomial$FR[binomial$Sucesso<cauda])*3
+x <- 15-cauda+0.5
+# polygon(x=c(jogadas+1,x,x,jogadas+1,jogadas+1), 
+#         y=c(-1,-1,y,y,-1), 
+#         col=paste(friendlycolor(30),"88",sep=""),
+#         bg=paste(friendlycolor(30),"88",sep=""))
+abline(v=x,lty=2)
+text(max(binomial$Sucesso)*1/2,
+     max(binomial$FR)*1.1,
+     "não rejeição\nde H0")
+# x <- mean(binomial$Sucesso[binomial$Sucesso<cauda])
+# y <- max(binomial$FR[binomial$Sucesso<cauda])*5
+# text(x, y, "rejeição\nde H0")
+x <- mean(binomial$Sucesso[binomial$Sucesso>jogadas-cauda])
+y <- max(binomial$FR[binomial$Sucesso>jogadas-cauda])*5
+text(x, y, "rejeição\nde H0")
+legend ("topright", c("alfa","p"), 
+        lwd=hachura*0.7, 
+        col=c(paste(friendlycolor(8),"88",sep=""),
+              paste(friendlycolor(27),"88",sep="")
+        ), 
+        box.lwd=0)
+```
+
+<font style="font-size:150%; color:"#507052";">Decisão: não se rejeita $H_0$</font>
+
+Portanto, não há evidência de que o novo tratamento seja superior ao tratamento tradicional, tomado como referência.
+```{r, echo=FALSE}
+knitr::include_graphics("jornalista06.png", dpi=150)
+```
+
+## Simulação 2 com <font style="background-color:#F7CB45;"> Goodcoin.R</font>
+```{r, echo=TRUE, eval=FALSE}
+source("Goodcoin.R")
+```
+Dado um valor a receber em moedas de R$1.00, metade da quantia
+eh oferecida em moedas com um balanceamento de referencia,
+e metade em moedas falsas, conhecidas por balanceamento distinto.
+Seu desafio eh distinguir os dois conjuntos atraves de experimentos.
+Numero de moedas (inteiro, default=10000): **20000**
+
+Para testar se a moeda eh verdadeira, joga-se
+cara ou coroa certo numero de vezes cada moeda (um experimento).
+Numero de lancamentos por experimento (numero inteiro, default=15): **15**
+
+Qual a proporcao maxima de moedas verdadeiras
+que voce aceita perder, i.e. alfa = probabilidade do
+erro do tipo I ou de falso-positivo).
+(numero entre 0 e 1).
+alfa (default=0.05): **0.05**
+
+As moedas verdadeiras tem balanceamento de referencia (H0).
+(caso queira moedas balanceadas, escolha o valor igual a 0.5)
+Qual a probabilidade de sortear coroa para uma moeda verdadeira?
+(número entre 0 e 1).
+P[coroa|H0] (default=0.5): **0.5**
+
+As moedas falsas tem outro balanceamento.
+(para simular, forneça uma probabilidade diferente de 0.5 
+ ou deixe em branco para simular somente a moeda verdadeira)
+Qual a probabilidade de sortear coroa para uma moeda falsa?
+(número entre 0 e 1).
+P[coroa|H1] (default=0.5): **0.6666**
+```{r, echo=FALSE}
+knitr::include_graphics("SimulaMoedas02.png", dpi=100)
+```
+
+<table  align="center" style="border:1; background-color:#dddddd;"><tr><td>
+$\beta$ ... probabilidade do erro do tipo II
+
+(não rejeitar $H_0$ incorretamente)
+</td></tr></table>
+
+## Tomada de decisão: $\alpha$ e $\beta$
+<div align=center>
+<table center>
+<tr>
+<td></td>
+<td style="color:#26a169; background-color:#cccccc; border:1px; padding:15px;">$H_0$ verdadeira</td>
+<td style="color:#E65518; background-color:#cccccc; border:1px; padding:15px;">$H_0$ falsa</td>
+</tr>
+<tr>
+<td style="color:#26a169; background-color:#cccccc; border:1px; padding:15px;">não rejeita $H_0$</td>
+<td style="text-align: center;">ok</td>
+<td style="font-size:180%; text-align: center;">$\beta$</td>
+</tr>
+<tr>
+<td style="color:#E65518; background-color:#cccccc; border:1px; padding:15px;">rejeita $H_0$</td>
+<td style="font-size:180%; text-align: center;">$\alpha$</td>
+<td style="text-align: center;">ok</td>
+</tr>
+</table>
+</div>
+
+### poder ($1-\beta$)
+
+Probabilidade de rejeitar $H_0$ corretamente:
+
+<div align=center>
+<table center>
+<tr>
+<td></td>
+<td style="color:#26a169; background-color:#cccccc; border:1px; padding:15px;">O efeito<br>**não existe**</td>
+<td style="color:#E65518; background-color:#cccccc; border:1px; padding:15px;">O efeito<br>**existe**</td>
+</tr>
+<tr>
+<td style="color:#26a169; background-color:#cccccc; border:1px; padding:15px;">**sem** evidência<br>de efeito</td>
+<td style="text-align: center;">não rejeitou $H_0$,<br>corretamente</td>
+<td style="font-size:100%; text-align: center;">$\beta$</td>
+</tr>
+<tr>
+<td style="color:#E65518; background-color:#cccccc; border:1px; padding:15px;">**com** evidência<br>de efeito</td>
+<td style="font-size:100%; text-align: center;">$\alpha$</td>
+<td style="text-align: center;">rejeitou $H_0$,<br>corretamente<br>
+<font style="font-size:180%;">$poder = 1-\beta$</font></td>
+</tr>
+</table>
+</div>
+
+### e o que acontece na prática?
+<div align=center>
+<table center>
+<tr>
+<td></td>
+<td style="color:#1965B0; background-color:#cccccc; border:1px; padding:15px;">**Não sabemos** se o efeito existe</td>
+</tr>
+<tr>
+<td style="color:#26a169; background-color:#cccccc; border:1px; padding:15px;">não rejeitou $H_0$,<br>**sem** evidência<br>de efeito, então...</td>
+<td style="text-align: center; background-color:#a6da9a;">
+... o efeito não existe<br>**OU**<br>
+... o efeito existe e a probabilidade<br>
+de **decisão errada é $\beta$**<br>
+(se o efeito existe -> erro do tipo II)
+</td>
+</tr>
+<tr>
+<td style="color:#E65518; background-color:#cccccc; border:1px; padding:15px;">rejeitou $H_0$,<br>**com** evidência<br>de efeito, então...</td>
+<td style="text-align: center; background-color:#F7CB45;">
+... o efeito não existe e a probabilidade<br>
+de **decisão errada é $\alpha$**<br>
+(se o efeito não existe -> erro do tipo I)<br>
+**OU**<br>
+... o efeito existe e a probabilidade<br>
+de **decisão correta é $1-\beta$**,<br>
+i.e., o poder do teste<br>
+(de declarar a diferença acertadamente).
+</td>
+</tr>
+</table>
+</div>
+
+Então, neste exemplo, como **não rejeitamos** $H_0$, declarar que os dois tratamentos são iguais (i.e., aceitar $H_0$) é a decisão incorreta com probabilidade de ...
+
+```{r, echo=TRUE}
+p.sucesso <- 0.6666
+jogadas <- 15
+beta <- sum(dbinom(0:11,jogadas,p.sucesso))
+cat("beta = ",beta,"\n")
+```
+
+#### Conclusão: ESTE ESTUDO É INCONCLUSIVO.
+
+<font style="text-align:center; font-size:160%;">
+Não temos evidência para dizer que os dois tratamentos são diferentes, e menos ainda podemos afirmar que os dois são iguais.
+</font>
+
+```{r, echo=FALSE}
+knitr::include_graphics("jornalista07.png", dpi=150)
+```
+
+
+## O que fazer para reduzir $\beta$?
+A literatura costuma usar o nível de significância $\alpha=0.05=5\%$ e poder entre $80\%$ e $90\%$ (de $\beta=0.2=20\%$ a $\beta=0.1=10\%$).
+
+```{r, echo=FALSE}
+alfa <- 0.05
+jogadas <- 15
+pH0 <- 0.5
+pH1 <- 2/3
+sucesso <- 0:jogadas
+H0 <- dbinom(sucesso,jogadas,pH0)
+H1 <- dbinom(sucesso,jogadas,pH1)
+
+# H0
+plot(sucesso, H0,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas", 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(H0,H1))*1.2, 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso, H0, 
+       pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# H1
+lines(sucesso+0.2, H1,
+     type="h", 
+     col=friendlycolor(27), lwd=3)
+points(sucesso+0.2, H1, 
+       pch=21, 
+       col=friendlycolor(27), 
+       bg=friendlycolor(30))
+# cutoff 5%
+cutoff <- jogadas+1
+while (sum(H0[cutoff:(jogadas+1)]) < alfa)
+{
+  cutoff <- cutoff-1
+}
+abline(v=cutoff-0.5,lty=2, lwd=2)
+# beta
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+lines (sucesso[1:cutoff], H1[1:cutoff],
+       col=paste(friendlycolor(27),"88",sep=""), 
+       lwd=hachura, type="h")
+```
+
+### Estratégia 1: aumentar o valor de $\alpha$
+```{r, echo=TRUE, eval=FALSE}
+source("Goodcoin.R")
+```
+
+Mesmo com $alfa=0.6$ ...
+```{r, echo=FALSE}
+source("friendlycolor.R")
+alfa <- 0.6
+jogadas <- 15
+pH0 <- 0.5
+pH1 <- 2/3
+sucesso <- 0:jogadas
+H0 <- dbinom(sucesso,jogadas,pH0)
+H1 <- dbinom(sucesso,jogadas,pH1)
+
+# H0
+plot(sucesso, H0,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas", 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(H0,H1))*1.2, 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso, H0, 
+       pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# H1
+lines(sucesso+0.2, H1,
+     type="h", 
+     col=friendlycolor(27), lwd=3)
+points(sucesso+0.2, H1, 
+       pch=21, 
+       col=friendlycolor(27), 
+       bg=friendlycolor(30))
+# cutoff 5%
+cutoff <- jogadas+1
+while (sum(H0[cutoff:(jogadas+1)]) < alfa)
+{
+  cutoff <- cutoff-1
+}
+abline(v=cutoff-0.5,lty=2, lwd=2)
+# beta e alfa
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+lines (sucesso[1:cutoff], 
+       H1[1:cutoff],
+       col=paste(friendlycolor(27),"88",sep=""), 
+       lwd=hachura, type="h")
+lines (sucesso[cutoff:jogadas+1], 
+       H0[cutoff:jogadas+1],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+cat("cutoff = ",cutoff-1,"\n")
+beta <- sum(H1[1:cutoff])
+```
+```{r, echo=TRUE}
+cat("beta = ",round(beta*100,2),"%\n")
+cat("poder = ",round((1-beta)*100,2),"%\n")
+```
+
+### Estratégia 2: tornar as distribuições mais estreitas
+```{r, echo=TRUE, eval=FALSE}
+source("Goodcoin.R")
+```
+
+Com 78 crianças e $alfa=0.05$ ...
+```{r, echo=FALSE}
+source("friendlycolor.R")
+alfa <- 0.05
+jogadas <- 78
+pH0 <- 0.5
+pH1 <- 2/3
+sucesso <- 0:jogadas
+H0 <- dbinom(sucesso,jogadas,pH0)
+H1 <- dbinom(sucesso,jogadas,pH1)
+
+# H0
+plot(sucesso, H0,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas", 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(H0,H1))*1.2, 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso, H0, 
+       pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# H1
+lines(sucesso+0.2, H1,
+     type="h", 
+     col=friendlycolor(27), lwd=3)
+points(sucesso+0.2, H1, 
+       pch=21, 
+       col=friendlycolor(27), 
+       bg=friendlycolor(30))
+# cutoff 5%
+cutoff <- jogadas+1
+while (sum(H0[cutoff:(jogadas+1)]) < alfa)
+{
+  cutoff <- cutoff-1
+}
+abline(v=cutoff-0.5,lty=2, lwd=2)
+# beta e alfa
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+lines (sucesso[1:cutoff], 
+       H1[1:cutoff],
+       col=paste(friendlycolor(27),"88",sep=""), 
+       lwd=hachura, type="h")
+lines (sucesso[cutoff:jogadas+1], 
+       H0[cutoff:jogadas+1],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+cat("cutoff = ",cutoff-1,"\n")
+beta <- sum(H1[1:cutoff])
+```
+```{r, echo=TRUE}
+cat("beta = ",round(beta*100,2),"%\n")
+cat("poder = ",round((1-beta)*100,2),"%\n")
+```
+Aplicando-se o novo método aplicado a 78 crianças:
+
+ - se 47 ou mais crianças aprenderem higiene pessoal, rejeitamos $H_0$ e podemos afirmar que o novo tratamento é melhor que o tradicional com $90\%$ de probabilidade de estarmos corretos (no entanto, pode ser que os tratamentos sejam iguais e estejamos errados, com $\alpha=5\%$ de probabilidade).
+ 
+ - se somente até 46 crianças aprenderem higiene pessoal, não podemos rejeitar $H_0$. No entanto, como escolhemos poder de $90\%$ **antes do iniciarmos o estudo**, podemos aceitar $H_0$ e afirmar que os dois tratamentos são iguais porque a igualdade não deve ser decorrente de insuficiência amostral (no entanto, podemos estarm enganados e, na verdade, o novo tratamento ser melhor, com $\beta=10\%$ de probabilidade).
+ 
+<table align=center style="border:1; background-color:#CAE0AB"; padding:15px;><tr><td>
+Notou que
+
+ ${47 \over 78} = 0.6025641 \approx 60\%$ 
+
+e antes, quando foi inconclusivo,
+
+ ${10 \over 15} = 0.6666667 \approx 67\%$ ?
+
+```{r, echo=FALSE}
+knitr::include_graphics("jornalista07.png", dpi=150)
+```
+</td></tr></table>
+
+
+### Estratégia 3: ser capaz de detectar, somente, maiores efeitos 
+```{r, echo=TRUE, eval=FALSE}
+source("Goodcoin.R")
+```
+Caso eu não tenha como avaliar mais do que 15 crianças...
+```{r, echo=TRUE}
+jogadas <- 15
+sucesso <- 0:jogadas
+p.sucesso <- 0.88 # *** um novo tratamento, com efeito maior
+probabilidade <- dbinom(sucesso,jogadas,p.sucesso)
+binomial <- data.frame(sucesso,probabilidade)
+names(binomial) <- c("Sucesso","FR")
+binomial$FA <- NA
+binomial$FAdec <- NA
+for(b in 1:(jogadas+1))
+{
+  binomial$FA[b] <- sum(binomial$FR[binomial$Sucesso<=b-1])
+  binomial$FAdec[b] <- sum(binomial$FR[binomial$Sucesso>=b-1])
+}
+print(binomial)
+```
+```{r, echo=FALSE}
+source("friendlycolor.R")
+alfa <- 0.05
+jogadas <- 15
+pH0 <- 0.5
+pH1 <- 0.88
+sucesso <- 0:jogadas
+H0 <- dbinom(sucesso,jogadas,pH0)
+H1 <- dbinom(sucesso,jogadas,pH1)
+
+# H0
+plot(sucesso, H0,
+     main = paste("Binomial: ",
+                  jogadas, " jogadas", 
+                  sep=""),
+     xlab = "Sucesso",
+     ylab = "Probabilidade",
+     ylim = c(0,max(H0,H1))*1.2, 
+     type="h", 
+     col=friendlycolor(8), lwd=3)
+points(sucesso, H0, 
+       pch=21, 
+       col=friendlycolor(8), 
+       bg=friendlycolor(12))
+# H1
+lines(sucesso+0.2, H1,
+     type="h", 
+     col=friendlycolor(27), lwd=3)
+points(sucesso+0.2, H1, 
+       pch=21, 
+       col=friendlycolor(27), 
+       bg=friendlycolor(30))
+# cutoff 5%
+cutoff <- jogadas+1
+while (sum(H0[cutoff:(jogadas+1)]) < alfa)
+{
+  cutoff <- cutoff-1
+}
+abline(v=cutoff-0.5,lty=2, lwd=2)
+# beta e alfa
+hachura <- 500/jogadas
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+lines (sucesso[1:cutoff], 
+       H1[1:cutoff],
+       col=paste(friendlycolor(27),"88",sep=""), 
+       lwd=hachura, type="h")
+lines (sucesso[cutoff:jogadas+1], 
+       H0[cutoff:jogadas+1],
+       col=paste(friendlycolor(8),"88",sep=""), 
+       lwd=hachura, type="h")
+cat("cutoff = ",cutoff-1,"\n")
+beta <- sum(H1[1:cutoff])
+```
+```{r, echo=TRUE}
+cat("beta = ",round(beta*100,2),"%\n")
+cat("poder = ",round((1-beta)*100,2),"%\n")
+```
+Com apenas 15 crianças disponíveis, o estudo de um novo método poderá ser conclusivo se o método for capaz de ensinar com sucesso $88\%$ ou mais das crianças (i.e., tenha efeito maior que os 2/3 do exemplo anterior); neste caso poderá ser considerado igual ao tradicional no caso de até 11 crianças ou melhor que o tradicional se 12 ou mais crianças aprenderem higiene pessoal.  
+
+# Distribuição de Poisson
+Esta é uma distribuição de probabilidades para uma variável quantitativa discreta (contagem de eventos) quando:
+
+ - não sabemos o número máximo de ocorrências;
+ - os eventos são raros; 
+ - as ocorrências dos eventos são independentes;
+ - a probabilidade de ocorrência de um evento em um certo intervalo é a mesma para todos os demais intervalos de tempo;
+ - a probabilidade de ocorrência dos eventos é proporcional ao tamanho do intervalo;
+ - em uma porção infinitesimal do intervalo, a probabilidade de mais de uma ocorrência do evento é desprezível.
+
+## exemplo
+Certo estudo demonstrou que a distribuição mensal de acidentes de trabalho entre moradores de determinada comunidade, entre 1977 e 1987, obedecia uma distribuição de Poisson com média 33 ocorrências por ano.
+
+Qual a probabilidade estimada de que num certo mês do ano sejam observados 3 acidentes de trabalho?
+
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+A distribuição de Poisson tem um único parâmetro, $\lambda$, que é a taxa de ocorrência dos eventos.
+
+Neste exemplo, a taxa mensal é
+${33 \over 12} = 2.75$
+</td></tr></table>
+
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+A função R é **dpois(x, lambda)** indicando, respectivamente,
+quantas ocorrências e a taxa das ocorrências.
+
+No caso de ocorrerem 2.75 (lambda=2.75) eventos para o
+tempo e o tamanho da população considerada, a probabilidade de não ocorrer evento algum (x=0) é:
+```{r, echo=TRUE}
+dpois(x=0, lambda=2.75)
+```
+de 1 ocorrência:
+```{r, echo=TRUE}
+dpois(1, 2.75)
+```
+de 2 ocorrências:
+```{r, echo=TRUE}
+dpois(2, 2.75)
+```
+etc.
+
+Diferentemente da distribuição binomial, a de Poisson pode ser computada ao infinito.
+</td></tr></table>
+
+Neste exemplo, a ocorrência de exatamente 3 eventos é: 
+```{r, echo=TRUE}
+dpois(x=3, lambda=2.75)
+```
+A probabilidade de ocorrer até 3 eventos é a soma das probabilidades de ocorrência de nenhum, 1, 2 ou 3 eventos:
+```{r, echo=TRUE}
+sum(dpois(0:3, lambda=2.75))
+```
+Como não há limite superior, caso quiséssemos saber a probabilidade de 4 ou mais eventos, precisamos usar o complemento:
+```{r, echo=TRUE}
+1-sum(dpois(0:3, lambda=2.75))
+```
+
+O seguinte código mostra a aparência desta distribuição:
+```{r, echo=TRUE}
+# Poisson_com_caudas.R
+# altere o que deseja
+lambda <- 2.75
+max_plotar <- 15 # valor maximo para plotar (Poisson vai a + infinito)
+cauda <- 3 # a partir de onde hachurar e calcular p da area
+cor = "#1965B0" # RGB
+# grafico e calculo
+hachura <- 500/max_plotar
+if (hachura < 10) {hachura <- 10}
+if (hachura > 35) {hachura <- 35}
+cor_transparencia <- paste(cor,"88",sep="")
+eventos <- 0:max_plotar
+probs <- dpois(eventos,lambda)
+# data frame com a distribuicao de Poisson
+poisson <- data.frame(eventos,probs)
+names(poisson) <- c("Eventos", "Probabilidade")
+plot (poisson$Eventos, poisson$Probabilidade, 
+      main="Distribuição de Poisson", 
+      xlab="Número de ocorrências", 
+      ylab="Probabilidade",
+      lwd=3, col=cor, type = "h")
+points(poisson$Eventos, poisson$Probabilidade, 
+       col=cor, bg=cor, pch=21)
+# cauda direita
+lines (poisson$Eventos[poisson$Eventos>cauda], 
+       poisson$Probabilidade[poisson$Eventos>cauda], 
+       col=paste(cor,"88",sep=""), 
+       lwd=hachura, type="h")
+print(poisson)
+prob_dir <- sum(poisson$Probabilidade[poisson$Eventos<=cauda])
+cat("\nP[eventos <= ",cauda,"] =",prob_dir)
+cat("\nP[eventos >  ",cauda,"] =",1-prob_dir)
+cat("\n")
+```
+
+# Distribuição normal
+
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+A distribuição normal tem dois parâmetros, média ($\mu$) e desvio-padrão ($\sigma$).
+</td></tr></table>
+
+## aparência
+Vamos assumir uma distribuição $N(\mu=15,\sigma=8)$:
+```{r, echo=FALSE}
+knitr::include_graphics("distnormal.png", dpi=100)
+```
+
+## simetria
+É uma distribuição simétrica, portanto média, moda e mediana coincidem:
+```{r, echo=FALSE}
+knitr::include_graphics("distnormal0dp.png", dpi=100)
+```
+
+
+Metade da área sob a curva está à esquerda e metade à direita da média.
+
+## áreas sob a curva
+
+### $\pm 1 dp$
+cerca de 68% da área entre -1 e +1 desvio-padrão:
+```{r, echo=FALSE}
+knitr::include_graphics("distnormal1dp.png", dpi=100)
+```
+
+
+### $\pm 2 dp$
+cerca de 95% da área entre -2 e +2 desvio-padrão:
+```{r, echo=FALSE}
+knitr::include_graphics("distnormal2dp.png", dpi=100)
+```
+
+### $\pm 3 dp$
+cerca de 99.7% da área entre -3 e +3 desvio-padrão:
+```{r, echo=FALSE}
+knitr::include_graphics("distnormal3dp.png", dpi=100)
+```
+
+### variando média e desvio-padrão
+Para cada par de parâmetros $\mu$ e $\sigma$, define-se completamente uma distribuição normal. 
+
+Admita (não tome estes valores como variáveis da prática médica) que as seguintes variáveis tenham distribuições normais:
+
+```{r, echo=TRUE}
+# GraficoNormal.R
+source ("friendlycolor.R")
+variavel <- "Creatinina"
+unidade <- "mg/dl"
+media <- 0.95
+desvpad <- 0.125
+x <- seq(from=media-5*desvpad, to=media+5*desvpad, by=0.01)
+y <- dnorm(x, mean=media, sd=desvpad)
+xy <- data.frame(x,y)
+plot(x,y,
+     main=paste("N(",media,",",desvpad,")",sep=""), 
+     xlab=paste(variavel," (",unidade,")",sep=""), 
+     ylab=NA,
+     xlim=c(media-4*desvpad,media+4*desvpad),
+     col=friendlycolor(2),type="l",lwd=2
+     )
+```
+
+... com o mesmo código R, geramos:
+
+```{r, echo=FALSE}
+# GraficoNormal.R
+source ("friendlycolor.R")
+variavel <- "Hemoglobina"
+unidade <- "g/dl"
+media <- 15.5
+desvpad <- 1.25
+x <- seq(from=media-5*desvpad, to=media+5*desvpad, by=0.01)
+y <- dnorm(x, mean=media, sd=desvpad)
+xy <- data.frame(x,y)
+plot(x,y,
+     main=paste("N(",media,",",desvpad,")",sep=""), 
+     xlab=paste(variavel," (",unidade,")",sep=""), 
+     ylab=NA,
+     xlim=c(media-4*desvpad,media+4*desvpad),
+     col=friendlycolor(8),type="l",lwd=2
+     )
+```
+```{r, echo=FALSE}
+# GraficoNormal.R
+source ("friendlycolor.R")
+variavel <- "Hematócrito"
+unidade <- "%"
+media <- 45
+desvpad <- 3.5
+x <- seq(from=media-5*desvpad, to=media+5*desvpad, by=0.01)
+y <- dnorm(x, mean=media, sd=desvpad)
+xy <- data.frame(x,y)
+plot(x,y,
+     main=paste("N(",media,",",desvpad,")",sep=""), 
+     xlab=paste(variavel," (",unidade,")",sep=""), 
+     ylab=NA,
+     xlim=c(media-4*desvpad,media+4*desvpad),
+     col=friendlycolor(14),type="l",lwd=2
+     )
+```
+```{r, echo=FALSE}
+# GraficoNormal.R
+source ("friendlycolor.R")
+variavel <- "Eritrócitos"
+unidade <- "milhões/microlitro"
+media <- 5.5
+desvpad <- 0.425
+x <- seq(from=media-5*desvpad, to=media+5*desvpad, by=0.01)
+y <- dnorm(x, mean=media, sd=desvpad)
+xy <- data.frame(x,y)
+plot(x,y,
+     main=paste("N(",media,",",desvpad,")",sep=""), 
+     xlab=paste(variavel," (",unidade,")",sep=""), 
+     ylab=NA,
+     xlim=c(media-4*desvpad,media+4*desvpad),
+     col=friendlycolor(20),type="l",lwd=2
+     )
+```
+```{r, echo=FALSE}
+# GraficoNormal.R
+source ("friendlycolor.R")
+variavel <- "Cálcio sérico"
+unidade <- "mg/dl"
+media <- 9.75
+desvpad <- 0.375
+x <- seq(from=media-5*desvpad, to=media+5*desvpad, by=0.01)
+y <- dnorm(x, mean=media, sd=desvpad)
+xy <- data.frame(x,y)
+plot(x,y,
+     main=paste("N(",media,",",desvpad,")",sep=""), 
+     xlab=paste(variavel," (",unidade,")",sep=""), 
+     ylab=NA,
+     xlim=c(media-4*desvpad,media+4*desvpad),
+     col=friendlycolor(26),type="l",lwd=2
+     )
+```
+
+Parecem todas iguais, mas observe na mesma escala (desconsiderando as unidades de medida):
+```{r, echo=FALSE}
+# GraficoNormal.R
+source ("friendlycolor.R")
+variavel <- c("Creatinina", "Hemoglobina", "Hematócrito", "Eritrócitos", "Cálcio sérico")
+media <- c(0.95,15.5,45,5.5,9.75)
+desvpad <- c(0.125,1.25,3.5,0.425,0.375)
+cor <- c()
+p.cor <- 2
+p.lty <- 1
+plot(NA, NA,
+     main="Distribuições normais não padronizadas", 
+     xlab="Valor", 
+     ylab=NA,
+     xlim=c(min(media-4*desvpad),max(media+4*desvpad)),
+     ylim=c(0,4)
+     )
+for (e in 1:length(variavel))
+{
+  x <- seq(from=media[e]-5*desvpad[e], 
+           to=media[e]+5*desvpad[e], by=0.01)
+  y <- dnorm(x, mean=media[e], sd=desvpad[e])
+  lines(x,y,col=friendlycolor(p.cor),lty=p.lty,
+        type="l",lwd=2)
+  cor <- c(cor,friendlycolor(p.cor))
+  p.cor <- p.cor+6
+  p.lty <- p.lty+1
+}
+legend ("topright", 
+        variavel, 
+        lty=seq(1:length(variavel)),
+        lwd=2, 
+        col=cor,
+        box.lwd=0)
+```
+
+## Distribuição normal padronizada
+
+Para padronizar **qualquer** distribuição, basta aplicar a todos os seus valores x:
+
+<font style="text-align:center; font-size:200%;">$z = { {x - \mu} \over \sigma }$</font>
+
+Subtrair a média faz com que a distribuição fique centrada em $0$ e dividir por $\sigma$ faz com que o desvio-padrão seja igual a $1$. A distribuição resultante é dada em escore $z$.
+
+Caso normalizemos todas as curvas acima, obteremos:
+```{r, echo=FALSE}
+source ("friendlycolor.R")
+variavel <- c("Creatinina", "Hemoglobina", 
+              "Hematócrito", "Eritrócitos", "Cálcio sérico")
+media <- c(0.95,15.5,45,5.5,9.75)
+desvpad <- c(0.125,1.25,3.5,0.425,0.375)
+cor <- c()
+p.cor <- 2
+lwd <- c()
+p.lwd <- 2+5*0.4
+p.lty <- 1
+plot(NA, NA,
+     main="Distribuições normais padronizadas", 
+     xlab="z", 
+     ylab=NA,
+     xlim=c(-4,4),
+     ylim=c(0,0.4)
+)
+for (e in 1:length(variavel))
+{
+  x <- seq(from=-5, to=+5, by=0.01)
+  y <- dnorm(x, mean=0, sd=1)
+  lines(x,y,col=friendlycolor(p.cor),lty=p.lty,
+        type="l",lwd=p.lwd)
+  cor <- c(cor,friendlycolor(p.cor))
+  lwd <- c(lwd,p.lwd)
+  p.cor <- p.cor+6
+  p.lty <- p.lty+1
+  p.lwd <- p.lwd-0.4
+}
+legend ("topright", 
+        variavel, 
+        lty=seq(1:length(variavel)),
+        lwd=lwd, 
+        col=cor,
+        box.lwd=0)
+```
+
+A vantagem é que conhecemos as propriedades de qualquer distribuição normal, mas da normal padronizada memorizamos facilmente seus principais valores.
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("coruja.png", dpi=150) 
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+A função R que (dado o valor q, devolve a probabilidade) é: 
+
+**pnorm(q, mean = 0, sd = 1, lower.tail = TRUE)**
+
+que calcula (por _default_) as probabilidades acumuladas de -infinito
+(lower.tail=TRUE) ao valor **q** solicitado. Assume, também por _default_, média igual a zero (mean=0) e desvio-padrão (em ingês, _standard deviation_) igual a 1 (sd=1), portanto uma normal padronizada.
+
+Não é necessário converter tudo para a normal padronizada quando quiser encontrar quaisquer as probabilidades.
+
+No exemplo, com média igual a 15 e desvio-padrão igual a 8, encontramos as áreas, respectivamente, para $\pm 1 sd$:
+```{r, echo=TRUE}
+2*(pnorm(15+8, mean=15, sd=8)-0.5)
+```
+ou, na versão da normal padronizada (que serve para simplificar):
+```{r, echo=TRUE}
+2*(pnorm(1)-0.5)
+```
+<small>a distribuição normal é simétrica, então achamos a probabilidade acumulada de $-\infty$ até 1 desvio-padrão, subtraímos a metade esquerda da distribuição (encontrando a área entre 0 e 1 desvio-padrão) e, então, multiplicamos por 2.</small>
+
+Similarmente, para $\pm 2 sd$:
+```{r, echo=TRUE}
+2*(pnorm(2)-0.5)
+```
+e para $\pm 3 sd$:
+```{r, echo=TRUE}
+2*(pnorm(3)-0.5)
+```
+Note que, entre $\pm 2 dp$, não temos exatamente 95% da área. Para
+achar o valor correto, a função R que faz o reverso de **_pnorm_** (dada a probabilidade, devolve o valor **q**) é:
+
+**qnorm(p, mean = 0, sd = 1, lower.tail = TRUE)**
+
+então obtemos (deixando $2.5\%$ em cada cauda):
+```{r, echo=TRUE}
+qnorm(0.025)
+```
+e
+```{r, echo=TRUE}
+qnorm(0.975)
+```
+Então, 95% da área fica, aproximadamente, no intervalo dado por $\pm 1.96 dp$.
+</td></tr></table>
+***
+
+## Criando distribuições normais em R
+
+Para mulheres o valor de referência da creatinina sérica é de 0.5 a 1.1 mg/dl. Assumiremos, então, distribuição aproximadamente normal com média de 0.8 mg/dl e desvio-padrão de 0.15 mg/dl.
+
+O seguinte código usa a função _**rnorm()**_ para criar, usando um gerador de números pseudo-aleatórios (_**r**andom_), uma população com 10000 indivíduos:
+```{r, echo=TRUE}
+# numero de individuos
+n <- 10000
+# assumindo que a distribuicao eh simetrica%
+mu <- 0.8 # (0.5+1.1)/2
+# assumindo que deram o intervalo de 95%
+dp <- 0.15 # (1.1-0.5)/4
+# cria a populacao e exibe o grafico
+v <- rnorm(n,mu,dp)
+d <- density(v)
+plot (d, type="l", 
+      main="Distribuicao ficticia",
+      xlim=c(mu-4*dp,mu+4*dp),
+      xlab="Creatinina", 
+      ylab="densidade", 
+      lty=1, lwd=2)
+```
+
+e o seguinte código exibe a distribuição padronizada
+```{r, echo=TRUE}
+v2 <- (v-mu)/dp
+d2<- density(v2)
+plot (d2, type="l", 
+      main="Distribuicao ficticia padronizada",
+      xlim=c(-4, 4),
+      xlab="z", 
+      ylab="densidade", 
+      lty=1, lwd=2)
+```
+
+Da mesma forma, assumindo-se que o valor de referência para  hemoglobina em mulheres é de $13.5 \pm 1.5 g/dl$, correspondendo estes valores à média $\pm$ 2 desvio-padrão, e que a distribuição da hemoglobina segue aproximadamente uma distribuição normal, criamos:
+```{r, echo=TRUE}
+# numero de individuos
+n <- 10000
+# media
+mu <- 13.5 
+# desvio-padrao
+dp <-1.5 
+# cria a populacao e exibe o grafico
+v <- rnorm(n,mu,dp)
+d <- density(v)
+plot (d, type="l", 
+      main="Distribuicao ficticia",
+      xlim=c(mu-4*dp,mu+4*dp),
+      xlab="Hemoglobina", 
+      ylab="densidade", 
+      lty=1, lwd=2)
+```
+a qual é igualmente padronizada:
+```{r, echo=TRUE}
+v2 <- (v-mu)/dp
+d2<- density(v2)
+plot (d2, type="l", 
+      main="Distribuicao ficticia padronizada",
+      xlim=c(-4, 4),
+      xlab="z", 
+      ylab="densidade", 
+      lty=1, lwd=2)
+```
+
+# TCL e EPM
+
+O Teorema Central do Limite (TCL) é uma das descobertas mais poderosas para as análises estatísticas. Para experimentar com ele, vamos criar uma população com uma variável fictícia que **não** tem distribuição normal:
+
+<div align=right><small>
+A íntegra do _Rscript_ que será desenvolvido adiante está em <font style="background-color:#F7CB45;"> Bootstrapping_populacaoXamostra.R</font>
+</small></div>
+
+```{r, echo=TRUE}
+# Cria populacao ficticia
+source ("friendlycolor.R")
+
+# Uma variavel qualquer
+N <- 1000000 # tamanho da populacao
+mu1 <- 80 # media de 2/3 da populacao
+sigma1 <- 30 # desvio padrao de 2/3 da populacao
+mu2 <- 180 # media de 1/3 da populacao
+sigma2 <- 50 # desvio padrao de 2/3 da populacao
+# set.seed(123)
+
+# criando uma populacao ficticia
+pop_valores <- round(rnorm(2*N/3, mean=mu1, sd=sigma1),0)
+pop_valores <- c(pop_valores,
+                 round(rnorm(1*N/3, mean=mu2, sd=sigma2),0))
+mean_pop <- mean(pop_valores)
+sd_pop <- sd(pop_valores)
+# distribuicao dos valores nesta populacao ficticia
+dpop_valores <- density(pop_valores)
+plot (dpop_valores, main="Populacao ficticia", 
+      xlab = "Valor", ylab = "densidade",
+      xlim = c(min(mu1,mu2)-4*max(sigma1,sigma2),
+               max(mu1,mu2)+4*max(sigma1,sigma2)),
+      ylim = c(0,max(dpop_valores$y)*1.3),
+      col = friendlycolor(10),
+      lwd=2, type = "l")
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_pop-i*sd_pop, mean_pop),
+        c(max(dpop_valores$y)*1.2,max(dpop_valores$y)*1.2),
+        lwd=10, lty=1, col = paste(friendlycolor(8),tp,sep="") )
+}
+legend("right", 
+       c("Distribuicao", "Media +-3 d.p."), 
+       col=c(friendlycolor(8),paste(friendlycolor(8),"44",sep="")),
+       lwd=c(2,10), 
+       lty=c(1,1), 
+       box.lwd=0, bg="transparent")  
+
+```
+
+### Amostragem (_sampling_)
+
+Retiraremos desta população **_B_** amostras com **_n_** indivíduos. As amostras aparecem em laranja.
+
+```{r, echo=TRUE}
+B <- 3000
+n <- 36
+# reapresenta a populacao
+plot (dpop_valores, main=paste("Amostragem (",B," amostras com n = ",n,")",sep=""), 
+      xlab = "Valor", ylab = "densidade",
+      xlim = c(min(mu1,mu2)-4*max(sigma1,sigma2),
+               max(mu1,mu2)+4*max(sigma1,sigma2)),
+      ylim = c(0,max(dpop_valores$y)*1.3),
+      col = friendlycolor(10),
+      lwd=2, type = "l")
+# plota media e dp populacional
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_pop-i*sd_pop, mean_pop),
+        c(max(dpop_valores$y)*1.2,max(dpop_valores$y)*1.2),
+        lwd=10, lty=1, col = paste(friendlycolor(8),tp,sep="") )
+}
+amo_med <- c() # guardando as medias amostras
+amo_sd <- c() # guardando os d.p. amostras
+for (a in 1:B)
+{
+  amostra <- sample(pop_valores, n, replace=FALSE)
+  amo_med <- c(amo_med,mean(amostra))
+  amo_sd <- c(amo_sd,sd(amostra))
+  amo_dens <- density(amostra, bw = 4)
+  lines(amo_dens, col=paste(friendlycolor(22),"04",sep=""), lwd=0.4)
+}
+mean_amo <- mean(amo_med)
+sd_amo <- mean(amo_sd)
+abline(v=mean_amo, lwd=2, lty=3, col=friendlycolor(19))
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_pop-i*sd_pop, mean_pop),
+        c(max(dpop_valores$y)*1.2,max(dpop_valores$y)*1.2),
+        lwd=10, lty=1, col = paste(friendlycolor(8),tp,sep="") )
+}
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_amo-i*sd_amo, mean_amo),
+        c(max(dpop_valores$y)*1.3,max(dpop_valores$y)*1.3),
+        lwd=10, lty=1, col = paste(friendlycolor(19),tp,sep="") )
+}
+legend(x=mean_pop+2*sd_pop, y=max(dpop_valores$y)*1.1,
+       c("Distribuicao pop.", 
+         "Media pop +-3 d.p.",
+         paste(B,"amostras"),
+         "Media(sampling)",
+         "Sampling +-3 d.p."
+       ), 
+       col=c(
+         friendlycolor(8),
+         paste(friendlycolor(8),"44",sep=""),
+         friendlycolor(22),
+         friendlycolor(19),
+         paste(friendlycolor(19),"44",sep="")
+       ),
+       lwd=c(2,10,2,2,10), 
+       lty=c(1,1,1,3,1), 
+       box.lwd=0, bg="transparent",
+       cex=0.8)  
+```
+
+A linha pontilhada vertical em vermelho corresponde à media das medias amostrais.  Na parte alta do grafico a barra horizontal em vermelho mostra a média das médias amostrais e a média dos desvios-padrão amostrais. 
+
+Repare que a média das médias amostrais coincide com a média populacional e que a média dos desvios-padrao amostrais coincide com o d.p. populacional.
+```{r, echo=TRUE}
+v <- ""
+v <- paste(v,"Populacao:\n")
+v <- paste(v,"\tmedia populacional:",round(mean_pop,3),"\n")
+v <- paste(v,"\td.p. populacional:",round(sd_pop,3),"\n")
+v <- paste(v,"\n")
+v <- paste(v,"Amostras:",B,"com n =",n,"\n")
+v <- paste(v,"\tmedia das medias amostrais:",round(mean_amo,3),"\n")
+v <- paste(v,"\tmedia dos d.p. amostrais:",round(sd_amo,3))
+cat(v)
+```
+### distribuição das médias amostrais e EPM
+O próximo gráfico mostra a distribuição das médias amostrais.  
+
+```{r, echo=TRUE}
+damo_med <- density(amo_med)
+plot (damo_med, main=paste("Distribuicao de Medias Amostrais\n(",B," amostras com n = ",n,")",sep=""), 
+      xlab = "Valor", ylab = "densidade",
+      ylim = c(0, max(damo_med$y)*1.3),
+      col = friendlycolor(19),
+      lwd=3, type = "l")
+sd_epmamostral <- sd(amo_med)
+minx <- mean_amo-5*sd_epmamostral
+maxx <- mean_amo+5*sd_epmamostral
+byx <- (maxx-minx)/100
+x_normal <- seq(from=minx, to=maxx, by=byx)
+y_normal <- dnorm(x_normal, mean=mean_amo, sd=sd_epmamostral)
+lines(x_normal,y_normal, lwd=2, lty=3, col = friendlycolor(19))
+legend("topright",
+       c("Distribuicao", 
+         "Normal"
+       ), 
+       col=c(
+         friendlycolor(19),
+         friendlycolor(19)
+       ),
+       lwd=c(3,2), 
+       lty=c(1,3), 
+       box.lwd=0, bg="transparent",
+       cex=0.8)  
+```
+
+O TCL estabelece que a distribuição das médias amostrais, independentemente da forma da distribuição da população original tem distribuicao NORMAL com média igual à média da população e com certo desvio-padrão.
+
+A linha pontilhada é uma distribuição normal sobreposta para mostrar que a distribuição simulada (linha sólida) é aproximadamente normal **apesar** da distribuição da variável original não ter este tipo de distribuição.
+
+O desvio-padrão das médias amostrais recebe o nome de Erro Padrão das Médias Amostrais (EPM), o qual (em teoria) é estimado pelo desvio-padrão da população dividido pela raiz quadrada do tamanho (n) de cada amostra:
+
+<font style="text-align:center; font-size:200%;">
+$EPM = {\sigma \over \sqrt{n}}$
+</font>
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("coruja.png", dpi=150) 
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+
+Você pode executar o _Rscript_ <font style="background-color:#F7CB45;"> Populacao_e_EPM.R</font>
+```{r, echo=FALSE}
+# Populacao_e_EMP.R
+
+foo <- function()
+{
+  source ("friendlycolor.R")
+  
+  # Uma variavel qualquer
+  N <- 1000000 # tamanho da populacao
+  mu1 <- 80 # media da populacao
+  sigma1 <- 30 # desvio padrao da populacao
+  n <- 100 # tamanho de cada amostra
+  B <- 3000 # numero de amostras
+  # set.seed(123)
+  
+  # criando uma populacao ficticia
+  pop_valores <- round(rnorm(N, mean=mu1, sd=sigma1),0)
+  mean_pop <- mean(pop_valores)
+  sd_pop <- sd(pop_valores)
+  # amostras
+  n_amostral <- c(4,16,36)
+  epm_amo <- sd_pop/(n_amostral ^0.5)
+  x <- seq(from=mean_pop-4*sd_pop, 
+           to=mean_pop+4*sd_pop, by=0.01)
+  ymax <- max(dnorm(x, mean=mean_pop, sd=min(epm_amo)))
+  dpop_valores <- density(pop_valores)
+  plot (dpop_valores, 
+        main=paste("Populacao fictícia e amostras\n",
+                   "média = ",round(mean_pop,0),", d.p. = ",round(sd_pop,1),
+                   sep=""), 
+        xlab = "Valor", ylab = "densidade",
+        xlim = c(mu1-4*sigma1,mu1+4*sigma1),
+        ylim = c(0,max(dpop_valores$y,ymax)*1.1),
+        col = friendlycolor(10),
+        lwd=4, type = "l")
+  tp <- 44
+  for (i in -3:3)
+  {
+    lines(c(mean_pop-i*sd_pop, mean_pop),
+          c(max(dpop_valores$y)*1.2,max(dpop_valores$y)*1.2),
+          lwd=10, lty=1, col = paste(friendlycolor(8),tp,sep="") )
+  }
+  cor_idx <- 25
+  cor_amo <- c()
+  txt_amo <- c()
+  for (a in 1:length(n_amostral))
+  {
+    mean_amo <- mean_pop
+    epm_amo <- sd_pop/(n_amostral[a] ^0.5)
+    x <- seq(from=mean_amo-4*epm_amo, 
+             to=mean_amo+4*epm_amo, by=0.01)
+    y <- dnorm(x, mean=mean_amo, sd=epm_amo)
+    lines(x,y,col=friendlycolor(cor_idx),lwd=2,lty=a+1)
+    txt_amo <- c(txt_amo,paste("n =",n_amostral[a],
+                               ": N(",round(mean_amo,0),", ",round(epm_amo,1),")",
+                               sep=""))
+    cor_amo <- c(cor_amo,friendlycolor(cor_idx))
+    cor_idx <- cor_idx+2
+  }
+  
+  legend("right", 
+         c("População", "Media +-3 d.p.",txt_amo), 
+         col=c(friendlycolor(8),
+               paste(friendlycolor(8),"44",sep=""),
+               cor_amo),
+         lwd=c(4,10,rep(2,length(txt_amo))), 
+         lty=c(1,1,2:(length(txt_amo)+1)), 
+         box.lwd=0, bg="transparent")  
+}
+
+foo()
+```
+
+Observe o comportamento do EPM quando aumenta o tamanho da amostra.
+
+</td></tr></table>
+***
+
+#### EPM na simulação com 3000 amostras
+Como as amostras tiveram tamanho de 36, o EPM é 6 vezes menor que o desvio-padrão populacional (ou o desvio-padrão médio das 3000 amostras)
+
+```{r, echo=TRUE}
+v <- ""
+v <- paste(v,"\tmedia dos d.p. amostrais:",round(sd_amo,3),"\n")
+v <- paste(v,"\td.p. das médias amostrais (EPM):",round(sd_epmamostral,3),"\n")
+cat(v)
+```
+
+### Reamostragem (_bootstrapping_), saindo da fantasia
+
+Ninguem faz **_B_** amostras de uma população. Na prática somente uma amostra é obtida.
+```{r, echo=TRUE}
+# reapresenta a populacao
+plot (dpop_valores, main=paste("Populacao e amostra unica com n = ",n,sep=""), 
+      xlab = "Valor", ylab = "densidade",
+      xlim = c(min(mu1,mu2)-4*max(sigma1,sigma2),
+               max(mu1,mu2)+4*max(sigma1,sigma2)),
+      ylim = c(0,max(dpop_valores$y)*1.3),
+      col = friendlycolor(10),
+      lwd=2, type = "l")
+# amostra unica
+amostra_unica <- sample(pop_valores, n, replace=FALSE)
+mean_amouni <- mean(amostra_unica)
+sd_amouni <- sd(amostra_unica)
+amouni_dens <- density(amostra_unica, bw = 4)
+lines(amouni_dens, col=paste(friendlycolor(22),sep=""), lwd=3)
+abline(v=mean_amouni, lwd=2, lty=3, col=friendlycolor(19))
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_pop-i*sd_pop, mean_pop),
+        c(max(dpop_valores$y)*1.2,max(dpop_valores$y)*1.2),
+        lwd=10, lty=1, col = paste(friendlycolor(8),tp,sep="") )
+}
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_amouni-i*sd_amouni, mean_amouni),
+        c(max(dpop_valores$y)*1.3,max(dpop_valores$y)*1.3),
+        lwd=10, lty=1, col = paste(friendlycolor(19),tp,sep="") )
+}
+legend(x=mean_pop+2*sd_pop, y=max(dpop_valores$y)*1.1,
+       c("Distribuicao pop.", 
+         "Media pop +-3 d.p.",
+         "Amostra unica",
+         "Media amostral",
+         "Media amostral +-3 d.p."
+       ), 
+       col=c(
+         friendlycolor(8),
+         paste(friendlycolor(8),"44",sep=""),
+         friendlycolor(22),
+         friendlycolor(19),
+         paste(friendlycolor(19),"44",sep="")
+       ),
+       lwd=c(2,10,2,2,10), 
+       lty=c(1,1,1,3,1), 
+       box.lwd=0, bg="transparent",
+       cex=0.8)  
+```
+
+A amostra, se não houver problemas, traz propriedades da população:
+```{r, echo=TRUE}
+v <- ""
+v <- paste(v,"Populacao:\n")
+v <- paste(v,"\tmedia populacional:",round(mean_pop,3),"\n")
+v <- paste(v,"\td.p. populacional:",round(sd_pop,3),"\n")
+v <- paste(v,"\n")
+v <- paste(v,"Amostra com n =",n,"\n")
+v <- paste(v,"\tmedia amostral:",round(mean_amouni,3),"\n")
+v <- paste(v,"\td.p. amostral:",round(sd_amouni,3),"\n")
+cat(v)
+```
+
+Na prática, porém, não temos a população como referência e, assim, não fazemos ideia se temos uma amostra representativa:
+
+```{r, echo=TRUE}
+# reapresenta sem a populacao
+plot (NA, main=paste("Amostra unica com n = ",n,sep=""), 
+      xlab = "Valor", ylab = "densidade",
+      xlim = c(min(mu1,mu2)-4*max(sigma1,sigma2),
+               max(mu1,mu2)+4*max(sigma1,sigma2)),
+      ylim = c(0,max(dpop_valores$y)*1.3)
+)
+# reapresenta a ultima amostra 
+lines(amouni_dens, col=paste(friendlycolor(22),sep=""), lwd=3)
+abline(v=mean_amouni, lwd=2, lty=3, col=friendlycolor(19))
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_amouni-i*sd_amouni, mean_amouni),
+        c(max(dpop_valores$y)*1.3,max(dpop_valores$y)*1.3),
+        lwd=10, lty=1, col = paste(friendlycolor(19),tp,sep="") )
+}
+legend(x=mean_pop+2*sd_pop, y=max(dpop_valores$y)*1.1,
+       c("Amostra unica",
+         "Media amostral",
+         "Media amostral +-3 d.p."
+       ), 
+       col=c(
+         friendlycolor(22),
+         friendlycolor(19),
+         paste(friendlycolor(19),"44",sep="")
+       ),
+       lwd=c(2,2,10), 
+       lty=c(1,3,1), 
+       box.lwd=0, bg="transparent",
+       cex=0.8)  
+```
+
+O que podemos fazer é um processo similar ao anterior, fazendo **_B_** reamostragens de **_n_** elementos. Isto parece inútil, pois sempre teremos a própria amostra:
+```{r, echo=TRUE}
+amostra <- c(1, 2, 3, 4, 5)
+n <- length(amostra)
+cat("amostra: ", amostra, 
+           ": média =", round(mean(amostra),2), 
+           "e dp =", round(sd(amostra),2), 
+           "\n")
+# 9 reamostragens sem reposicao
+for (r in 1:9)
+{
+  # *** replace=FALSE por default ***
+  reamostra <- sample(amostra,n)
+  cat("reamostra",r,": ", reamostra, 
+             ": média =", round(mean(reamostra),2), 
+             "e dp =", round(sd(reamostra),2), 
+             "\n")
+}
+```
+
+Então, para obtermos variações de nossa única amostra, fazemos a reamostragem COM REPOSICAO:
+```{r, echo=TRUE}
+# 9 reamostragens com reposicao
+for (r in 1:9)
+{
+  # *** replace=TRUE permite a reposicao ***
+  reamostra <- sample(amostra,n,replace=TRUE)
+  cat("reamostra",r,": ", reamostra, 
+             ": média =", round(mean(reamostra),2), 
+             "e dp =", round(sd(reamostra),2), 
+             "\n")
+}
+```
+
+Voltando à população, podemos fazer as **_B_** amostras com **_n_** elementos **com** reposição:
+
+```{r, echo=TRUE}
+B <- 3000
+n <- 36
+# reapresenta a amostra
+plot (NA, main=paste("Bootstrapping (",B," reamostras com n = ",n,")",sep=""), 
+      xlab = "Valor", ylab = "densidade",
+      xlim = c(min(mu1,mu2)-4*max(sigma1,sigma2),
+               max(mu1,mu2)+4*max(sigma1,sigma2)),
+      ylim = c(0,max(dpop_valores$y)*1.3),
+      col = friendlycolor(22),
+      lwd=2, type = "l")
+boot_med <- c() # guardando as medias amostras do bootstrapping
+boot_sd <- c() # guardando os d.p. amostras do bootstrapping
+for (a in 1:B)
+{
+  amostra <- sample(amostra_unica, n, replace=TRUE)
+  boot_med <- c(boot_med,mean(amostra))
+  boot_sd <- c(boot_sd,sd(amostra))
+  amo_dens <- density(amostra, bw = 4)
+  lines(amo_dens, col=paste(friendlycolor(15),"04",sep=""), lwd=0.4)
+}
+# replota a amostra unica
+lines (amouni_dens, lwd=3, col = friendlycolor(22))
+mean_boot <- mean(boot_med)
+sd_boot <- mean(boot_sd)
+abline(v=mean_boot, lwd=2, lty=3, col=friendlycolor(13))
+# replota media e dp da amostra unica
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_amouni-i*sd_amouni, mean_amouni),
+        c(max(dpop_valores$y)*1.3,max(dpop_valores$y)*1.3),
+        lwd=10, lty=1, col = paste(friendlycolor(19),tp,sep="") )
+}
+# plota media e dp do bootstrapping
+tp <- 44
+for (i in -3:3)
+{
+  lines(c(mean_boot-i*sd_boot, mean_boot),
+        c(max(dpop_valores$y)*1.2,max(dpop_valores$y)*1.2),
+        lwd=10, lty=1, col = paste(friendlycolor(13),tp,sep="") )
+}
+legend(x=mean_pop+2*sd_pop, y=max(dpop_valores$y)*1.1,
+       c("Dist. da amostra", 
+         "Media am +-3 d.p.",
+         paste(B,"amostras"),
+         "Media geral (bootstrp.)",
+         "Medias bootstrp",
+         "Bootstrp. +-3 d.p."
+       ), 
+       col=c(
+         friendlycolor(22),
+         paste(friendlycolor(19),"44",sep=""),
+         friendlycolor(15),
+         friendlycolor(13),
+         paste(friendlycolor(24),"20",sep=""),
+         paste(friendlycolor(13),"44",sep="")
+       ),
+       lwd=c(2,10,2,2,10,10), 
+       lty=c(1,1,1,3,1,1), 
+       box.lwd=0, bg="transparent",
+       cex=0.8)  
+```
+
+E verificar que, novamente, a distribuição das médias amostrais é normal:
+```{r, echo=TRUE}
+# apresenta o EPM obtido por bootstrapping
+dboot_med <- density(boot_med)
+plot (dboot_med, main=paste("Distribuicao de Medias Amostrais\n(",B," amostras com n = ",n,")",sep=""), 
+      xlab = "Valor", ylab = "densidade",
+      ylim = c(0, max(damo_med$y)*1.3),
+      col = friendlycolor(15),
+      lwd=3, type = "l"
+)
+abline(v=mean_boot, lwd=2, lty=3, col=friendlycolor(15))
+sd_epmboot <- sd(boot_med)
+minx <- mean_boot-5*sd_epmboot
+maxx <- mean_boot+5*sd_epmboot
+byx <- (maxx-minx)/100
+x_normal <- seq(from=minx, to=maxx, by=byx)
+y_normal <- dnorm(x_normal, mean=mean_boot, sd=sd_epmboot)
+lines(x_normal,y_normal, lwd=2, lty=3, col = friendlycolor(15))
+icx <- quantile (boot_med, probs=c(0.025,0.975))
+icy <- rep(max(damo_med$y)*1.3,3)
+icy <- icy * c(0.95,0.9,0.85)
+lines(c(icx[1],icx[1],icx[1],icx[2],icx[2],icx[2]), 
+      c(icy[1],icy[3],icy[2],icy[2],icy[1],icy[3]),
+      lwd=3, col = friendlycolor(15))
+points(mean_boot, icy[2], pch=21, bg = friendlycolor(45), col = friendlycolor(15), cex=2)
+points(mean_pop, icy[2], pch=21, bg = friendlycolor(19), col = friendlycolor(19), cex=2)
+legend("topright",
+       c("Dist. bootstrapping",
+         "Normal bootstrapping",
+         "Media populacao",
+         "Media bootstrapping"
+       ), 
+       col=c(
+         friendlycolor(15),
+         friendlycolor(15),
+         friendlycolor(19),
+         friendlycolor(15)
+       ),
+       pt.bg=c(NA,NA,friendlycolor(19),friendlycolor(45)),
+       lwd=c(3,2,NA,NA), 
+       lty=c(1,3,NA,NA), 
+       pch=c(NA,NA,21,21),
+       box.lwd=0, bg="transparent",
+       cex=0.8)  
+```
+
+O valor de EPM, a partir do _bootstrapping_, também é próximo a 1/6 do desvio-padrão populacional.
+```{r, echo=TRUE}
+v <- ""
+v <- paste(v,"Populacao (que nunca veremos):\n")
+v <- paste(v,"\tmedia populacional:",round(mean_pop,3),"\n")
+v <- paste(v,"\td.p. populacional:",round(sd_pop,3),"\n")
+v <- paste(v,"\n")
+v <- paste(v,"Amostra com n =",n,"\n")
+v <- paste(v,"\tmedia amostral:",round(mean_amouni,3),"\n")
+v <- paste(v,"\td.p. amostral:",round(sd_amouni,3),"\n")
+v <- paste(v,"Reamostras:",B,"com n =",n,"\n")
+v <- paste(v,"\tmedia das medias amostrais:",round(mean_boot,3),"\n")
+v <- paste(v,"\tmedia dos d.p. amostrais:",round(sd_boot,3),"\n")
+v <- paste(v,"EPM por bootstrapping a partir da amostra:","\n")
+icx <- round(icx,3)
+v <- paste(v,"\tmedia das medias amostrais:",round(mean_boot,3),"[",icx[1],",",icx[2],"]","\n")
+v <- paste(v,"\tEPM (desvio-padrao das medias amostrais):",round(sd_epmboot,3),"\n")
+cat(v)
+```
+
+Observe, ainda, que a média populacional está dentro do intervalo de confiança de 95% estimado pelo _bootstrapping_.
+
+```{r, echo=FALSE}
+knitr::include_graphics("boot_strap.png", dpi=100)
+```

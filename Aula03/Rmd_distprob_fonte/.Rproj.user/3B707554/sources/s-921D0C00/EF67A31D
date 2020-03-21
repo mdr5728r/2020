@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1584239070819.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EF67A31D",
+    "lastKnownWriteTime" : 1565946162,
+    "last_content_update" : 1565946162,
+    "path" : "~/ps20200114/MSP1290_2020/Aula 2 - Distribuicoes de probabilidade e teste de hipotese nula/Rmd_distprob_fonte/friendlycolor.R",
+    "project_path" : "friendlycolor.R",
+    "properties" : {
+        "cursorPosition" : "50,38",
+        "scrollLine" : "44"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

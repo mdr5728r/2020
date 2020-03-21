@@ -1,0 +1,16 @@
+"0","v <- """""
+"0","v <- paste(v,""Populacao:\n"")"
+"0","v <- paste(v,""\tmedia populacional:"",round(mean_pop,3),""\n"")"
+"0","v <- paste(v,""\td.p. populacional:"",round(sd_pop,3),""\n"")"
+"0","v <- paste(v,""\n"")"
+"0","v <- paste(v,""Amostras:"",B,""com n ="",n,""\n"")"
+"0","v <- paste(v,""\tmedia das medias amostrais:"",round(mean_amo,3),""\n"")"
+"0","v <- paste(v,""\tmedia dos d.p. amostrais:"",round(sd_amo,3))"
+"0","cat(v)"
+"1"," Populacao:
+ 	media populacional: 113.421 
+ 	d.p. populacional: 60.532 
+ 
+ Amostras: 3000 com n = 36 
+ 	media das medias amostrais: 113.218 
+ 	media dos d.p. amostrais: 60.175"

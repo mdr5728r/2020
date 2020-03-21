@@ -1,0 +1,30 @@
+"0","v <- """""
+"0","v <- paste(v,""Populacao (que nunca veremos:\n"")"
+"0","v <- paste(v,""\tmedia populacional:"",round(mean_pop,3),""\n"")"
+"0","v <- paste(v,""\td.p. populacional:"",round(sd_pop,3),""\n"")"
+"0","v <- paste(v,""\n"")"
+"0","v <- paste(v,""Amostra com n ="",n,""\n"")"
+"0","v <- paste(v,""\tmedia amostral:"",round(mean_amouni,3),""\n"")"
+"0","v <- paste(v,""\td.p. amostral:"",round(sd_amouni,3),""\n"")"
+"0","v <- paste(v,""Reamostras:"",B,""com n ="",n,""\n"")"
+"0","v <- paste(v,""\tmedia das medias amostrais:"",round(mean_boot,3),""\n"")"
+"0","v <- paste(v,""\tmedia dos d.p. amostrais:"",round(sd_boot,3),""\n"")"
+"0","v <- paste(v,""EPM por bootstrapping a partir da amostra:"",""\n"")"
+"0","icx <- round(icx,3)"
+"0","v <- paste(v,""\tmedia das medias amostrais:"",round(mean_boot,3),""["",icx[1],"","",icx[2],""]"",""\n"")"
+"0","v <- paste(v,""\tEPM (desvio-padrao das medias amostrais):"",round(sd_epmboot,3),""\n"")"
+"0","cat(v)"
+"1"," Populacao (que nunca veremos:
+ 	media populacional: 113.421 
+ 	d.p. populacional: 60.532 
+ 
+ Amostra com n = 5 
+ 	media amostral: 113.333 
+ 	d.p. amostral: 56.426 
+ Reamostras: 3000 com n = 5 
+ 	media das medias amostrais: 113.538 
+ 	media dos d.p. amostrais: 50.539 
+ EPM por bootstrapping a partir da amostra: 
+ 	media das medias amostrais: 113.538 [ 72.8 , 167.4 ] 
+ 	EPM (desvio-padrao das medias amostrais): 24.862 
+"

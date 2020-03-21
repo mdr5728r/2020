@@ -1,0 +1,30 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.17)  11 MAR 2020 19:10
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**/tmp/silveira/rmarkdown/2d09a87a17d413329fc98262fdf9d5dd/rmd_2d09a87a17d41332
+9fc98262fdf9d5dd.tex
+
+(/tmp/silveira/rmarkdown/2d09a87a17d413329fc98262fdf9d5dd/rmd_2d09a87a17d413329
+fc98262fdf9d5dd.tex
+LaTeX2e <2017-04-15>
+Babel <3.18> and hyphenation patterns for 5 language(s) loaded.
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 \begin{frame}{Objetivos desta aula}
+                                        
+Here is how much of TeX's memory you used:
+ 7 strings out of 494880
+ 552 string characters out of 6179601
+ 46110 words of memory out of 5000000
+ 3428 multiletter control sequences out of 15000+600000
+ 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 36 hyphenation exceptions out of 8191
+ 7i,0n,5p,141b,20s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+!  ==> Fatal error occurred, no output PDF file produced!

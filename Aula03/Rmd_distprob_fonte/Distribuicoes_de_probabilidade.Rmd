@@ -1,0 +1,461 @@
+---
+title: |
+    | Distribuições de probabilidade, 
+    | hipótese nula e valor p
+author: | 
+    | Paulo S. P Silveira (paulo.silveira@fm.usp.br)
+    | Koichi Sameshima (koichi.sameshima@fm.usp.br)
+    | José O. Siqueira (jose.siqueira@fm.usp.br)
+output: 
+  html_document: 
+    df_print: tibble
+    theme: cerulean
+    highlight: pygments
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: true
+      smooth_scroll: true        
+---
+<!-- https://bookdown.org/yihui/rmarkdown/html-document.html#data_frame_printing -->
+<!-- theme: https://bootswatch.com/3/ -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Objetivos desta aula
+Ao final desta aula o aluno deve ser capaz de:
+
+- definir distribuição de probabilidades;
+- definir e aplicar a distribuição Binomial;
+- definir hipóteses estatísticas (hipótese nula e alternativa);
+- diferenciar erros do tipo I e II (alfa e beta);
+- interpretar o valor-p;
+
+## Distribuição Binomial
+![](binomial.png)
+
+## Distribuição de Poisson
+![](poisson.png)
+
+## Distribuição normal
+![](normal.png)
+# Continuando a deformação
+<img src="monstromedico.png" alt="deformando" width="400"/>
+
+# Exemplo hipotético
+
+Suponha que foi feito um levantamento sobre o número de drogas em uso por gestantes .
+
+```{r echo=TRUE}
+DrgGrv <- read.table("Drogas_Gravidez.txt", header=TRUE, sep="\t")
+print(DrgGrv)
+```
+O arquivo _Drogas_Gravidez.txt_ tem duas colunas:
+
+ - a primeira linha tem os nomes das variáveis (header=TRUE), 
+ - as colunas estão separadas por _tab_ (sep="\\t")
+ 
+A variável **DrgGrv** é um _data frame_:
+```{r echo=TRUE}
+is.data.frame(DrgGrv)
+```
+
+
+## Gráfico (contagens)
+
+```{r echo=TRUE}
+plot (DrgGrv)
+```
+
+### No estilo _histogram-like (vertical lines)_
+```{r echo=TRUE}
+plot (DrgGrv,type="h")
+```
+
+Como foi que eu descobri isto? [Quick-R: Line charts](https://www.statmethods.net/graphs/line.html)
+
+### Para manter as bolinhas
+```{r echo=TRUE}
+plot (DrgGrv,type="h")
+points(DrgGrv)
+```
+
+### Colorir
+Encontrei mais em 
+[Quick-R: Graphical Parameters](https://www.statmethods.net/advgraphs/parameters.html)
+
+```{r echo=TRUE}
+plot (DrgGrv,type="h", col="#994F88", lwd=3)
+points(DrgGrv, pch=21, col="#994F88", bg="#994F88")
+```
+
+### Cores amigáveis para daltônicos:
+```{r echo=TRUE}
+source("friendlycolor.R")
+plot (DrgGrv,type="h", col=friendlycolor(8), lwd=3)
+points(DrgGrv, pch=21, col=friendlycolor(8), bg=friendlycolor(12))
+```
+
+#### <font style="background-color:#F7CB45;"> friendlydemo.R </font>
+Exibindo todas as cores da função friendlycolor():
+```{r echo=TRUE}
+# friendlydemo.R
+# exibe as 46 cores disponíveis em friendlycolor.R
+source("friendlycolor.R")
+indice <- 1 # primeiro indice
+# plota um gráfico vazio
+plot(NA, xlim=c(0,9), ylim=c(0,7), 
+     xlab=NA, ylab=NA, axes = FALSE)
+for (x in 1:8)
+{
+  for (y in 1:6)
+  {
+    # pula se acabaram as cores
+    if (indice > 46) {next} 
+    points ( x, 7-y, 
+             pch=21, cex=5, 
+             col="black", 
+             bg=friendlycolor(indice)
+           )
+    
+    cortexto <- "black"
+    
+    if (
+        (indice >= 25 & indice <= 27)
+        |
+        (indice >= 31 & indice <= 36)
+       )
+    {
+      cortexto <- "white"
+    }
+    text(x, 7-y, indice, col=cortexto)
+    # incrementa (proxima cor)
+    indice <- indice+1
+  }
+}
+```
+
+## Distribuição de probabilidades
+```{r echo=TRUE}
+DrgGrv <- read.table("Drogas_Gravidez.txt", header=TRUE, sep="\t")
+print(DrgGrv)
+names(DrgGrv)
+DrgGrv$Porcentagem <- round(DrgGrv$Pacientes/sum(DrgGrv$Pacientes)*100,2)
+names(DrgGrv)
+print(DrgGrv)
+```
+
+### Características
+ - a coluna "Porcentagem" soma 1 ou 100%
+ - todos os valores são positivos
+ - todos os valores ficam entre 0 e 1 (ou entre 0% e 100%)
+
+```{r echo=TRUE}
+sum(DrgGrv$Porcentagem)
+```
+```{r echo=TRUE}
+DrgGrv$Porcentagem < 0
+```
+
+```{r echo=TRUE}
+sum(DrgGrv$Porcentagem < 0)
+```
+
+```{r echo=TRUE}
+DrgGrv$Porcentagem >= 0 & DrgGrv$Porcentagem <= 100
+```
+
+```{r echo=TRUE}
+sum (DrgGrv$Porcentagem >= 0 & DrgGrv$Porcentagem <= 100)
+```
+
+## Gráfico em porcentagem
+Como *DrgGrv* agora tem três colunas, precisamos indicar quais colunas quero usar como $x$ (**DrgGrv$Drogas**) e $y$ (**DrgGrv$Porcentagem**)
+
+```{r echo=TRUE}
+source("friendlycolor.R")
+plot (DrgGrv$Drogas, DrgGrv$Porcentagem,
+      type="h", col=friendlycolor(20), lwd=3)
+points(DrgGrv$Drogas, DrgGrv$Porcentagem,
+       pch=21, 
+       col=friendlycolor(20), bg=friendlycolor(23))
+```
+
+### Corrigindo os eixos
+... consequentemente, os nomes das variáveis aparecem nos eixos. Isto é corrigido assim:
+
+```{r echo=TRUE}
+source("friendlycolor.R")
+plot (DrgGrv$Drogas, DrgGrv$Porcentagem,
+      type="h", col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+points(DrgGrv$Drogas, DrgGrv$Porcentagem,
+       pch=21, 
+       col=friendlycolor(20), bg=friendlycolor(23))
+```
+
+### _Density plots_
+O número de drogas utilizadas é uma variável quantitativa discreta. 
+
+Apenas para demonstrar (não é a forma apropriada), caso a variável fosse quantitativa contínua, poderíamos usar um _density plot_
+
+Primeiro criamos uma variável para conter a densidade de probabilidades
+```{r echo=TRUE}
+# desdobra a quantidade de pacientes
+populacao <- c() # cria um vetor vazio
+for (r in 1:nrow(DrgGrv))
+{
+  # acumula no vetor o número de drogas
+  populacao <- c(populacao, rep(DrgGrv$Drogas, times=DrgGrv$Pacientes))
+}
+# usa a funcao R que transforma em densidade de probabilidade
+densidade <- density(populacao)
+```
+```{r echo=TRUE}
+source("friendlycolor.R")
+plot (densidade,
+      col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+```
+
+#### Dando nome ao gráfico
+A função _plot()_ tem muitos parâmetros; aqui usamos o parâmetro _main_.
+```{r echo=TRUE}
+source("friendlycolor.R")
+# note o titulo em duas linhas usando-se \\n
+plot (densidade,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+```
+
+## <font style="background-color:#F7CB45;">gestantes.R</font>
+Tudo o que foi feito até agora pode ser colocado em um único _Rscript_
+
+```{r eval=FALSE}
+# gestantes.R
+#   le os dados e cria os graficos
+
+source("friendlycolor.R")
+
+# le os dados
+DrgGrv <- read.table("Drogas_Gravidez.txt", 
+                     header=TRUE, sep="\t")
+
+# cria coluna para a porcentagem
+DrgGrv$Porcentagem <- round(DrgGrv$Pacientes/
+                            sum(DrgGrv$Pacientes)*100,2)
+
+# exibe a tabela de dados
+cat("Utilização de drogas em gestantes\n")
+print(DrgGrv)
+
+# exibe o grafico no estilo 'histograma'
+# (variavel quantitativa discreta)
+plot (DrgGrv$Drogas, DrgGrv$Porcentagem,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      type="h", col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+points(DrgGrv$Drogas, DrgGrv$Porcentagem,
+       pch=21, 
+       col=friendlycolor(20), bg=friendlycolor(23))
+
+# tratando a variavel como quantitativa continua
+# (apenas por exemplo; nao eh apropriado fazer isto)
+# cria uma populacao com as quantidades 
+# de drogas utilizadas pelas pacientes
+populacao <- c() # cria um vetor vazio
+for (r in 1:nrow(DrgGrv))
+{
+  # acumula no vetor o número de drogas
+  populacao <- c(populacao, 
+                 rep(DrgGrv$Drogas, times=DrgGrv$Pacientes))
+}
+# usa a funcao R que transforma 
+# em densidade de probabilidade
+densidade <- density(populacao)
+# exibe o grafico no estilo 'density plot'
+plot (densidade,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+```
+
+```{r echo=FALSE}
+# gestantes.R
+#   le os dados e cria os graficos
+
+source("friendlycolor.R")
+
+# le os dados
+DrgGrv <- read.table("Drogas_Gravidez.txt", 
+                     header=TRUE, sep="\t")
+
+# cria coluna para a porcentagem
+DrgGrv$Porcentagem <- round(DrgGrv$Pacientes/
+                            sum(DrgGrv$Pacientes)*100,2)
+
+# exibe a tabela de dados
+cat("Utilização de drogas em gestantes\n")
+print(DrgGrv)
+
+# exibe o grafico no estilo 'histograma'
+# (variavel quantitativa discreta)
+plot (DrgGrv$Drogas, DrgGrv$Porcentagem,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      type="h", col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+points(DrgGrv$Drogas, DrgGrv$Porcentagem,
+       pch=21, 
+       col=friendlycolor(20), bg=friendlycolor(23))
+
+# tratando a variavel como quantitativa continua
+# (apenas por exemplo; nao eh apropriado fazer isto)
+# cria uma populacao com as quantidades 
+# de drogas utilizadas pelas pacientes
+populacao <- c() # cria um vetor vazio
+for (r in 1:nrow(DrgGrv))
+{
+  # acumula no vetor o número de drogas
+  populacao <- c(populacao, 
+                 rep(DrgGrv$Drogas, times=DrgGrv$Pacientes))
+}
+# usa a funcao R que transforma 
+# em densidade de probabilidade
+densidade <- density(populacao)
+# exibe o grafico no estilo 'density plot'
+plot (densidade,
+      main = "Distribuição do uso de\ndrogas em gestantes",
+      col=friendlycolor(20), lwd=3,
+      xlab="Número de drogas utilizadas",
+      ylab="Porcentagem de gestantes")
+```
+
+## Novamente, a incerteza
+![](moeda400reis.png)
+
+## Moeda é um exemplo em saúde?
+<img src="moedasHeadTail.png" width="400"/>
+
+<img src="moedasHeadTailTexto.png" width="400"/>
+
+## Distribuição Binomial: 1 jogada
+```{r, echo=FALSE}
+library(ggplot2, verbose = FALSE)
+library(png)
+library(grid)
+library(ggimage)
+```
+```{r, echo=FALSE}
+layout(matrix(1:2,nrow=1),widths=c(1,2))
+# imagem das moedas
+plot(NA,NA,xlim=c(0,10),ylim=c(0,10), 
+     xlab="", ylab="", axes=FALSE)
+img <- readPNG("moeda_1jogada.png")
+rasterImage(img,0,0,10,6.5)
+# grafico
+source("friendlycolor.R")
+jogadas <- 1
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucessos <- 0:jogadas
+plot(sucessos, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogada", sep=""),
+     ylim = c(0,0.5),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucessos,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+par(mfrow=c(1,1))
+```
+
+## Distribuição Binomial: 2 jogadas
+```{r, echo=FALSE}
+layout(matrix(1:2,nrow=1),widths=c(1,2))
+# imagem das moedas
+plot(NA,NA,xlim=c(0,10),ylim=c(0,10), 
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     xlab="", ylab="", axes=FALSE)
+img <- readPNG("moeda_2jogadas.png")
+rasterImage(img,0,0,10,7.5)
+# grafico
+source("friendlycolor.R")
+jogadas <- 2
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucessos <- 0:jogadas
+plot(sucessos, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     ylim = c(0,0.5),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucessos,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+par(mfrow=c(1,1))
+```
+
+## Distribuição Binomial: 3 jogadas
+```{r, echo=FALSE}
+layout(matrix(1:2,nrow=1),widths=c(1,2))
+# imagem das moedas
+plot(NA,NA,xlim=c(0,10),ylim=c(0,10), 
+     xlab="", ylab="", axes=FALSE)
+img <- readPNG("moeda_3jogadas.png")
+rasterImage(img,0,0,10,10)
+# grafico
+source("friendlycolor.R")
+jogadas <- 3
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucessos <- 0:jogadas
+plot(sucessos, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     ylim = c(0,0.5),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucessos,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+par(mfrow=c(1,1))
+```
+
+## Distribuição Binomial: 5 jogadas
+```{r, echo=TRUE}
+source("friendlycolor.R")
+jogadas <- 5
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucessos <- 0:jogadas
+plot(sucessos, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     ylim = c(0,0.5),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucessos,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+```
+## Distribuição Binomial: 15 jogadas
+```{r, echo=TRUE}
+source("friendlycolor.R")
+jogadas <- 15
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucessos <- 0:jogadas
+plot(sucessos, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     ylim = c(0,0.5),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucessos,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+```
+
+```{r, echo=FALSE}
+source("friendlycolor.R")
+jogadas <- 15
+probabilidade <- dbinom(0:jogadas,jogadas,0.5)
+sucessos <- 0:jogadas
+plot(sucessos, probabilidade,
+     main = paste("Binomial: ",jogadas, " jogadas", sep=""),
+     ylim = c(0,max(probabilidade)),
+     type="h", col=friendlycolor(8), lwd=3)
+points(sucessos,probabilidade, pch=21, col=friendlycolor(8), 
+       bg=friendlycolor(12))
+```
