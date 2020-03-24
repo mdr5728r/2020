@@ -10,6 +10,7 @@ library(readxl)
 Dados <- readxl::read_excel("Table 8.2 RawBirthWeight.xls")
 BSDA::z.test(x=Dados$RBW, sigma.x=4, mu = 20, 
              alternative="less", conf.level=.95)
+sd(Dados$RBW)
 estatura <- c(169, 174, 175, 186)
 BSDA::z.test(x=estatura, sigma.x=7, mu = 177, 
              alternative="less", conf.level=.95)
