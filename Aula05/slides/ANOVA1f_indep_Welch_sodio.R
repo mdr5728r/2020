@@ -1,4 +1,4 @@
-# ANOVA1f_dep_balanc_sodio.R
+# ANOVA1f_indep_Welch_sodio.R
 # para ajustar este RScript para outros dados
 # troque a planilha xlsx e substitua as palavras
 # Instructor pela nova VI (fator)

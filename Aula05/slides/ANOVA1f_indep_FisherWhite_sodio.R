@@ -12,6 +12,8 @@ library(gplots)
 library(emmeans)
 library(readxl)
 
+source("eiras_plotIC.R")
+
 # suppress warnings
 options(warn=-1)
 
@@ -113,16 +115,42 @@ for( f in 1:length(fatores))
 }
 TH$Instructor <- as.factor(TH$Instructor)
 modelo <- lm(Sodium~Instructor, data=TH)
-mc.tuckey <- multcomp::glht(modelo, linfct = mcp(Instructor = "Tukey"))
-print(mcs.tuckey <- summary(mc.tuckey, test=adjusted("bonferroni")))
-multcomp::cld(mcs.tuckey, level=alfa, decreasing=TRUE)
-plot(mc.tuckey,las=3)
-legend("topleft",legenda,lwd=0,lty=0,cex=0.6,box.lwd=0, bg="transparent")
+mc.tukey <- multcomp::glht(modelo, linfct = mcp(Instructor = "Tukey"))
+print(mcs.tukey <- summary(mc.tukey, test=adjusted("bonferroni")))
+multcomp::cld(mcs.tukey, level=alfa, decreasing=TRUE)
+# plot(mc.tukey,las=3)
+t.ic <- mcs.tukey$test$qfunction(0.95)
+df_plot <- data.frame(
+  names (mcs.tukey$test$coefficient),
+  as.vector(mcs.tukey$test$coefficients),
+  as.vector(mcs.tukey$test$coefficients)-t.ic*as.vector(mcs.tukey$test$sigma),
+  as.vector(mcs.tukey$test$coefficients)+t.ic*as.vector(mcs.tukey$test$sigma),
+  as.vector(mcs.tukey$test$pvalues)
+)
+eiras_plotIC(df_plot,
+             main="95% family-wise confidence level",
+             xlab="Difference",
+             usecolor="n"
+             )
+legend("topleft",legenda,lwd=0,lty=0,cex=0.6,box.lwd=0, border="transparent", bg="transparent")
 mc.dunnett <- multcomp::glht(modelo, linfct = mcp(Instructor = "Dunnett"))
 mcs.dunnett <- summary(mc.dunnett, test=adjusted("bonferroni"))
 print(mcs.dunnett)
-plot(mc.dunnett,las=3)
-legend("topleft",legenda,lwd=0,lty=0,cex=0.6,box.lwd=0, bg="transparent")
+# plot(mc.dunnett,las=3)
+t.ic <- mcs.dunnett$test$qfunction(0.95)
+df_plot <- data.frame(
+  names (mcs.dunnett$test$coefficient),
+  as.vector(mcs.dunnett$test$coefficients),
+  as.vector(mcs.dunnett$test$coefficients)-t.ic*as.vector(mcs.dunnett$test$sigma),
+  as.vector(mcs.dunnett$test$coefficients)+t.ic*as.vector(mcs.dunnett$test$sigma),
+  as.vector(mcs.dunnett$test$pvalues)
+)
+eiras_plotIC(df_plot,
+             main="95% family-wise confidence level",
+             xlab="Difference",
+             usecolor="n"
+)
+legend("topleft",legenda,lwd=0,lty=0,cex=0.6,box.lwd=0, border="transparent", bg="transparent")
 
 # enable warnings
 options(warn=0)
