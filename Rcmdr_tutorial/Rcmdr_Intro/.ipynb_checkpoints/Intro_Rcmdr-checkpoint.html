@@ -1,0 +1,931 @@
+<!DOCTYPE html> MPT0164_terminal
+<html lang="en" dir="ltr" class="client-nojs">
+<head>
+<title>MDR5728 = Introdução ao R Commander</title>
+<meta name="generator" content="MediaWiki 1.25.1" />
+<link rel="alternate" type="application/x-wiki" title="Edit" href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit" />
+<link rel="edit" title="Edit" href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="search" type="application/opensearchdescription+xml" href="/opensearch_desc.php" title="SisLAu (pt-br)" />
+<link rel="EditURI" type="application/rsd+xml" href="http://sislau.fm.usp.br/api.php?action=rsd" />
+<link rel="alternate" hreflang="x-default" href="/wiki/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander" />
+<link rel="alternate" type="application/atom+xml" title="SisLAu Atom feed" href="/index.php?title=Especial:Mudan%C3%A7as_recentes&amp;feed=atom" />
+<link rel="stylesheet" href="http://sislau.fm.usp.br/load.php?debug=false&amp;lang=en&amp;modules=ext.gadget.improveLinks%7Cext.math.styles%7Cext.rtlcite%7Cext.visualEditor.viewPageTarget.noscript%7Cmediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cmediawiki.ui.button%7Cskins.vector.styles&amp;only=styles&amp;skin=vector&amp;*" />
+<meta name="ResourceLoaderDynamicStyles" content="" />
+<style>a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+/* cache key: sislaudb:resourceloader:filter:minify-css:7:12aefe8e6c5ad5a35fb6089257ba5d4a */</style>
+<script src="http://sislau.fm.usp.br/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector&amp;*"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"MPT0164/Aulas_práticas/R_Commander/Introdução_ao_R_Commander","wgTitle":"MPT0164/Aulas práticas/R Commander/Introdução ao R Commander","wgCurRevisionId":26518,"wgRevisionId":26518,"wgArticleId":4367,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":"89733","wgUserGroups":["teacher","*","user","autoconfirmed"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"pt-br","wgPageContentModel":"wikitext","wgSeparatorTransformTable":[",\t."," \t,"],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],"wgMonthNamesShort":["","jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],"wgRelevantPageName":"MPT0164/Aulas_práticas/R_Commander/Introdução_ao_R_Commander","wgRelevantArticleId":4367,"wgUserId":422,"wgUserEditCount":338,"wgUserRegistration":1359368126000,"wgUserNewMsgRevisionId":null,"wgIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":false,"dialogs":false,"hidesig":true,"preview":false,"previewDialog":false,"publish":false},"wgVisualEditor":{"pageLanguageCode":"pt-BR","pageLanguageDir":"ltr"}});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function($,jQuery){mw.user.options.set({"gender":"male","nickname":"Sameshima","language":"en","gadget-improveLinks":"1","timecorrection":"ZoneInfo|-180|America/Sao_Paulo","watchlisttoken":"b15f04a8cd723d5c402a72dcd944d58b732a9354"});});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"3b775ce9721f05dfde8b195f22706f375e9dc25d+\\","patrolToken":"2eb8d1d06ac69e9d4dfd958be7abf89e5e9dc25d+\\","watchToken":"0c513398ec81cfcdca104485450633825e9dc25d+\\"});});
+/* cache key: sislaudb:resourceloader:filter:minify-js:7:e106bab76b55e292ee88d356baec4ee6 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","ext.visualEditor.viewPageTarget.init","skins.vector.js"]);
+}</script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/skins/Vector/csshover.min.htc")}</style><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-MPT0164_Aulas_práticas_R_Commander_Introdução_ao_R_Commander skin-vector action-view">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+
+						<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" class="firstHeading" lang="pt-BR">MPT0164/Aulas práticas/R Commander/Introdução ao R Commander</h1>
+						<div id="bodyContent" class="mw-body-content">
+									<div id="siteSub">From SisLAu</div>
+								<div id="contentSub" lang="en" dir="ltr"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="pt-BR" dir="ltr" class="mw-content-ltr"><table style="width: 25%; float: right; margin: 0 0 1em 1em; padding: 1em 1em 0 1em; background: #FFF; font-size: 90%; border: 2px solid #0c3e07; -moz--moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px;; text-align: center;">
+
+<tr>
+<th colspan="2" style="background: #002B00; font-size: 150%; color: #FFF; text-align: center; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;"> Métodos Quantitativos em Medicina
+</th></tr>
+<tr>
+<td colspan="2"> <div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_logodim.jpg" class="image"><img alt="MPT0164 logodim.jpg" src="./MPT0164_logodim.jpg" width="160" height="102" /></a></div></div>
+</td></tr>
+<tr>
+<th colspan="2" style="background: #002B00; font-size: 120%; color: #FFF; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;"> <a href="/wiki/MPT0164" title="MPT0164"><span style="color: #FFF;">MPT0164</span></a>
+</th></tr>
+<tr>
+<td style="text-align: left; width: 40%;"> <b>Professores:</b> </td>
+<td style="text-align: left;"><a href="/wiki/Usu%C3%A1rio:2094503" title="Usuário:2094503">Paulo Silveira</a><br /><a href="/wiki/Usu%C3%A1rio:89733" title="Usuário:89733">Koichi Sameshima</a>
+</td></tr>
+<tr>
+<td style="text-align: left;"> <b>Júpiter:</b> </td>
+<td style="text-align: left;"> <a rel="nofollow" target="_blank" class="external text" href="https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=MPT0164">Disciplina</a> e <a rel="nofollow" target="_blank" class="external text" href="https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=MPT0164">Turma(s)</a>
+<p><br />
+</p>
+</td></tr>
+<tr>
+<th colspan="2" style="background: #002B00; font-size: 120%; color: #FFF; text-align: center; font-weight: bold; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;"> Conteúdos
+</th></tr>
+<tr>
+<td> <a href="/wiki/MPT0164/Aulas" title="MPT0164/Aulas">Aulas</a> </td>
+<td> <a href="/wiki/MPT0164/E-books" title="MPT0164/E-books">E-books</a>
+</td></tr>
+<tr>
+<td> <a href="/wiki/MPT0164/Resumos" title="MPT0164/Resumos">Resumos ou Cadernos</a> </td>
+<td> <a href="/wiki/MPT0164/Quest%C3%B5es" title="MPT0164/Questões">Exercícios</a>
+</td></tr>
+<tr>
+<td> <a href="/wiki/MPT0164/Outros_materiais" title="MPT0164/Outros materiais">Outros materiais</a>
+</td></tr>
+<tr>
+<td> <a href="/wiki/MPT0164/Apresenta%C3%A7%C3%A3o" title="MPT0164/Apresentação">Apresentação</a> </td>
+<td> <a href="/wiki/MPT0164/Objetivos" title="MPT0164/Objetivos">Objetivos</a>
+</td></tr>
+<tr>
+<td> <a href="/wiki/MPT0164/Aulas_pr%C3%A1ticas" title="MPT0164/Aulas práticas">Aulas práticas<br />e tabelas</a> </td>
+<td> <a href="/wiki/MPT0164/Calend%C3%A1rio" title="MPT0164/Calendário">Calendário</a><br />e <a href="/wiki/MPT0164/Provas" title="MPT0164/Provas">Provas</a>
+</td></tr>
+<tr>
+<th colspan="2" style="background: #002B00; font-size: 120%; color: #FFF; text-align: center; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;"> Turmas
+</th></tr>
+<tr>
+<td colspan="2" style="text-align: left;">
+</td></tr>
+<tr>
+<td> <a href="/wiki/MPT0164/20141TA" title="MPT0164/20141TA">20141TA</a> </td>
+<td> <a href="/wiki/MPT0164/20141TB" title="MPT0164/20141TB">20141TB</a>
+</td></tr>
+<tr>
+<td>  </td>
+<td>
+</td></tr>
+<tr>
+<td>  </td>
+<td>
+</td></tr>
+<tr>
+<th colspan="2" style="background: #002B00; font-size: 100%; color: #FFF; text-align: center; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;"> Situação da disciplina
+</th></tr>
+<tr>
+<td colspan="2"> <a href="/wiki/MPT0164/Status" title="MPT0164/Status">Relatório editorial</a>
+</td></tr>
+<tr>
+<th colspan="2" style="background: #002B00; font-size: 100%; color: #FFF; text-align: center; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;"> <a href="/wiki/Patologia" title="Patologia"><span style="color:#FFF;">Patologia</span></a>
+</th></tr>
+<tr>
+<td colspan="2"> <a rel="nofollow" target="_blank" class="external text" href="http://sislau.fm.usp.br/index.php?title=Predefini%C3%A7%C3%A3o:Disciplinas/MPT0164&amp;action=edit"><span title="Editar esta predefinição" style=";">Editar este quadro</span></a>
+</td></tr></table>
+<center><big><big>Métodos Quantitativos em Medicina</big></big></center>
+<p>O objetivo desta aula é familiarizar o estudante com o software estatístico R Commander, uma interface gráfica para o R, desenvolvida para permitir ao usuário maior facilidade no uso da linguagem. Para o bom desenvolvimento do curso de Métodos, os estudantes devem saber utilizar os principais comandos, menus de organização e recuperação de dados em planilhas a partir do uso deste software.
+</p>
+<div id="toc" class="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Sobre_este_texto"><span class="tocnumber">1</span> <span class="toctext">Sobre este texto</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#O_que_voc.C3.AA_deve_saber_antes_de_usar_o_R_Commander"><span class="tocnumber">2</span> <span class="toctext">O que você deve saber antes de usar o R Commander</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Por_que_R_Commander.3F"><span class="tocnumber">3</span> <span class="toctext">Por que R Commander?</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Abrindo_o_programa"><span class="tocnumber">4</span> <span class="toctext">Abrindo o programa</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#No_Linux"><span class="tocnumber">4.1</span> <span class="toctext">No Linux</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#No_Macintosh"><span class="tocnumber">4.2</span> <span class="toctext">No Macintosh</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#No_Windows"><span class="tocnumber">4.3</span> <span class="toctext">No Windows</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Manipula.C3.A7.C3.A3o_dos_dados"><span class="tocnumber">5</span> <span class="toctext">Manipulação dos dados</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Abrindo_uma_planilha_de_dados_existente"><span class="tocnumber">5.1</span> <span class="toctext">Abrindo uma planilha de dados existente</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#N.C3.BAmeros:_v.C3.ADrgulas_ou_pontos"><span class="tocnumber">5.1.1</span> <span class="toctext">Números: vírgulas ou pontos</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Visualizando_os_dados"><span class="tocnumber">5.1.2</span> <span class="toctext">Visualizando os dados</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Salvando_e_recuperando_dados"><span class="tocnumber">5.1.3</span> <span class="toctext">Salvando e recuperando dados</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Elementos_da_tela_do_Rcmdr"><span class="tocnumber">5.1.4</span> <span class="toctext">Elementos da tela do Rcmdr</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-14"><a href="#Preenchimento_manual_da_planilha"><span class="tocnumber">5.2</span> <span class="toctext">Preenchimento manual da planilha</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#Saindo_e_retornando_ao_R_Commander"><span class="tocnumber">6</span> <span class="toctext">Saindo e retornando ao R Commander</span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="#Desligando_o_R_Commander"><span class="tocnumber">6.1</span> <span class="toctext">Desligando o R Commander</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Voltando_ao_R_Commander"><span class="tocnumber">6.2</span> <span class="toctext">Voltando ao R Commander</span></a>
+<ul>
+<li class="toclevel-3 tocsection-18"><a href="#Salvando_e_lendo_scripts"><span class="tocnumber">6.2.1</span> <span class="toctext">Salvando e lendo <i>scripts</i></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#Manipula.C3.A7.C3.A3o_da_Plan.C3.ADlha"><span class="tocnumber">7</span> <span class="toctext">Manipulação da Planílha</span></a>
+<ul>
+<li class="toclevel-2 tocsection-20"><a href="#Obtendo_subconjunto_dos_dados"><span class="tocnumber">7.1</span> <span class="toctext">Obtendo subconjunto dos dados</span></a>
+<ul>
+<li class="toclevel-3 tocsection-21"><a href="#Escolhendo_colunas"><span class="tocnumber">7.1.1</span> <span class="toctext">Escolhendo colunas</span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#Escolhendo_linhas"><span class="tocnumber">7.1.2</span> <span class="toctext">Escolhendo linhas</span></a>
+<ul>
+<li class="toclevel-4 tocsection-23"><a href="#Vari.C3.A1veis_num.C3.A9ricas"><span class="tocnumber">7.1.2.1</span> <span class="toctext">Variáveis numéricas</span></a></li>
+<li class="toclevel-4 tocsection-24"><a href="#Vari.C3.A1veis_textuais"><span class="tocnumber">7.1.2.2</span> <span class="toctext">Variáveis textuais</span></a></li>
+<li class="toclevel-4 tocsection-25"><a href="#Mais_exemplos.3F"><span class="tocnumber">7.1.2.3</span> <span class="toctext">Mais exemplos?</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-26"><a href="#Outras_opera.C3.A7.C3.B5es_com_o_subset_ativo"><span class="tocnumber">7.2</span> <span class="toctext">Outras operações com o <i>subset</i> ativo</span></a>
+<ul>
+<li class="toclevel-3 tocsection-27"><a href="#Veja_as_vari.C3.A1veis_do_data_set"><span class="tocnumber">7.2.1</span> <span class="toctext">Veja as variáveis do <i>data set</i></span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#Removendo_pacientes_da_planilha"><span class="tocnumber">7.2.2</span> <span class="toctext">Removendo pacientes da planilha</span></a></li>
+<li class="toclevel-3 tocsection-29"><a href="#Recodificando_vari.C3.A1veis"><span class="tocnumber">7.2.3</span> <span class="toctext">Recodificando variáveis</span></a></li>
+<li class="toclevel-3 tocsection-30"><a href="#Eliminando_vari.C3.A1veis"><span class="tocnumber">7.2.4</span> <span class="toctext">Eliminando variáveis</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#Reordenando_as_colunas"><span class="tocnumber">7.2.5</span> <span class="toctext">Reordenando as colunas</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-32"><a href="#Para_saber_mais"><span class="tocnumber">8</span> <span class="toctext">Para saber mais</span></a>
+<ul>
+<li class="toclevel-2 tocsection-33"><a href="#Para_iniciantes"><span class="tocnumber">8.1</span> <span class="toctext">Para iniciantes</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#Uso_avan.C3.A7ado"><span class="tocnumber">8.2</span> <span class="toctext">Uso avançado</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Refer.C3.AAncias"><span class="tocnumber">9</span> <span class="toctext">Referências</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Sobre_este_texto">Sobre este texto</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=1" title="Edit section: Sobre este texto" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=1" title="Edit section: Sobre este texto">edit source</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Este texto é o equivalente em R Commander do tutorial <a href="/wiki/MPT0164/Minitab/Introdu%C3%A7%C3%A3o_ao_Minitab" title="MPT0164/Minitab/Introdução ao Minitab"> Introdução ao Minitab</a>, cujo conteúdo foi originalmente elaborado pelo <a href="/wiki/Usu%C3%A1rio:89733" title="Usuário:89733"> Prof. Sameshima</a>. A transcrição para o R Commander foi iniciada pelo <a href="/wiki/Usu%C3%A1rio:2094503" title="Usuário:2094503"> Prof. Paulo Silveira</a>. Tanto quanto possível, manteremos o conteúdo originalmente concebido. No entanto, devido a diferenças fundamentais entre a operação dos dois programas, há grandes trechos sem equivalência; neste caso o tutorial segue a ordem mais razoável para cada um deles.
+</p><p>O Minitab foi utilizado por esta disciplina ao longo dos últimos anos, com bom sucesso. Porém, trata-se de um software que depende de licença paga pela USP, o que restringe seu acesso aos estudantes após o final desta disciplina. Pensando em provê-los com uma alternativa gratuita, optamos, a partir deste ano (2014) experimentar com a linguagem de programação R, que é muito utilizada em procedimentos estatísticos por pesquisadores do mundo todo.
+</p>
+<h2><span class="mw-headline" id="O_que_voc.C3.AA_deve_saber_antes_de_usar_o_R_Commander">O que você deve saber antes de usar o R Commander</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=2" title="Edit section: O que você deve saber antes de usar o R Commander" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=2" title="Edit section: O que você deve saber antes de usar o R Commander">edit source</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Para instalar o R Commander, seu computador também precisa do <a rel="nofollow" target="_blank" class="external text" href="http://www.r-project.org/">R</a> instalado. Direções para a instalação dos programas estão <a href="/wiki/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Instala%C3%A7%C3%A3o_do_R_Commander" title="MPT0164/Aulas práticas/R Commander/Instalação do R Commander"> aqui</a>.
+</p><p>Como o R Commander é disponível para diversas plataformas, presume-se que o estudante saiba utilizar seu computador. É necessário saber como baixar um arquivo da Internet (<i>download</i>), criar uma pasta (diretório) em seu computador, e encontrá-lo posteriormente. No tutorial de Minitab existe uma descrição das <a href="/wiki/MPT0164/Minitab/Introdu%C3%A7%C3%A3o_ao_Minitab#Tarefas_b.C3.A1sicas" title="MPT0164/Minitab/Introdução ao Minitab"> tarefas básicas</a> que talvez lhe interesse observar.
+</p><p>Enquanto o Minitab é restrito ao <i>Windows</i>, R e R Commander são multiplataforma. Esta série de tutoriais foi inicialmente ilustrada com o R Commander versão 1.8-1, R na versão 2.14.1, rodando sob Linux (especificamente, <a rel="nofollow" target="_blank" class="external text" href="http://www.ubuntu.com/">Ubuntu</a>, versão 12.04 LTS, em inglês). No entanto, espera-se que colaboradores também entrem na edição. Devem utilizar outros sistemas operacionais, com outras configurações de tela e/ou versões diferentes do R Commander e do R, e portanto haverá telas com aspectos ligeiramente diferentes, mas sem perturbar o entendimento do tutorial. Por exemplo, a pós-graduanda <a href="/wiki/Usu%C3%A1rio:2937263" title="Usuário:2937263"> Tiana Carla Lopes Moreira</a> também está editando tutoriais, usando R na versão 3.0.2 e R Commander em português. 
+</p><p>Caso encontre alguma discrepância maior, não hesite em alterar o tutorial para orientar os usuários dos diferentes sistemas ou versões. Caso seja necessário, e prefira não poluir o tutorial com excesso de comentários, faça <i>links</i> para páginas novas, onde você pode colocar suas observações.
+</p><p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     <big>OBSERVAÇÃO IMPORTANTE:</big> sendo multiplataforma e usando várias línguas, as ilustrações do R Commander nos tutoriais foram e continuarão sendo montadas a muitas mãos. Teremos telas com aspectos diferentes, em inglês e em português... todo mundo se entende, não é? --<a href="/wiki/Usu%C3%A1rio:2094503" title="Usuário:2094503">Paulo S. P. Silveira</a> (<a href="/wiki/Usu%C3%A1rio_Discuss%C3%A3o:2094503" title="Usuário Discussão:2094503">discussão</a>) 16h12min de 23 de janeiro de 2014 (BRST)
+</p>
+</blockquote>
+<p>Para que todos usem o R Commander em português ou inglês, ao seu gosto, padronizamos usar os comandos sempre nas duas versões. Por exemplo:
+</p>
+<dl><dd><a href="./Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Estatísticas -&gt; Médias -&gt; Teste t para amostras independentes</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Statistics -&gt; Means -&gt; Independent samples t-test</span></dd></dl>
+<p>e, dentro do texto, colocaremos em <b>português</b> (<b>e inglês entre parênteses</b>) .
+</p>
+<h2><span class="mw-headline" id="Por_que_R_Commander.3F">Por que R Commander?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=3" title="Edit section: Por que R Commander?" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=3" title="Edit section: Por que R Commander?">edit source</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Optamos por R Commander porque é um programa de código aberto e de uso livre. Pesquisadores ou alunos familiarizados com o R Commander poderão utilizá-los em suas tarefas, não dependendo de licenças institucionais ou da compra para uso pessoal. O R Commander também mostra, enquanto opera, como são os comandos R que constrói para você. No futuro, ou precisando de usos mais avançados, você poderá aprender R, que é uma linguagem de programação forte em estatística, mas com vários outros recursos. Programar em R é outro nível, mas as possibilidades são muito mais amplas.
+</p><p>O R Commander:
+</p>
+<ul><li> Apresenta organização de menus semelhantes aos de aplicativos comumente utilizados, como processadores de texto (e.g. Word, LibreOffice Writer) e planilhas eletrônicas (e.g., Excel, Gnumeric, LibreOffice Calc), facilitando seu aprendizado; e </li>
+<li> Incorpora uma série de recursos de manipulação de dados, de confecção de gráﬁco e de rotinas de análise estatística mais importantes que irão satisfazer a maioria das necessidades de estudantes e pesquisadores na área biomédica.</li></ul>
+<p>Pretende-se introduzir o <a rel="nofollow" target="_blank" class="external text" href="http://www.rcommander.com/">R Commander</a>, comumente abreviado para <i><b>Rcmdr</b></i>, mostrando algumas rotinas de manipulação de arquivos que serão úteis para resolução de problemas práticos de análise de dados em medicina. 
+</p><p>Não é possível esgotar todas as possibilidades e recursos oferecidos pelo R em poucas aulas, mas esperamos poder mostrar algumas novas perspectivas de uso prático de um pacote estatístico que também tem os principais recursos de um programa de planilha eletrônica, semelhante ao Excel (Microsoft), ou OpenOﬃce/LibreOffice (este um programa livre). 
+</p><p>Para aqueles mais curiosos, sugere-se a leitura do manual disponível na página dos autores em <a rel="nofollow" target="_blank" class="external free" href="http://socserv.mcmaster.ca/jfox/Misc/Rcmdr">http://socserv.mcmaster.ca/jfox/Misc/Rcmdr</a>. Os testes estatísticos propriamente ditos serão introduzidos ao longo das aulas práticas subsequentes.
+</p>
+<h2><span class="mw-headline" id="Abrindo_o_programa">Abrindo o programa</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=4" title="Edit section: Abrindo o programa" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=4" title="Edit section: Abrindo o programa">edit source</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="No_Linux">No Linux</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=5" title="Edit section: No Linux" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=5" title="Edit section: No Linux">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Inicie o R Commander. No Ubuntu, versão 12.04 LTS está em
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">???</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Applications -&gt; Science -&gt; R Commander</span></dd></dl>
+<p>Um terminal abre-se primeiro e o R é ativado:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_Terminal.png" class="image"><img alt="MPT0164 Rcmdr Terminal.png" src="./MPT0164_Rcmdr_Terminal.png" width="821" height="462" /></a></div></div>
+<p>em seguida aparece a interface gráfica do R Commander:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_Iniciando.png" class="image"><img alt="MPT0164 Rcmdr Iniciando.png" src="./MPT0164_Rcmdr_Iniciando.png" width="845" height="846" /></a></div></div>
+<p><br />
+O terminal pode ser minimizado, mas não deve ser fechado. Este terminal é totalmente funcional e pode ser utilizado simultaneamente ao Rcmdr. Experimente escrever no terminal o comando R <b>version</b> após o sinal de "&gt;" (este é o <i>prompt</i> do R). Deve obter algo como:
+</p>
+<pre style="color: #770077">
+&gt; version
+               _                            
+platform       i686-pc-linux-gnu            
+arch           i686                         
+os             linux-gnu                    
+system         i686, linux-gnu              
+status                                      
+major          2                            
+minor          14.1                         
+year           2011                         
+month          12                           
+day            22                           
+svn rev        57956                        
+language       R                            
+version.string R version 2.14.1 (2011-12-22)
+&gt; 
+</pre>
+<h3><span class="mw-headline" id="No_Macintosh">No Macintosh</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=6" title="Edit section: No Macintosh" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=6" title="Edit section: No Macintosh">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A ser descrito por um usuário deste sistema operacional.
+</p>
+<h3><span class="mw-headline" id="No_Windows">No Windows</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=7" title="Edit section: No Windows" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=7" title="Edit section: No Windows">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Na área de trabalho do Windows encontre e utilize o acesso ao R, que abre a RGui, uma interface gráfica que facilita o uso do R e contém um terminal.
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_terminal(winxp).png" class="image"><img alt="MPT0164 terminal(winxp).png" src="./MPT0164_terminal%28winxp%29.png" width="670" height="467" /></a></div></div>
+<p>Neste terminal (como mostrado acima) digite o comando:
+</p>
+<pre style="color: #c00000">
+&gt; library(Rcmdr)
+</pre>
+<p>A janela do R Commander deve abrir: 
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0165_Rcmdr(winxp).png" class="image"><img alt="MPT0165 Rcmdr(winxp).png" src="./MPT0165_Rcmdr%28winxp%29.png" width="688" height="742" /></a></div></div>
+<p>Da mesma forma que acontece em outras plataformas, o terminal é funcional (pode testar com o comando <b>version</b>, como descrito para a <a href="/wiki/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander#No_Linux" title="MPT0164/Aulas práticas/R Commander/Introdução ao R Commander"> implementação em Linux</a>). O terminal pode ser minimizado, mas não deve ser fechado.
+</p>
+<h2><span class="mw-headline" id="Manipula.C3.A7.C3.A3o_dos_dados">Manipulação dos dados</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=8" title="Edit section: Manipulação dos dados" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=8" title="Edit section: Manipulação dos dados">edit source</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Abrindo_uma_planilha_de_dados_existente">Abrindo uma planilha de dados existente</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=9" title="Edit section: Abrindo uma planilha de dados existente" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=9" title="Edit section: Abrindo uma planilha de dados existente">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Os dados que utilizaremos aqui estão no arquivo <a href="/img_auth.php/1/1f/MPT0164_exames1.txt" class="internal" title="MPT0164 exames1.txt">exames1.txt</a>, que você deve baixar para seu computador (dependendo da configuração de seu computador e navegador, experimente usar o botão da direita do mouse para fazer este <i>download</i>). Este arquivo de dados é apresentado em texto puro, delimitado por "tabs", e precisa ser importado pelo Rcmdr, como descrito abaixo.
+</p><p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     Este arquivo de dados tem o mesmo conteúdo de <a href="/img_auth.php/9/94/MPT0164_exames1.xls" class="internal" title="MPT0164 exames1.xls">exames1.xls</a>, utilizado pelo Minitab. O R Commander nas versões atualmente (2014) disponíveis para Linux e Macintosh não abrem planilhas Excel diretamente, mas (curiosamente) abrem arquivos do Minitab. Caso você tenha dados em Excel, pode <a href="/wiki/MPT0164/Exporta%C3%A7%C3%A3o_de_dados_em_formato_Excel_para_arquivos_texto" title="MPT0164/Exportação de dados em formato Excel para arquivos texto"> gerar um arquivo texto</a>, como fizemos.
+</p>
+</blockquote>
+<p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     Arquivos textos com delimitadores são a forma mais universal de transpor dados entre programas diferentes e, portanto, vale a pena saber lidar com eles. Ouvi dizer que na versão mais nova em Windows o Rcmdr importa planilhas Excel. Com a versão 2016 no Windows 10  foi possível importar planilha Excel. O procedimento é o mesmo: Dados -&gt; Importar arquivo de dados... a última opção é arquivo do Excel. 
+</p>
+</blockquote>
+<p>Acesse, no Rcmdr:
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Importar conjunto de dados -&gt; de arquivo de texto ... </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Import data -&gt; from text file ...</span></dd></dl>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_ImportData.png" class="image"><img alt="MPT0164 Rcmdr ImportData.png" src="./MPT0164_Rcmdr_ImportData.png" width="850" height="254" /></a></div></div>
+<p>A caixa de diálogo que aparece:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0165_Rcmdr_ImportData2.png" class="image"><img alt="MPT0165 Rcmdr ImportData2.png" src="./MPT0165_Rcmdr_ImportData2.png" width="411" height="366" /></a></div></div>
+<p>precisa ser configurada de acordo com o formato do arquivo texto:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0165_Rcmdr_ImportData3.png" class="image"><img alt="MPT0165 Rcmdr ImportData3.png" src="./MPT0165_Rcmdr_ImportData3.png" width="413" height="366" /></a></div></div>
+<p><br />
+Note as seguintes opções que fizemos:
+</p>
+<ul><li> <b>Defina o nome do conjunto de dados</b> (<b>Enter name for data set</b>): Exames1 (apenas para que lembremos de qual arquivo os dados vieram);</li>
+<li> <b>Nome das varíaveis no arquivo</b> (<b>Variable names in file</b>): selecionado (porque, neste arquivo, a primeira linha contém os nomes das variáveis, o que é sempre recomendado);</li>
+<li> <b>Separador de campos</b> (<b>Field separator</b>): Tabs (porque foi o delimitador que utilizamos ao gerar <a href="/img_auth.php/1/1f/MPT0164_exames1.txt" class="internal" title="MPT0164 exames1.txt">exames1.txt</a>);</li>
+<li> <b>Separador de decimais</b> (<b>Decimal-point character</b>): Period (no caso, foi como exportamos os dados numéricos).</li></ul>
+<p>Para importar os dados: clique [Ok] e aponte o arquivo de dados que você baixou. Repare o comando R ecoado na <b> Output</b> (<b>Output Windows</b>): este é o comando que você precisaria escrever em R, caso usasse a linha de comando, para importar este arquivo. É deste trabalho que o Rcmdr o poupa:
+</p>
+<dl><dd> <span style="color:#800000">Exames1 &lt;- read.table("/home/silveira/ps20131101/MPT0164_2014/Tutorial_R_Commander/Introducao_Rcmdr/MPT0164_exames1.txt", header=TRUE, sep="\t", na.strings="NA", dec=".", strip.white=TRUE)</span></dd></dl>
+<p>Se tudo estiver correto, na tela de mensagens deve aparecer:
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a></dd></dl>
+<pre style="color: DarkBlue">
+NOTA: Os dados exames1 tem 705 linhas e 15 colunas.
+</pre>
+<dl><dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a></dd></dl>
+<pre style="color: DarkBlue">
+NOTE: The dataset Exames1 has 705 rows and 15 columns.
+</pre>
+<h4><span class="mw-headline" id="N.C3.BAmeros:_v.C3.ADrgulas_ou_pontos">Números: vírgulas ou pontos</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=10" title="Edit section: Números: vírgulas ou pontos" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=10" title="Edit section: Números: vírgulas ou pontos">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>O uso de vírgula ou de ponto como separador decimal dá problema entre computadores utilizando português ou inglês. Particularmente <a href="/wiki/Usu%C3%A1rio:2094503" title="Usuário:2094503">(opinião de Paulo Silveira)</a>, prefiro desrespeitar a gramática para trabalhar e <b>sempre</b> utilizar o ponto (trocando para vírgulas somente no que preciso publicar em português). Caso sua opção seja outra, saiba que isto depende da configuração do computador utilizado no momento da exportação dos dados para o arquivo <b>txt</b> e do que você selecionar no R Commander no momento de importar os dados para o <i>data set</i>. Verifique como está o seu computador. Veja opinião do <a href="/wiki/Usu%C3%A1rio:89733" title="Usuário:89733">Prof. Koichi Sameshima</a>, algo divergente em <a href="/wiki/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Estat%C3%ADstica_Descritiva_e_Probabilidade#Uma_Pausa:_cuidado_no_uso_da_v.C3.ADrgula_decimal" title="MPT0164/Aulas práticas/R Commander/Estatística Descritiva e Probabilidade"> Uma Pausa: cuidado no uso da vírgula decimal</a>.
+</p>
+<h4><span class="mw-headline" id="Visualizando_os_dados">Visualizando os dados</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=11" title="Edit section: Visualizando os dados" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=11" title="Edit section: Visualizando os dados">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Após importar os dados, um conjunto de dados (<i>data set</i>) com o nome que você escolheu está ativo. Você pode conferir se a importação dos dados deu certo clicando em <b>Ver conjunto de dados</b> (<b>[View data set]</b>) para abrir esta janela:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0165_Rcmdr_ImportData4.png" class="image"><img alt="MPT0165 Rcmdr ImportData4.png" src="./MPT0165_Rcmdr_ImportData4.png" width="858" height="647" /></a></div></div>
+<p>Nesta tela aparecem os dados importados. Há também barras de rolagens horizontal e vertical, para que você possa percorrê-los. Antes de prosseguir, identiﬁque os elementos que compõem a janela em questão, pois é fundamental entender como os dados ficam organizados: 
+</p>
+<ul><li> note que os dados de cada paciente estão organizados em linhas, identiﬁcadas na coluna à esquerda enumeradas a partir de 1 (o número de cada linha coincide com o número de identificação do paciente, mas isto é somente coincidência);</li>
+<li> observe que cada coluna, denominada variável, é encimada por sua identiﬁcação, o nome da variável. É através deste identiﬁcador, importado da primeira linha do arquivo texto, que você referenciará as variáveis que desejar para executar os procedimentos adiante. </li></ul>
+<dl><dd> <b>Dica</b>: não utilize espaços ou símbolos especiais (o Rcmdr aceita "." se precisar de nomes compostos) para compor nome de identiﬁcadores; também recomenda-se iniciar os nomes das variáveis com uma letra; </dd></dl>
+<p>Depois que verificar o sucesso da importação, sugere-se que esta janela seja fechada.
+</p><p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     O Rcmdr trabalha com <b>conjuntos de dados</b> (<i><b>data sets</b></i>). Você pode ter mais que um conjunto de dados simultaneamente aberto em uma mesma seção do Rcmdr, mas os comandos são executados apenas com o conjunto ativo. A qualquer momento você pode alterar o conjunto ativo através de <b>Dados -&gt; conjunto de dados ativos</b> (<b>Data-&gt;Active data set</b>) ou clicando sobre o botão que aparece contendo o nome do <i>data set</i> ativo.
+</p>
+</blockquote>
+<p>Ao lado do botão <b>[Ver conjunto de dados]</b> (<b>[View data set]</b>) aparece <b>[Editar conjunto de dados]</b> (<b>[Edit data set]</b>), o qual obviamente permite modificar os dados. A interface de edição não é muito boa. Caso precise de alterações mais extensas, é melhor arrumar os dados em uma planilha e importar novamente. Há mais detalhes sobre este editor <a href="/wiki/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander#Entrada_de_dados:_preenchimento_manual_da_planilha" title="MPT0164/Aulas práticas/R Commander/Introdução ao R Commander"> abaixo</a>.
+</p>
+<h4><span class="mw-headline" id="Salvando_e_recuperando_dados">Salvando e recuperando dados</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=12" title="Edit section: Salvando e recuperando dados" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=12" title="Edit section: Salvando e recuperando dados">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Este conjunto de dados pode ser salvo no formato do R Commander para usar mais tarde (assim não é necessário repetir a importação). Esta operação, bem como várias outras, encontra-se em: 
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; conjuntos de dados ativos -&gt; salvar conjunto de dados ativos...</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data-&gt;Active data set-&gt;Save active data set...</span></dd></dl>
+<p>Escolha a pasta e grave o arquivo que recebe o nome do <i>data set</i> e a extensão Rdata: no exemplo o arquivo gerado é <b>Exames1.RData</b>. Por esta razão, procure escolher nomes com significado para seus conjuntos de dados; não os chame de <b>dados</b>, <b>planilha</b>, <b>pacientes</b>, ou coisas similares. Quando quiser voltar a trabalhar com o mesmo conjunto de dados, busque-o com:
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen"> Dados -&gt; Carregar conjunto de dados </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data-&gt;Load data set...</span></dd></dl>
+<h4><span class="mw-headline" id="Elementos_da_tela_do_Rcmdr">Elementos da tela do Rcmdr</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=13" title="Edit section: Elementos da tela do Rcmdr" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=13" title="Edit section: Elementos da tela do Rcmdr">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>A esta altura, a janela do R Commander deve ter o seguinte aspecto:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_Main.png" class="image"><img alt="MPT0164 Rcmdr Main.png" src="./MPT0164_Rcmdr_Main.png" width="842" height="718" /></a></div></div>
+<p>Identifique os elementos desta tela: menus de acesso aos comandos no topo, uma fileira de botões que indicam o <i>data set</i> ativo, permitem edição ou visualização dos dados, e uma indicação [&lt;Sem modelo ativo&gt;] ([&lt;No active model&gt;]). Abaixo aparecem três janelas: script (<i>Script Window</i>), Output (<i>Output Window</i>) e Mensagens (<i>Messages</i>). Respectivamente mostram os comandos que você teria que executar se usasse um terminal (usando o R sem a interface gráfica do Rcmdr), o que este terminal ecoaria, e mensagens do sistema.
+</p>
+<h3><span class="mw-headline" id="Preenchimento_manual_da_planilha">Preenchimento manual da planilha</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=14" title="Edit section: Preenchimento manual da planilha" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=14" title="Edit section: Preenchimento manual da planilha">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Vamos abrir um novo conjunto de dados usando o comando 
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen"> Dados -&gt;Novo conjunto de dados... </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; New data set...</span></dd></dl>
+<p>Como exercício, batize este conjunto com o nome de <b>Colegas</b>, pois armazenaremos dados de nomes de seus colegas, idade e cidade de nascimento. Portanto será uma planilha com três variáveis.
+</p><p>A interface é auto explicativa. Se necessário, alargue o tamanho da tela para aparecer, pelo menos, três colunas:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0165_Rcmdr_Editor.png" class="image"><img alt="MPT0165 Rcmdr Editor.png" src="./MPT0165_Rcmdr_Editor.png" width="464" height="336" /></a></div></div>
+<p>Renomeie as três primeiras colunas, respectivamente, como <b>Nome</b>, <b>Idade</b> e <b>Cidade Nasc</b>: clique sobre os nomes pré-definidos (<b>var1</b>, <b>var2</b> ou <b>var3</b>), escolha <b>nome da variável</b> (<b>Change name</b>) e entre com os nomes de variáveis desejados. A seguir, entre com o seguinte pequeno conjunto de dados:
+</p>
+<pre style="color: DarkGreen">
+Pedro Souza 		17 	Sao Paulo
+Marines Sanchez 	19 	Bauru
+Clovis Concravo 	21 	Votuporanga 
+</pre>
+<p>Na versão do Rcmdr que estou usando a interface não é das melhores, mas para pequenas entradas como esta é o suficiente. Entre as principais deficiências estão as colunas não se ajustam de acordo com o conteúdo e a acentuação em português não é aceita (repare em <i>Sao Paulo</i> sem <i>ã</i> ou <i>Clovis</i> sem <i>ó</i>). Entrar os dados e mudar de célula é simples: clique sobre a célula onde deseja entrar cada dado, e use as teclas direcionais (setas) para mudar para células vizinhas. Quando acabar de entrar os dados deve ver a tela com o seguinte aspecto:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0166_Rcmdr_Editor2.png" class="image"><img alt="MPT0166 Rcmdr Editor2.png" src="/img_auth.php/8/8b/MPT0166_Rcmdr_Editor2.png" width="464" height="334" /></a></div></div>
+<p>Clique <b>Sair</b> (<b>[Quit]</b>). O conjunto de dados <b>Colegas</b> é criado já fica ativo. Pode conferir com <b>[Ver conjunto de dados]</b> (<b>[View Data Set]</b>).
+</p><p><b>Observação</b>: na versão utilizada atualmente não há mais botão (<b>[Quit]</b>). Basta clicar em <b>X</b> no canto superior direito da janela. 
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_DadosManuais.png" class="image"><img alt="MPT0164 Rcmdr DadosManuais.png" src="./MPT0164_Rcmdr_DadosManuais.png" width="366" height="115" /></a></div></div>
+<p>Note que o Rcmdr não admite espaço no nome das variáveis, de forma que a terceira coluna ficou denominada como <b>Cidade.Nasc</b>. Note também que <b>[Ver conjunto de dados]</b> (<b>[View Data Set]</b>) ajusta automaticamente a largura das colunas ao conteúdo das células, facilitando a leitura.
+</p><p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     Dica que vale para qualquer programa, não somente Rcmdr: não assuma que um programa tenha sido desenvolvido ou que está bem implementado em relação às acentuações da língua portuguesa; não as utilize antes de testar o programa de computador para dois aspectos: primeiro, apresentar consistência na comparação textual de palavras, por exemplo se galã é igual a gala e laco é igual laço; em segundo, se ordena consistentemente as palavras acentuadas e as que usam ce-cedilhados. Um jeito seguro é não usar acentos nem cedilhas.
+</p>
+</blockquote>
+<p>Não se esqueça de salvar sua conjunto de dados em um arquivo chamado <b>Colegas.Rdata</b>.
+</p>
+<h2><span class="mw-headline" id="Saindo_e_retornando_ao_R_Commander">Saindo e retornando ao R Commander</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=15" title="Edit section: Saindo e retornando ao R Commander" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=15" title="Edit section: Saindo e retornando ao R Commander">edit source</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Desligando_o_R_Commander">Desligando o R Commander</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=16" title="Edit section: Desligando o R Commander" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=16" title="Edit section: Desligando o R Commander">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Saber sair corretamente do programa é importante. O mais normal é fechar a interface gráfica e o terminal, utilizando:
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Arquivo -&gt;Sair -&gt;Do Commander e do R  </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">File -&gt; Exit -&gt; From R Commander and R</span></dd></dl>
+<p>O programa perguntará se quer salvar o <i>script</i> e o <i>output</i>. Por enquanto responda <b>[Não]</b> (<b>[No]</b>) para ambos; voltaremos a isto adiante.
+</p>
+<h3><span class="mw-headline" id="Voltando_ao_R_Commander">Voltando ao R Commander</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=17" title="Edit section: Voltando ao R Commander" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=17" title="Edit section: Voltando ao R Commander">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Nas seções anteriores você abriu dois <i>data sets</i> e os salvou. O primeiro, <b>Exames1</b>, foi obtido de um arquivo texto que geramos a partir de uma planilha do Excel; o segundo, <b>Colegas</b>, foi digitado por você. Respectivamente, devem ter sido salvos no formato do Rcmdr com os nomes <b>Exames1.Rdata</b> e <b>Colegas.Rdata</b>.
+</p><p>Reabra, portanto, o Rcmdr e utilize:
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Carregar conjunto de dados...</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Load data set</span></dd></dl>
+<p>aponte para leitura o arquivo <b>Exames1.Rdata</b>. A seguir, repita o procedimento para ler <b>Colegas.Rdata</b>. Repare a <i>Script Window</i> onde aparece 
+</p>
+<pre style="color: #0066cc">
+load(&quot;{aqui aparece o caminho para seu arquivo}/Exames1.RData&quot;)
+load(&quot;{aqui aparece o caminho para seu arquivo}/Colegas.RData&quot;)
+</pre>
+<h4><span class="mw-headline" id="Salvando_e_lendo_scripts">Salvando e lendo <i>scripts</i></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=18" title="Edit section: Salvando e lendo scripts" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=18" title="Edit section: Salvando e lendo scripts">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Este é um uso mais avançado e este exemplo é muito simples (mas ilustrativo).
+</p><p>Pois bem... utilize:
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Arquivo -&gt; salvar script como ...</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">File -&gt; Save script as...</span></dd></dl>
+<p>e dê o nome <b>Leitura_Exames_e_Colegas.R</b> para este script.
+</p><p>Feche completamente o programa (<b>Sair -&gt; Do Commander e do R</b>, <b>Exit -&gt; From Commander and R</b>) e abra novamente. Utilize
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Arquivo -&gt; Abrir arquivo c/ script </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">File -&gt; Open script file...</span></dd></dl>
+<p>e traga de volta o conteúdo da Janela script (<i>Script Window</i>) recuperando o arquivo <b>Leitura_Exames_e_Colegas.R</b>. Repare que esta janela permite edição, de forma que você pode conferir e ajeitar o script sempre que quiser. Quanto estiver pronto, note o botão <b>Submeter</b> (<b>Submit</b>) no canto inferior direito desta janela: clique nele para executar seu script. A janela mensagens (<i>Messages</i>) mostra:
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: #c00000">
+ERRO: Nada foi selecionado.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: #c00000">
+ERROR: Nothing is selected.
+</pre>
+<p><br />
+Selecione, então, na Janela Script (<i>Script Window</i>) as duas linhas:
+</p>
+<pre style="color: #0066cc">
+load(&quot;{aqui aparece o caminho para seu arquivo}/Exames1.RData&quot;)
+load(&quot;{aqui aparece o caminho para seu arquivo}/Colegas.RData&quot;)
+</pre>
+<p>e clique em <b>Submeter</b> (<b>Submit</b>) novamente. Desta vez a Janela output (<i>Output Window</i>) reage, mostrando
+</p>
+<pre style="color: #c00000">
+&gt; load(&quot;{aqui aparece o caminho para seu arquivo}//Exames1.RData&quot;)
+&gt; load(&quot;{aqui aparece o caminho para seu arquivo}//Colegas.RData&quot;)
+</pre>
+<p>Clique o botão da fileira superior onde aparece <span style="color: #c00000">&lt;Não há conjunto de dados ativos&gt;</span> (<span style="color: #c00000">&lt;No active dataset&gt;</span>) e escolha um dos dois <i>data sets</i> lidos. A janela Mensagens (<i>Messages</i>) acusará o sucesso dizendo:
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: #0000cc">
+NOTA: Os dados Exames1 tem 705 linhas e 15 colunas.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: #0000cc">
+NOTE: The dataset Exames1 has 705 rows and 15 columns.
+</pre>
+<p>ou
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: #0000cc">
+NOTA: Os dados Colegas tem 3 linhas e 3 colunas.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: #0000cc">
+NOTE: The dataset Colegas has 3 rows and 3 columns.
+</pre>
+<p>de acordo com o conjunto de dados que você deixou ativo.
+</p><p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     A partir deste exemplo simples, sofistique. Qualquer script que você salvar, reler e submeter repetirá uma sequência de ações. Com o que aprender adiante, poderá trabalhar no R Commander experimentando fazer alguma análise. Apague as linhas que não deram certo. faça coisas algo mais sofisticadas, como gráficos e análises estatísticas, teste com determinado conjunto de dados e, depois, adapte o script para repetir o trabalho em outros conjuntos de dados. Salve seus scripts "amadurecidos" e evitará um monte de (re)trabalho.
+</p>
+</blockquote>
+<p>Similar, mas menos útil (pois não roda como um <i>script</i>), caso queira preservar um lembrete do que fez enquanto usava o Rcmdr, é salvar a Janela Output(<i>Output Window</i>) em um arquivo texto.
+</p>
+<h2><span class="mw-headline" id="Manipula.C3.A7.C3.A3o_da_Plan.C3.ADlha">Manipulação da Planílha</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=19" title="Edit section: Manipulação da Planílha" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=19" title="Edit section: Manipulação da Planílha">edit source</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Há uma quantidade de operações disponíveis nos menus do R Commander. Aqui ilustraremos algumas, que lhe permitirão:
+</p>
+<ul><li> criar subsets</li>
+<li> fazer gráficos</li></ul>
+<h3><span class="mw-headline" id="Obtendo_subconjunto_dos_dados">Obtendo subconjunto dos dados</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=20" title="Edit section: Obtendo subconjunto dos dados" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=20" title="Edit section: Obtendo subconjunto dos dados">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     <b>Importante</b>: Antes de começar o exercício proposto aqui, observe que na versão xls, da qual os dados de <b>Exames1</b> vieram, a coluna de sódio sérico tem o nome de variável <b>NA</b>. Embora a importação ocorra sem problemas, o nome da variável entra em conflito com a palavra reservada do Rcmdr, <b>NA</b>, significando <i><b>N</b>ot <b>A</b>vailable</i> (confira com <b>[View data set]</b>: aparece um pequeno ponto ao lado de NA). É possível consertar o arquivo texto e reimportar os dados, mas a solução mais simples e rápida, agora que já importou os dados, é entrar no modo de <a href="/wiki/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander#Entrada_de_dados:_preenchimento_manual_da_planilha" title="MPT0164/Aulas práticas/R Commander/Introdução ao R Commander"> preenchimento manual da planilha</a>, alterar o nome da variavel (por exemplo, para <b>SODIO</b> ou <b>Natremia</b> - evitando começar com <b>NA</b> em maiúsculas) e, então, salvar seu <i>data set</i> novamente, para preservar a modificação.
+<br />
+Outra maneira de fazer a mesma coisa é usar <b>Dados -&gt; modificação de variáveis no conjunto de dados -&gt; Renomear variáveis...</b> (<b>Data -&gt; Manage variables in active data set -&gt; Rename variables...</b>).
+</p>
+</blockquote>
+<p>Uma vez consertado e ativo seu <i>data set</i> <b>Exames1</b>, utilize:
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Conjunto de dados ativos -&gt; definir subconjunto de dados ativos...</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Active data set -&gt; Subset active data set...</span></dd></dl>
+<p>Observe a janela que se abre:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_Subset.png" class="image"><img alt="MPT0164 Rcmdr Subset.png" src="./MPT0164_Rcmdr_Subset.png" width="413" height="295" /></a></div></div>
+<p>É possível "recortar" colunas ou linhas do <i>data set</i>.
+</p>
+<h4><span class="mw-headline" id="Escolhendo_colunas">Escolhendo colunas</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=21" title="Edit section: Escolhendo colunas" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=21" title="Edit section: Escolhendo colunas">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Suponha que você queira apenas algumas variáveis em um novo <i>data set</i>, em um estudo que somente lhe interessa estudar colesterol (HDL e COL) e triglicérides (TRIG); para não perder a referência dos dados do paciente guardaremos também a identificação do PACIENTE, IDADE, SEXO. Basta desmarcar "Incluir todas as variáveis" ("Include all variables") e, segurando a tecla CTRL, apontar as variáveis de interesse, que aparecem em ordem alfabética: COL, HDL, IDADE, PACIENTE, SEXO e TRIG. Deixe <b>Expressão</b> (<b>Subset expression</b>) como está, &lt;todos os casos&gt; (&lt;all cases&gt;) e escolha um nome para o novo <i>data set</i> (e.g. <b>Gordura</b>). 
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_Subset_Colunas.png" class="image"><img alt="MPT0164 Rcmdr Subset Colunas.png" src="./MPT0164_Rcmdr_Subset_Colunas.png" width="410" height="295" /></a></div></div>
+<p>Clique [OK]. Na <b>Janela de Script</b> (<b>Script Window</b>) aparece o comando:
+</p>
+<pre style="color: Black">
+Gordura &lt;- subset(Exames1, select=c(COL,HDL,IDADE,PACIENTE,SEXO,TRIG))
+</pre>
+<p>Na <b>Output Window</b> ecoa-se a execução do comando R:
+</p>
+<pre style="color: DarkRed">
+&gt; Gordura &lt;- subset(Exames1, select=c(COL,HDL,IDADE,PACIENTE,SEXO,TRIG))
+</pre>
+<p>Na <b>janela mensagens</b> (<b>Message Window</b>) o sistema notifica:
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTA: os dados Gordura tem 705 linhas e 6 colunas.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTE: The dataset Gordura has 705 rows and 6 columns.
+</pre>
+<p>o que confere, pois todos os pacientes foram transferidos (mesmo número de linhas do conjunto original), mas com apenas 6 colunas. Repare que o conjunto de dados ativo agora é <b>Gordura</b>; como sempre, você pode conferir com <b>[Ver conjunto de dados]</b> (<b>[View data set]</b>) e salvar seu conjunto de dados em um arquivo <b>Gordura.Rdata</b> para uso futuro.
+</p>
+<h4><span class="mw-headline" id="Escolhendo_linhas">Escolhendo linhas</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=22" title="Edit section: Escolhendo linhas" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=22" title="Edit section: Escolhendo linhas">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h5><span class="mw-headline" id="Vari.C3.A1veis_num.C3.A9ricas">Variáveis numéricas</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=23" title="Edit section: Variáveis numéricas" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=23" title="Edit section: Variáveis numéricas">edit source</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Torne o <i>data set</i> <b>Exames1</b> novamente ativo e repita o processo para fazer um Subconjunto (<i>subset</i>). Podemos, por exemplo, separar os pacientes com hipernatremia (sódio sérico acima de  142 mEq/L). Desta vez vamos deixar assinalado <b>Incluir todas as variáveis</b> (<b>Include all variables</b>), portanto não há sentido em apontar nada no quadro de variáveis, e colocaremos em <b>Expressão</b> (<b>Subset expression</b>) a expressão <b>SODIO &gt; 142</b>. Como sempre, escolheremos um nome para o novo <i>data set</i> que seja significativo (e.g. Hipernatremicos).
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0165_Rcmdr_Subset_Hipernatremicos.png" class="image"><img alt="MPT0165 Rcmdr Subset Hipernatremicos.png" src="./MPT0165_Rcmdr_Subset_Hipernatremicos.png" width="413" height="294" /></a></div></div>
+<p>Ao clicar [OK] acontecerá algo imprevisto: uma mensagem de alerta (em verde) na <b>Janela de mensagem</b> (<b>Message Window</b>):
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkGreen">
+NOTA: Aviso em Ops.factor(SODIO, 142)&#160;: &gt; não faz sentido para fatores
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkGreen">
+WARNING: Warning in Ops.factor(SODIO, 142)&#160;: &gt; not meaningful for factors
+</pre>
+<p>Por que? Esta coluna de <b>SODIO</b>, que já tínhamos renomeado, ainda tem problemas. Neste caso, volte a ativar o conjunto de dados Exames1, entre no editor de dados clicando <b>[Editar conjunto de dados]</b> (<b>[Edit data set]</b>) e clique sobre o nome da variável <b>SODIO</b>. Há um asterisco em frente da palavra Character (<i>character</i>)
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_Variavel_SODIO.png" class="image"><img alt="MPT0164 Rcmdr Variavel SODIO.png" src="./MPT0164_Rcmdr_Variavel_SODIO.png" width="158" height="128" /></a></div></div>
+<p>compare com a coluna do potássio sérico:
+</p>
+<div class="center"><div class="floatnone"><a href="./Arquivo:MPT0164_Rcmdr_Variavel_K.png" class="image"><img alt="MPT0164 Rcmdr Variavel K.png" src="./MPT0164_Rcmdr_Variavel_K.png" width="177" height="142" /></a></div></div>
+<p>que é <i>Real</i>. Respectivamente significa que <b>SODIO</b>, por alguma razão, está sendo tratada pelo Rcmdr como texto, enquanto <b>K</b> é numérica. Para corrigir, basta indicar que <b>SODIO</b> é <i>Real</i>, sair do editor e repetir a geração do <i>sub set</i> chamado <b>Hipernatremicos</b>. Desta vez, na Mensagens (<i>Message Window</i>), aparece:
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTA: Os dados Hipernatremicos tem 25 linhas e 15 colunas.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTE: The dataset Hipernatremicos has 25 rows and 15 columns.
+</pre>
+<p>Podemos isolar uma "fatia" dos pacientes, por exemplo, os normonatrêmicos (com natremia igual ou superior a 120 e igual ou inferior a 142 mEq/L). Torne <b>Exames1</b> ativo e repita o procedimento, desta vez usando <b>???</b> (<b>Subset expression</b>) como <b>SODIO &gt;= 120 &amp; SODIO &lt;= 142</b> (onde <b>&amp;</b> é a sintaxe R para <b>AND</b>). A resposta deve ser:
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTA: OS dados Normonatremicos tem 678 linhas e 15 colunas.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTE: The dataset Normonatremicos has 678 rows and 15 columns.
+</pre>
+<p>Note que <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ 678+25=703 $</span>. Os outros dois pacientes devem ser os Hiponatrêmicos. Experimente criar um <i>subset</i> usando a <b>Expressão</b> (<b>Subset expression</b>) <b>SODIO &lt; 120</b>. Obterá:
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTA: Os dados Hiponatremicos tem 1 linhas e 15 colunas.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTE: The dataset Hiponatremicos has 1 rows and 15 columns.
+</pre>
+<p>Faltou um paciente. Estranho, não? Reative <b>Exames1</b> e verifique a coluna <b>SODIO</b>: o paciente da linha 121 tem o valor de <b>SODIO</b> faltando:&#160;??? (NA).
+</p><p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     Que tal verificar as demais colunas, se estão registradas como numéricas e textuais como deviam ser? Uma sugestão: dê uma olhada em GLIC na linha 144, que tem um * (aceitável para uma variável contendo texto), transforme GLIC em Real e olhe a linha 144 novamente (você deve aprender algo sobre o Rcmdr com isto).
+</p>
+</blockquote>
+<h5><span class="mw-headline" id="Vari.C3.A1veis_textuais">Variáveis textuais</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=24" title="Edit section: Variáveis textuais" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=24" title="Edit section: Variáveis textuais">edit source</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Dados textuais (i.e., <i>character</i>) também podem ser utilizados para separar um <i>subset</i>. Suponha que eu queira isolar as mulheres em um <i>subset</i> <b>Exames1_mulheres</b>. É o mesmo procedimento (lembre-se de tornar Exames1 novamente ativo), utilizando a <b>Expressão</b> (<b>Subset expression</b>) como <b>SEXO == "F"</b> (note o uso de dois sinais de igual, sintaxe do R para comparações lógicas pois o sinal de igual simples serve para atribuições, e F entre aspas porque é uma <i>string</i>), obtendo.
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTA: Os dados Exames1_mulheres tem 448 linhas e 15 colunas.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTE: The dataset Exames1_mulheres has 448 rows and 15 columns.
+</pre>
+<h5><span class="mw-headline" id="Mais_exemplos.3F">Mais exemplos?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=25" title="Edit section: Mais exemplos?" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=25" title="Edit section: Mais exemplos?">edit source</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Enquanto executava as operações acima, você prestou atenção à <b>Script</b> (<b>Script Window</b>)? Se sim, deve ter visto os comandos:
+</p>
+<pre style="color: DarkBlue">
+Gordura &lt;- subset(Exames1, select=c(COL,HDL,IDADE,PACIENTE,SEXO,TRIG))
+Hipernatremicos &lt;- subset(Exames1, subset=SODIO &gt; 142)
+Normonatremicos &lt;- subset(Exames1, subset=SODIO &gt;= 120 &amp; SODIO &lt;= 142)
+Hiponatremicos &lt;- subset(Exames1, subset=SODIO &lt; 120)
+Exames1_mulheres &lt;- subset(Exames1, subset=SEXO == &quot;F&quot;)
+</pre>
+<p>O que aparece após <b>subset=</b> são expressões R válidas. Em qualquer site que dê exemplos encontrará outros operadores (como <b>|</b> que significa <b>or</b>). Poderá, com isto, descobrir como construir expressões mais complexas para gerar o <i>subset</i> que precisar.
+</p><p>Veja, por exemplo, <a rel="nofollow" target="_blank" class="external free" href="http://rprogramming.net/subset-data-in-r/">http://rprogramming.net/subset-data-in-r/</a>
+</p><p>Uma pequena lista dos operadores básicos<sup id="cite_ref-1" class="reference"><a href="#cite_note-1">[1]</a></sup>, úteis para construir as expressões, é
+</p>
+<table class="wikitable" style="margin: 1em auto 1em auto;">
+<caption> Operadores para expressões R
+</caption>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ == $</span> </td>
+<td> igual
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ != $</span> </td>
+<td> diferente
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ \text{&amp;} $</span> </td>
+<td> AND
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ \text{|} $</span> </td>
+<td> OR
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ \text{is.na(nome_da_variável)} $</span> </td>
+<td> inclui os valores não disponíveis (NA) da variável
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ \text{!is.na(nome_da_variável)} $</span> </td>
+<td> exclui os valores não disponíveis (NA) da variável
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ &gt; $</span> </td>
+<td> maior que
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ &lt; $</span> </td>
+<td> menor que
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ &gt;= $</span> </td>
+<td> maior ou igual que
+</td></tr>
+<tr>
+<td> <span class="mwe-math-fallback-source-inline tex" dir="ltr">$ &lt;= $</span> </td>
+<td> menor ou igual que
+</td></tr></table>
+<p>Parênteses também podem ser usados para a precedência de expressões. Por exemplo (absurdo, mas somente para exercitar), se quisermos um <i>subset</i> das mulheres hipernatrêmicas e dos homens normonatrêmicos, poderíamos usar a expressão
+</p>
+<dl><dd><b>(SODIO &gt; 142 &amp; SEXO == "F") | ((SODIO &gt;= 120 &amp; SODIO &lt;=142) &amp; SEXO == "M")</b></dd></dl>
+<p>garantindo, desta forma, que todos os <b>AND</b> e <b>OR</b> aconteçam na ordem desejada. Se o executar obterá:
+</p>
+<pre style="color: Black">
+Exemplo_complicado &lt;- subset(Exames1, subset=(SODIO &gt; 142 &amp; SEXO == &quot;F&quot;) | ((SODIO &gt;= 120 &amp; SODIO &lt;=142) &amp; SEXO == &quot;M&quot;))
+</pre>
+<p>e 
+</p><p><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTA: Os dados Exemplo_complicado tem 257 linhas e 15 colunas.
+</pre>
+<p><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a>
+</p>
+<pre style="color: DarkBlue">
+NOTE: The dataset Exemplo_complicado has 257 rows and 15 columns.
+</pre>
+<p>Use <b>Ver conjunto de dados</b> (<b>[View data set]</b>) e confira; procure as poucas mulheres filtradas e verá que são as hipernatrêmicas.
+</p>
+<h3><span class="mw-headline" id="Outras_opera.C3.A7.C3.B5es_com_o_subset_ativo">Outras operações com o <i>subset</i> ativo</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=26" title="Edit section: Outras operações com o subset ativo" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=26" title="Edit section: Outras operações com o subset ativo">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Dois menus do Rcmdr permitem várias manipulações que podem ser úteis:
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt;  conjunto de dados ativo </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Active data set</span></dd></dl>
+<p>e
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Modificação de variáveis no conjunto de dados ativos </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Manage variables in active data set</span></dd></dl>
+<p>Seus nomes são o que sugerem, de forma que sugerimos que os explore por sua conta. Aqui daremos apenas alguns exemplos.
+</p><p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     <b>Note</b>: embora a planilha no Rcmdr tenha uma organização matricial em colunas e linhas, ela tem uma diferença fundamental em relação às planilhas do Excel, Gnumeric, OpenOffice, LibreOffice e similares: suas células comportam valores, mas não fórmulas. Devido a isso, as operações são realizadas com os conteúdos de colunas e o resultado armazenado em uma coluna escolhida na operação.
+</p>
+</blockquote>
+<h4><span class="mw-headline" id="Veja_as_vari.C3.A1veis_do_data_set">Veja as variáveis do <i>data set</i></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=27" title="Edit section: Veja as variáveis do data set" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=27" title="Edit section: Veja as variáveis do data set">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Use
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Conjunto de dados ativos -&gt; variáveis em conjunto de dados ativo </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Active data set -&gt; Variables in active data set</span></dd></dl>
+<p>Como sempre, veja o comando R na <i>Script Window</i> e a resposta na <i>Output Window</i>
+</p>
+<h4><span class="mw-headline" id="Removendo_pacientes_da_planilha">Removendo pacientes da planilha</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=28" title="Edit section: Removendo pacientes da planilha" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=28" title="Edit section: Removendo pacientes da planilha">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Em algumas situações a análise é perturbada por dados incorretamente preenchidos ou não preenchidos. Respectivamente experimente
+</p>
+<dl><dd><a href="./Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; conjunto de dados ativos -&gt; Remova linha(s) do conjunto de dados ativos...</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Active data set -&gt; Remove rows from active data set...</span></dd></dl>
+<p>e
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Conjunto de dados ativos -&gt; Remover observações com dados faltantes...</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Active data set -&gt; Remove cases with missing data...</span></dd></dl>
+<p>Em ambos você tem a opção de fazer a operação no próprio <i>data set</i> em uso, o que pode não ser conveniente caso precise voltar atrás, ou criar um novo, que você pode salvar para uso futuro.
+</p>
+<h4><span class="mw-headline" id="Recodificando_vari.C3.A1veis">Recodificando variáveis</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=29" title="Edit section: Recodificando variáveis" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=29" title="Edit section: Recodificando variáveis">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Com 
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Modificação de variáveis de conjunto de dados ativo -&gt; Recodificar variáveis...</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Manage variables in active data set -&gt; Recode variables...</span></dd></dl>
+<p>você pode criar outras variáveis. Por exemplo, caso queiramos classificar as pessoas de acordo com suas idades, experimente:
+</p>
+<ol><li> selecionar a variável <b>IDADE</b></li>
+<li> escolher o nome da nova variável, e.g. <b>IDADE_classificacao</b></li>
+<li> preencher <b>Definições p/ recodificação</b> (<b>Enter recode directives</b>) com um critério de sua escolha, e.g.:</li></ol>
+<dl><dd><dl><dd> 1:11 = "crianca"</dd>
+<dd> 12:17 = "adolescente"</dd>
+<dd> 18:25 = "adulto jovem"</dd>
+<dd> 26:64 = "adulto"</dd>
+<dd> 65:1000 = "idoso"</dd></dl></dd></dl>
+<p>Observe que nova coluna foi adicionada ao seu <i>data set</i>. 
+</p><p><br />
+</p>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     Existem outras formas de definir as diretivas --- consulte <b>[Ajuda]</b> (<b>[Help]</b>) antes de clicar <b>[OK]</b>.
+</p>
+</blockquote>
+<p>Experimente "esquecer" um pedaço das idades, por exemplo, parando os adultos aos 55 anos de idade, e observe como ficam os conteúdos da variável criada.
+</p>
+<h4><span class="mw-headline" id="Eliminando_vari.C3.A1veis">Eliminando variáveis</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=30" title="Edit section: Eliminando variáveis" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=30" title="Edit section: Eliminando variáveis">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Com 
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Modificação de variáveis de conjunto de dados ativo -&gt; Apagar variáveis do conjunto de dados... </span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Manage variables in active data set -&gt; Delete variables from data set...</span></dd></dl>
+<p>você pode retirar colunas inteiras de seus dados, seja porque não quer determinadas colunas para sua análise, ou porque criou uma coluna erradamente. Experimente remover a <b>IDADE_classificacao</b> que acabou de criar.
+</p>
+<h4><span class="mw-headline" id="Reordenando_as_colunas">Reordenando as colunas</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=31" title="Edit section: Reordenando as colunas" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=31" title="Edit section: Reordenando as colunas">edit source</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Quando se utiliza a ferramenta "Definir sub-conjunto de dados ativo",
+</p>
+<dl><dd><a href="./Arquivo:Flag_of_Brazil.svg" class="image"><img alt="Flag of Brazil.svg" src="./30px-Flag_of_Brazil.svg.png" width="30" height="21" srcset="./Flag_of_Brazil.svg/45px-Flag_of_Brazil.svg.png 1.5x, ./Flag_of_Brazil.svg/60px-Flag_of_Brazil.svg.png 2x" /></a> <span style="color: DarkGreen">Dados -&gt; Conjunto de dados ativos -&gt; definir subconjunto de dados ativos...</span></dd>
+<dd><a href="./Arquivo:Flag_of_the_United_States.svg" class="image"><img alt="Flag of the United States.svg" src="./30px-Flag_of_the_United_States.svg.png" width="30" height="16" srcset="./Flag_of_the_United_States.svg/45px-Flag_of_the_United_States.svg.png 1.5x, ./Flag_of_the_United_States.svg/60px-Flag_of_the_United_States.svg.png 2x" /></a> <span style="color: Purple">Data -&gt; Active data set -&gt; Subset active data set...</span></dd></dl>
+<p>as colunas do novo conjunto de dados serão automaticamente ordenadas na ordem alfabética das variáveis selecionadas.
+</p><p>No exemplo do <i>data set</i> <b>Gordura</b>, a tabela ficou da seguinte forma:
+</p><p><a href="./Arquivo:MPT0164_colunas.png" class="image"><img alt="MPT0164 colunas.png" src="./MPT0164_colunas.png" width="296" height="506" /></a>
+</p><p>Lembrando que para criar essa tabela o comando utilizado foi:
+</p>
+<pre style="color: DarkBlue">
+Gordura &lt;- subset(Exames, select=c(COL,HDL,IDADE,PACIENTE,SEXO,TRIG))
+library(relimp, pos=4)
+</pre>
+<p>Observe que a ordem das colunas segue a ordem das variáveis no comando (COL,HDL,IDADE,PACIENTE,SEXO,TRIG). Assim, para reordenar as colunas na tabela, basta alterar a ordem das varáveis no comando.
+Por exemplo:
+</p>
+<pre style="color: DarkBlue">
+Gordura &lt;- subset(Exames, select=c(PACIENTE,SEXO,IDADE,COL,HDL,TRIG)) library(relimp, pos=4)
+</pre>
+<p>Resultando numa apresentação mais ordenada dos dados:
+</p><p><a href="./Arquivo:MPT0164_colunas_reordenadas.png" class="image"><img alt="MPT0164 colunas reordenadas.png" src="./MPT0164_colunas_reordenadas.png" width="297" height="504" /></a>
+</p>
+<h2><span class="mw-headline" id="Para_saber_mais">Para saber mais</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=32" title="Edit section: Para saber mais" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=32" title="Edit section: Para saber mais">edit source</a><span class="mw-editsection-bracket">]</span></span></h2>
+<blockquote style="color: #007400; background-color: #ddf5eb; border: solid thin gray;">
+<p>     Há muitos tutoriais e dicas de uso na <i>Web</i>. Quem encontrar e testar outros, pode ampliar a lista colocando um breve comentário sobre sua experiência.
+</p>
+</blockquote>
+<h3><span class="mw-headline" id="Para_iniciantes">Para iniciantes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=33" title="Edit section: Para iniciantes" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=33" title="Edit section: Para iniciantes">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li> <i>Getting Started with R Commander</i><sup id="cite_ref-2" class="reference"><a href="#cite_note-2">[2]</a></sup>: </li></ul>
+<dl><dd> Trata-se de um mini-manual de 27 páginas disponível em PDF, escrito por um dos autores do Rcmdr. É indicado para quem vai usar o R Commander pela primeira vez ou precisa de uma recordação rápida sobre seu uso. Começa do início, explicando todos os elementos da interface do R Commander, e segue fazendo algumas manipulações básicas dos dados.</dd></dl>
+<h3><span class="mw-headline" id="Uso_avan.C3.A7ado">Uso avançado</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit&amp;vesection=34" title="Edit section: Uso avançado" class="mw-editsection-visualeditor">edit</a><span class="mw-editsection-divider"> | </span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;section=34" title="Edit section: Uso avançado">edit source</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li> Nenhum tutorial na lista (incluir o nome aqui)</li></ul>
+<dl><dd>  (incluir seu comentário aqui)</dd></dl>
+<p><br />
+</p>
+<h2 style="cursor:help" title="Esta seção não é editável por razões técnicas. Edite a página toda em vez disso."><span class="mw-headline" id="Refer.C3.AAncias">Referências</span></h2>
+<div class="reflist references-small" style=""><ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a rel="nofollow" target="_blank" class="external text" href="http://junction404.com/R_Commander.pdf">David McCallum. <i>R Commander HowTo</i> (PDF)</a></span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a rel="nofollow" target="_blank" class="external text" href="http://socserv.mcmaster.ca/jfox/Misc/Rcmdr/Getting-Started-with-the-Rcmdr.pdf">Fox J. Getting Started with R Commander</a></span>
+</li>
+</ol></div>
+
+<!-- 
+NewPP limit report
+CPU time usage: 4.460 seconds
+Real time usage: 106.672 seconds
+Preprocessor visited node count: 867/1000000
+Preprocessor generated node count: 2332/1000000
+Post‐expand include size: 13401/2097152 bytes
+Template argument size: 6003/2097152 bytes
+Highest expansion depth: 6/40
+Expensive parser function count: 0/100
+-->
+
+<!-- 
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   66.087      1 - -total
+ 34.70%   22.932      1 - Predefinição:Disciplinas/MPT0164
+ 29.98%   19.816      1 - Predefinição:Disciplinas
+ 18.92%   12.504      1 - Predefinição:Referências
+  6.21%    4.104      7 - Predefinição:Border-radius
+  6.00%    3.963     11 - Predefinição:Format/Quote
+  3.86%    2.548      1 - Predefinição:Esconder_link_para_editar_seção
+  2.67%    1.766      1 - Predefinição:!!
+  2.59%    1.712      1 - Predefinição:Ver_e_editar
+-->
+
+<!-- Saved in parser cache with key sislaudb:pcache:idhash:4367-0!*!0!!en!5!*!math=6 and timestamp 20200420153826 and revision id 26518
+ -->
+</div>									<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="http://sislau.fm.usp.br/index.php?title=MPT0164/Aulas_práticas/R_Commander/Introdução_ao_R_Commander&amp;oldid=26518">http://sislau.fm.usp.br/index.php?title=MPT0164/Aulas_práticas/R_Commander/Introdução_ao_R_Commander&amp;oldid=26518</a>"					</div>
+													<div id='catlinks' class='catlinks catlinks-allhidden'></div>												<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul lang="en" dir="ltr">
+							<li id="pt-userpage"><a href="/wiki/Usu%C3%A1rio:89733" dir="auto" title="Your user page [.]" accesskey=".">89733</a></li><li id="pt-mytalk"><a href="/wiki/Usu%C3%A1rio_Discuss%C3%A3o:89733" title="Your talk page [n]" accesskey="n">Talk</a></li><li id="pt-preferences"><a href="/wiki/Especial:Prefer%C3%AAncias" title="Your preferences">Preferences</a></li><li id="pt-watchlist"><a href="/wiki/Especial:P%C3%A1ginas_vigiadas" title="A list of pages you are monitoring for changes [l]" accesskey="l">Watchlist</a></li><li id="pt-mycontris"><a href="/wiki/Especial:Contribui%C3%A7%C3%B5es/89733" title="A list of your contributions [y]" accesskey="y">Contributions</a></li><li id="pt-logout"><a href="/index.php?title=Especial:Sair&amp;returnto=MPT0164%2FAulas+pr%C3%A1ticas%2FR+Commander%2FIntrodu%C3%A7%C3%A3o+ao+R+Commander" title="Log out">Log out</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul lang="en" dir="ltr">
+															<li  id="ca-nstab-main" class="selected"><span><a href="/wiki/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander"  title="View the content page [c]" accesskey="c">Page</a></span></li>
+															<li  id="ca-talk" class="new"><span><a href="/index.php?title=Discuss%C3%A3o:MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit&amp;redlink=1"  title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>
+													</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<h3 id="p-variants-label"><span>Variants</span><a href="#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul lang="en" dir="ltr">
+															<li id="ca-view" class="selected"><span><a href="/wiki/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander" >Read</a></span></li>
+															<li id="ca-ve-edit"><span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;veaction=edit"  title="Edit this page with VisualEditor [v]" accesskey="v">Edit</a></span></li>
+															<li id="ca-edit" class=" collapsible"><span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=edit"  title="You can edit this page. Please use the preview button before saving [e]" accesskey="e">Edit source</a></span></li>
+															<li id="ca-history" class="collapsible"><span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=history"  title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>
+															<li id="ca-watch" class="icon"><span><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=watch&amp;token=b4e4443803a8924d0fcc5fd4429ee6f85e9dc25d%2B%5C"  title="Add this page to your watchlist [w]" accesskey="w">Watch</a></span></li>
+													</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu" aria-labelledby="p-cactions-label">
+						<h3 id="p-cactions-label"><span>More</span><a href="#"></a></h3>
+
+						<div class="menu">
+							<ul lang="en" dir="ltr">
+																	<li id="ca-delete">
+										<a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=delete"  title="Delete this page [d]" accesskey="d">Delete</a>
+									</li>
+																	<li id="ca-move">
+										<a href="/wiki/Especial:Mover_p%C3%A1gina/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander"  title="Move this page [m]" accesskey="m">Move</a>
+									</li>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3 lang="en" dir="ltr">
+							<label for="searchInput">Search</label>
+						</h3>
+
+						<form action="/index.php" id="searchform">
+														<div id="simpleSearch">
+															<input type="search" name="search" placeholder="Search" title="Search SisLAu [f]" accesskey="f" id="searchInput" /><input type="hidden" value="Especial:Busca" name="title" /><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton" /><input type="submit" name="go" value="Go" title="Go to a page with this exact name if exists" id="searchButton" class="searchButton" />								</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="/wiki/P%C3%A1gina_principal"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id='p-navigation' aria-labelledby='p-navigation-label'>
+			<h3 lang="en" dir="ltr" id='p-navigation-label'>Navigation</h3>
+
+			<div class="body">
+									<ul>
+													<li id="n-mainpage-description"><a href="/wiki/P%C3%A1gina_principal" title="Visit the main page [z]" accesskey="z">Main page</a></li>
+													<li id="n-recentchanges"><a href="/wiki/Especial:Mudan%C3%A7as_recentes" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>
+													<li id="n-randompage"><a href="/wiki/Especial:Aleat%C3%B3ria" title="Load a random page [x]" accesskey="x">Random page</a></li>
+													<li id="n-help"><a href="http://www.sislau.fm.usp.br/wiki/Ajuda" rel="nofollow" target="_blank" title="The place to find out">Help</a></li>
+											</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-tb' aria-labelledby='p-tb-label'>
+			<h3 lang="en" dir="ltr" id='p-tb-label'>Tools</h3>
+
+			<div class="body">
+									<ul>
+													<li id="t-whatlinkshere"><a href="/wiki/Especial:P%C3%A1ginas_afluentes/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li>
+													<li id="t-recentchangeslinked"><a href="/wiki/Especial:Mudan%C3%A7as_relacionadas/MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li>
+													<li id="t-upload"><a href="/wiki/Especial:Carregar_arquivo" title="Upload files [u]" accesskey="u">Upload file</a></li>
+													<li id="t-specialpages"><a href="/wiki/Especial:P%C3%A1ginas_especiais" title="A list of all special pages [q]" accesskey="q">Special pages</a></li>
+													<li id="t-print"><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li>
+													<li id="t-permalink"><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;oldid=26518" title="Permanent link to this revision of the page">Permanent link</a></li>
+													<li id="t-info"><a href="/index.php?title=MPT0164/Aulas_pr%C3%A1ticas/R_Commander/Introdu%C3%A7%C3%A3o_ao_R_Commander&amp;action=info" title="More information about this page">Page information</a></li>
+											</ul>
+							</div>
+		</div>
+				</div>
+		<div id="footer" role="contentinfo" lang="en" dir="ltr">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last modified on 1 September 2016, at 16:38.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="/wiki/SisLAu:Pol%C3%ADtica_de_privacidade" title="SisLAu:Política de privacidade">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="/wiki/SisLAu:Sobre" title="SisLAu:Sobre">About SisLAu</a></li>
+											<li id="footer-places-disclaimer"><a href="/wiki/SisLAu:Aviso_geral" title="SisLAu:Aviso geral">Disclaimers</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+											<li id="footer-poweredbyico">
+															<a href="//www.mediawiki.org/"><img src="/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31" /></a>
+													</li>
+									</ul>
+						<div style="clear:both"></div>
+		</div>
+		<script>if(window.jQuery)jQuery.ready();</script><script>if(window.mw){
+mw.loader.state({"site":"ready","user":"ready","user.groups":"ready"});
+}</script>
+<script>if(window.mw){
+mw.loader.load(["ext.math.mathjax.enabler","ext.cite","mediawiki.toc","mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","mediawiki.page.watch.ajax","ext.gadget.improveLinks","ext.visualEditor.targetLoader"],null,true);
+}</script>
+<script>if(window.mw){
+mw.config.set({"wgBackendResponseTime":106819});
+}</script>
+	</body>
+</html>
