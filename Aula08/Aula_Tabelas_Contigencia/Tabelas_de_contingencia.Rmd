@@ -1,0 +1,1660 @@
+---
+title: "| Análise de Tabelas de contingência"
+author: |
+  | Paulo S. P Silveira (paulo.silveira@fm.usp.br)
+  | José O. Siqueira (jose.siqueira@fm.usp.br)
+output:
+  html_document:
+    df_print: tibble
+    highlight: pygments
+    theme: cerulean
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+---
+<!-- versao -->
+<div align=right>
+<font style="color:#26a169; font-size:80%">v20200426.2245</font>
+</div>
+<!-- https://bookdown.org/yihui/rmarkdown/html-document.html#data_frame_printing -->
+<!-- theme: https://bootswatch.com/3/ -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.width=6, fig.height=5,
+                      fig.align = "center",
+                      comment = NA)
+```
+
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+td {
+  padding: 5px;
+  text-align: left;
+}
+th {
+  padding: 5px;
+  font-size: 120%;
+  background-color: #F7CB45;
+    opacity: 1;
+  text-align: center;
+}
+table#t01 {
+background-color: #f1f1c1;
+  }
+table#t02 {
+width: 100%;
+background-color: #dddddd;
+  }
+table.center {
+  margin-left:auto; 
+  margin-right:auto;
+}
+</style>
+
+# Objetivos
+
+- Identificar e sumariar dados categóricos em tabela de contingência.
+- Identificar distribuição amostral $\chi^2$ (qui-quadrado).
+- Formular hipótese estatística na análise de dados categóricos.
+- Definir e determinar frequências observada e esperada.
+- Identificar, aplicar e interpretar os testes de aderência.
+- Identificar e formular análise de variáveis categóricas em tabela de contingência $l$x$c$ (números de linhas versus de colunas).
+- Analisar tabelas de contingencia com variáveis ordinais.
+- Analisar de tabelas "tridimensionais" $l$x$c$x$k$, com a inclusão de variável de estratificação.
+- Realizar os procedimentos estatísticos em R.
+
+# Preparação
+
+Para executar os exemplos aqui apresentados, sugerimos que crie um projeto e baixe os seguintes arquivos para a pasta do mesmo:
+
+* [tabelacontingencia2x2_capacetetrauma.R](tabelacontingencia2x2_capacetetrauma.R)
+* [Qui2.R](Qui2.R)
+* [Qui2_LxC.R](Qui2_LxC.R)
+* [friendlycolor.R](friendlycolor.R)
+* [TesteQuiQuadradoAderencia_Chocolate.R](TesteQuiQuadradoAderencia_Chocolate.R)
+* [chocolate.xlsx](chocolate.xlsx)
+* [eiras.quiaderencia.R](eiras.quiaderencia.R)
+* [TesteQuiQuadradoAderencia_Flores.R](TesteQuiQuadradoAderencia_Flores.R)
+* [flores.xlsx](flores.xlsx)
+* [TabelaContingencia2x2_TabagismoEtilismo.R](TabelaContingencia2x2_TabagismoEtilismo.R)
+* [tabagismo_e_etilismo_2x2.xlsx](tabagismo_e_etilismo_2x2.xlsx)
+* [TCrXc_StatusOcupacional.R](TCrXc_StatusOcupacional.R)
+* [Teste qui-quadrado de Cochran-Armitage.R](Teste qui-quadrado de Cochran-Armitage.R)
+* [menarca.xlsx](menarca.xlsx)
+* [Teste qui-quadrado de Cochran-Armitage generalizado.R](Teste qui-quadrado de Cochran-Armitage generalizado.R)
+* [Teste Qui-quadrado de Mantel-Haenszel.R](Teste Qui-quadrado de Mantel-Haenszel.R)
+* [fumo_e_faixaetaria.xlsx](fumo_e_faixaetaria.xlsx)
+
+# Roteiro
+
+Há diversas funções e procedimentos envolvidos neste texto. Como roteiro orientador, verifique:
+
+**Delineamento entre participantes**
+
+teste de independência / dissociação
+
+- Tabela unidimensional
+    - Uma variável nominal: 
+        - Teste de aderência: chisq.test
+- Tabela bidimensional
+    - Duas variáveis nominais dicotômicas
+        - Teste qui-quadrado de Pearson: chisq.test
+        - Teste exato de Fisher de OR bruto: fisher.test
+        - Teste qui-quadrado mínimo
+    - Uma variável nominal dicotômica e uma ordinal
+        - Teste qui-quadrado de Cochran-Armitage (trend):         -           - DescTools::CochranArmitageTest
+    - Uma variável nominal politômica e uma ordinal
+        - Teste qui-quadrado de Cochran-Armitage generalizado: coin::chisq_test
+    - Duas variáveis ordinais
+        - Teste qui-quadrado de Mantel-Haenszel: DescTools::MHChisqTest
+- Tabela tridimensional
+    - Duas variáveis nominais dicotômicas e uma variável de estratificação nominal politômica
+        - Teste de Mantel-Haenszel de OR comum: stats::mantelhaen.test
+    - Duas variáveis nominais politômicas e uma variável de estratificação nominal politômica
+        - Teste de Mantel-Haenszel de OR comum generalizado: coin::cmh_test
+    - Duas variáveis ordinais e uma variável de estratificação nominal politômica
+        - Teste qui-quadrado ordinal estratificado (linear-by-linear association model): coin::lbl_test
+
+**Delineamento intraparticipantes**
+
+teste de concordância entre dois métodos de avaliação
+
+- Tabela bidimensional
+    - Duas variáveis nominais dicotômicas
+        - Teste de McNemar: mcnemar.test, coin::mh_test 
+        - Teste kappa de Cohen: epiR::epi.kappa
+
+
+# Contingência
+
+Em sentido geral, contingência pode significar qualquer relação de dependência entre eventos ambientais ou entre eventos comportamentais e ambientais (Catania, 1993; Skinner, 1953, 1969; Todorov, 1985). Embora possa ser encontrado nos dicionários com diferentes significados, esse termo é empregado, na análise do comportamento, **como termo técnico para enfatizar como a probabilidade de um evento pode ser afetada ou causada por outros eventos** (Catania, 1993, p. 368). 
+<div align=right><small>
+Deisy das Graças de Souza (UFSCar)<br>
+http://www.itcrcampinas.com.br/txt/texto_deisy.pdf
+</small></div>
+
+
+$$~$$
+
+# Relações entre duas variáveis
+<div align=center>
+<table style="border:1; background-color:#F7F056; border-radius: 25px; cellpadding=25"><tr><td  style="text-align:center;">
+<font style="font-size:300%">1</font><br>
+<font style="font-size:200%">Exposição e Desfecho</font>
+</td></tr></table>
+</div>
+
+<!--
+```{r, echo=FALSE}
+knitr::include_graphics("./image/exposicao_desfecho.gif")
+```
+-->
+
+## tabela 2x2
+```{r, echo=FALSE}
+knitr::include_graphics("./image/expdfc_tabela.png", dpi=100)
+```
+
+## independência
+```{r, echo=FALSE}
+knitr::include_graphics("./image/expdfc_independencia.png", dpi=100)
+```
+
+
+## concordância
+```{r, echo=FALSE}
+knitr::include_graphics("./image/expdfc_concordancia.png", dpi=100)
+```
+
+## discordância
+```{r, echo=FALSE}
+knitr::include_graphics("./image/expdfc_discordancia.png", dpi=100)
+```
+
+
+$$~$$
+
+# Associação
+
+<div align=center>
+<table style="border:2; background-color:#F7F056; border-radius: 25px; cellpadding=50px"><tr><td  style="text-align:center;">
+<font style="font-size:300%">2</font><br>
+<font style="font-size:200%">Não avalia<br>causa e efeito:<br>apenas associação.</font>
+</td></tr></table>
+</div>
+
+## causa e efeito positivo?
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitopositivo.png", dpi=100)
+```
+
+## causa e efeito negativo?
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitonegativo.png", dpi=100)
+```
+
+## causa e efeito positivo?
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitopositivo2.png", dpi=100)
+```
+
+# Exemplos
+
+## Gatos e alergia
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitopositivo.png", dpi=100)
+```
+
+### - estresse
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitogatos01.png", dpi=100)
+```
+
+### - mecanismo imune
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitogatos02.png", dpi=100)
+```
+
+### - desinfetantes
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitogatos03.png", dpi=100)
+```
+
+### - alergia e estresse
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitogatos04.png", dpi=100)
+```
+
+### - alergia e gatos
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitogatos05.png", dpi=100)
+```
+
+## Vinho e doença coronariana
+
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho01.png", dpi=100)
+```
+
+### - ambiente inseguro
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho02.png", dpi=100)
+```
+
+### - moradia precária
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho03.png", dpi=100)
+```
+
+### - má nutrição
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho04.png", dpi=100)
+```
+
+### - boa moradia
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho05.png", dpi=100)
+```
+
+### - segurança
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho06.png", dpi=100)
+```
+
+### - boa alimentação
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho07.png", dpi=100)
+```
+
+### - outros cuidados
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho08.png", dpi=100)
+```
+
+### - é o vinho?
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitovinho09.png", dpi=100)
+```
+
+## Fumo e Câncer de Pulmão
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitopositivo2.png", dpi=100)
+```
+
+### - The Cigarette Century
+```{r, echo=FALSE}
+knitr::include_graphics("./image/cigarette_century.png", dpi=200)
+```
+
+#### - How could one attribute lung cancer to cigarette smoking?
+
+"The public impression of scientific and medical **uncertainty** that resulted was a crucial element in maintaining the market of current smokers as well as recruiting new ones. Industry literature, for example, frequently pointed to the fact that **nonsmokers could also develop lung cancer**. Therefore, they argued, **how could one attribute lung cancer to cigarette smoking?**"
+
+#### - Medical knowledge is provisional
+
+medical knowledge was always provisional and **contingent**. Just as drugs deemed “effective” do not work in every case, so too **a cause of disease does not always result in disease**. As Richard Doll would later explain, the epidemiologists had identified a cause of lung cancer (and other diseases), not the cause.
+
+#### - Fisher was against the association between smoking and lung cancer
+
+```{r, echo=FALSE}
+knitr::include_graphics("./image/fisher_smoker.png", dpi=300)
+```
+Another vocal critic of the lung cancer findings was **Sir Ronald Fisher**, the leading biometrician and geneticist in Great Britain during the first half of the twentieth century and a man deeply committed to bringing statistical analysis to genetics and agricultural experimentation. His <font size=4>**1925**</font> book, Statistical Methods for Research Workers, quickly became a classic, leading to academic appointments at University College London and Cambridge University. Fisher’s critiques were similar to Berkson’s. The ethical impossibility of conducting a randomized experiment led him to question the results of the epidemiological studies. As a **believer in genetic* notions of cancer causality, Fisher speculated that there was some constitutional factor that led individuals both to become smokers and to get lung cancer, even though smoking and lung cancer might not be causally related**. Doll and Hill repeatedly rebutted this theory, returning to the critical question of how to account for the rise in lung cancers during the twentieth century if the disease was simply “constitutional.”
+
+\* <font size=4>**1923**</font>: One of the [A. Bradford] Hill's innovations was the **first randomized, double-blind clinical trial**, designed to reduce investigator bias in the evaluation of clinical outcomes. [...] This method, which drew on Fisher's **agricultural experimentation** in genetics, became a critical new tool for evaluating medical treatments. 
+
+```{r, echo=FALSE}
+knitr::include_graphics("./image/fisher_dna.png", dpi=150)
+```
+
+By the  <font size=4>**1930s**</font>, the relationship of smoking to cancer was a topic of uresolved debate. It was the **life insurance industry**, which like the tobacco corporations grew by leaps and bounds in the first half of the twentieth century, that **took the lead in understanding the effects of smoking on health**.
+
+By the early <font size=4>**1950s**</font>, however, it was abundantly clear that the evidence implicating cigarette smoking as a risk to health was now of a different order. First, the link between smoking and disease was **categorical**, outside the realm of individual clinical judgment.
+
+They [tobacco industry] responded with a new and unprecedent public relations strategy. Its goals was to produce and **sustain scientific skepticism and controversy** in order to disrupt the emerging consensus on the harms of cigarette smoking. This strategy required **intrusions into scientific process and procedure**. [...] So long as there appeared to be doubt, so long as the industry could assert "**not proven**". [...] The future of the cigarette would now depend on the **successful production of a scientific controversy**.
+
+## Óculos e xixi
+
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitoxixi01.png", dpi=100)
+```
+```{r, echo=FALSE}
+knitr::include_graphics("./image/causaefeitoxixi02.png", dpi=100)
+```
+
+> Quando alguém lhe traz uma opinião coincidente com sua crença, você a toma como um fato.
+> Quando alguém lhe traz um fato discordante de sua crença, você o toma como uma opinião.
+
+<div align=right><small>
+Prof. Eduardo Massad
+</small></div>
+
+
+# A hipótese nula
+<div align=center>
+<table style="border:1; background-color:#F7F056; border-radius: 25px; cellpadding=25"><tr><td  style="text-align:center;">
+<font style="font-size:300%">3</font><br>
+<font style="font-size:200%">Tomada de decisão:<br>
+Hipótese nula ($H_0$)<br>
+e hipótese alternativa ($H_1$)</font>
+</td></tr></table>
+</div>
+
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Adotaremos, neste texto, a seguinte convenção:
+
+<table id="t01" class="center">
+<tr><td></td><th>Desfecho +</th><th>Desfecho -</th></tr>
+<tr><th>Exposição +</th><td>a</td><td>b</td></tr>
+<tr><th>Exposição -</th><td>c</td><td>d</td></tr>
+</table>
+
+</td></tr></table>
+***
+
+## Teste Qui-quadrado
+
+Os testes baseados na estatística qui-quadrado podem ser divididos em dois
+tipos:
+
+1. Teste de aderência uma variável nominal com duas ou mais categorias:
+teste de frequências hipotetizadas
+
+2. Teste de independência entre duas variáveis nominais com duas ou mais
+categorias
+
+## - a distribuição $\chi^2$
+
+Antes de discutirmos os testes, vamos explorar um pouco a distribuição que utilizam. Diferente da distribuição normal que têm domínio de $[- \infty, + \infty]$, estas são distribuições assimétricas, iniciadas em zero, que tendem assintoticamente a zero com o valor crescente de $\chi^2$, $[0, + \infty]$.
+
+
+
+
+O comando para calcular a probabilidade acumulada entre zero e cada valor de qui-quadrado é:
+
+**dchisq(x, df, ncp = 0, log = FALSE)**
+
+onde <code>x</code> é o valor de $\chi^2$, <code>df</code> são os graus de liberdade (_degrees of freedom_) e <code>ncp</code> é o parâmetro de não centralidade (_non-centrality parameter_\ =\ 0, por _default_, correspondente à distribuição centrada de $H_0$; voltaremos ao <code>ncp</code> adiante). O parâmetro <code>log</code>, desligado por _default_ é para a possibilidade de devolver o logarítmo do valor (não o exploraremos neste texto).
+
+Pode-se gerar curvas desta distribuição com o seguinte código, mostrando seu aspecto entre 2 e 6 graus de liberdade:
+```{r, comment=NA, echo=TRUE}
+chi2.valor <- seq(from=0, to=40, by=0.01)
+graus.liberdade <- 2:6
+for (g in 1:length(graus.liberdade))
+{
+  p <- dchisq(chi2.valor, df=graus.liberdade[g])
+  plot(chi2.valor, p, type="l", 
+       main=paste("Distribuição de Qui^2, df=",
+                  graus.liberdade[g],sep=""),
+       xlab="Qui-quadrado", ylab="Densidade")
+}
+```
+ou, caso prefira ver todas as curvas no mesmo gráfico, sugere-se:
+```{r, comment=NA, echo=TRUE}
+source("friendlycolor.R")
+cor <- 3
+padrao <- 1
+leg.txt <- c()
+leg.cor <- c()
+chi2.valor <- seq(from=0, to=40, by=0.01)
+graus.liberdade <- 2:6
+for (g in 1:length(graus.liberdade))
+{
+  p <- dchisq(chi2.valor, df=graus.liberdade[g])
+  if (g==1)
+  {
+    plot(chi2.valor, p, type="l", lty=padrao,
+         col=friendlycolor(cor), lwd=2,
+         main="Distribuições de Qui^2",
+         xlab="Qui-quadrado", ylab="Densidade")
+    
+  } else
+  {
+    lines(chi2.valor, p, lty=padrao,
+         col=friendlycolor(cor), lwd=2)
+  }
+  # guarda para a legenda
+  leg.txt <- c(leg.txt, paste("df = ",graus.liberdade[g],sep=""))
+  leg.cor <- c(leg.cor, friendlycolor(cor))
+  cor <- cor+6
+  padrao <- padrao+1
+}
+legend("topright",
+       leg.txt, 
+       col=leg.cor,
+       lwd=2, 
+       lty=1:5, 
+       box.lwd=0, bg="transparent")  
+```
+
+
+## Teste de aderência: teste qui-quadrado de uma variável
+
+Permite descobrir se um conjunto de frequências observadas difere de um
+outro conjunto de frequências hipotetizadas.
+
+### suposição
+
+Independência das observações: cada observação da unidade observacional
+deve ser alocada em apenas um categoria da variável nominal.
+<div align=right><small>
+SIEGEL, S. & CASTELLAN Jr., N.J. (1988) Nonparametric statistics for the behavioral sciences. 2ª ed. NY: McGraw-Hill, p. 111
+</small></div>
+
+### exemplo 1: chocolate
+
+Cento e dez pessoas foram solicitadas a manifestar suas preferências com respeito a chocolates. Queremos verificar se alguma das marcas é preferida em detrimento de outras.
+
+Se não são ($H_0$), devemos esperar aproximadamente o mesmo número de pessoas em cada categoria.
+
+Com certeza, não haverá exatamente o mesmo número de participantes em cada categoria, mas os números devem ter uma distribuição com razoável proximidade.
+
+O número de pessoas que escolheu apenas uma entre quatro marcas diferentes está em [chocolate.xlsx](chocolate.xlsx). 
+
+O teste está implementado em [TesteQuiQuadradoAderencia_Chocolate.R](TesteQuiQuadradoAderencia_Chocolate.R):
+```{r, echo=FALSE}
+cat(readLines("TesteQuiQuadradoAderencia_Chocolate.R"), sep = '\n')
+```
+Observe o código:
+
+- lê a planilha no formato _xlsx_ com os dados e a exibe.
+  - note que denominamos uma coluna como **probH0**, contendo $0.25$ em todas as linhas; estas são as frequências esperadas para a hipótese nula, $H_0$.
+- O teste em si recebe a coluna com o número de pessoas que preferiram cada chocolate e estas frequências esperadas; é executado com _bootstrapping_, com $10^5$ iterações (parâmetro $B$).
+- O restante do código serve para reorganizar e ecoar os resultados, incluindo o cálculo de tamanho de efeito dado pelo V de Cramér.
+
+Este código gera a seguinte saída:
+```{r, echo=FALSE}
+source("TesteQuiQuadradoAderencia_Chocolate.R")
+```
+Com $p=9.999 \cdot 10^-5$, rejeita-se $H_0$ e, portanto, temos evidência de que a escolha das pessoas pelas marcas de chocolate não é homogênea. Observando a tabela, vemos que o desequilíbrio ocorreu pela maior preferência pelo chocolate B.
+
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Os graus de liberdade em uma tabela com $L$ linhas e $C$ colunas são dados por $$df = (L-1) \cdot (C-1)$$
+Portanto, uma tabela $2\text{ x }2$, tem somente um grau de liberdade, e uma tabela $4\text{ x }3$ tem seis graus de liberdade.
+</td></tr></table>
+***
+
+
+### exemplo 2: genética
+
+As probabilidades relacionadas com $H_0$ não precisam ser sempre as mesmas. Por exemplo, em genética, é comum precisarmos avaliar como é a herança de um genótipo a partir dos fenótipos observados. 
+
+Duas linhagens puras de plantas foram cruzadas: uma com pétalas amarelas e outra com pétalas vermelhas. A primeira geração, $F_1$, tem pétalas cor de laranja. Então $F_1$ é cruzada entre si, gerando $F_2$ com 320 plantas, das quais 182 têm pétalas cor de laranja, 61 amarelas e 77 vermelhas. 
+<div align=right><small>
+exemplo traduzido de https://www.ncbi.nlm.nih.gov/books/NBK21907/
+</small></div>
+
+Há duas possibilidades para explicar este resultado, e queremos saber qual é o caso para o fenótipo das pétalas das flores desta espécie:
+
+1. dominância incompleta ou codominância, com os seguintes genótipos e frequências esperadas:
+    * Y/R: laranja ($1 \over 2$)
+    * Y/Y: amarela ($1 \over 4$)
+    * R/R: vermelha ($1 \over 4$)
+
+Neste caso, os números esperados para $F_2$ são, respectivamente, 160, 80 e 80, seguindo as proporções 2:1:1.
+  
+2. [epistasis](https://en.wikipedia.org/wiki/Epistasis) recessiva, com os seguintes genótipos e frequências esperadas:
+    * Y/-; R/-: laranja ($9 \over 16$)
+    * y/y; R/-: amarela ($3 \over 16$)
+    * Y/-; r/r: vermelha ($3 \over 16$)
+    * y/y; r/r: vermelha ($1 \over 16$)
+
+Neste caso, os números esperados para $F_2$ são, respectivamente, 180 , 60 e 80 (60+20), seguindo as proporções 9:3:(3:1).
+
+A qual das duas hipóteses a herança da cor das flores desta espécie adere?
+
+Implementamos uma solução em [eiras.quiaderencia.R](eiras.quiaderencia.R) e [TesteQuiQuadradoAderencia_Flores.R](TesteQuiQuadradoAderencia_Flores.R). 
+
+Observe o código com nova função declarada:
+```{r, echo=FALSE}
+cat(readLines("eiras.quiaderencia.R"), sep = '\n')
+```
+Criar uma função e armazená-la em um arquivo separado facilita seu uso (o nome do arquivo tem o mesmo nome da função só por conveniência; poderia ter qualquer nome). Esta função, _eiras.quiaderencia()_, recebe um _data frame_ com duas colunas e o número de iterações para o _bootstrapping_ (com $10^6$ por _default_). 
+
+Adaptar o código para outros casos torna-se muito mais simples. No código anterior, seria preciso alterar todas as ocorrências de **df_chocolate** e os nomes das colunas **Pessoas** e **probH0**. Agora, só é necessário modificar 
+[TesteQuiQuadradoAderencia_Flores.R](TesteQuiQuadradoAderencia_Flores.R):
+
+```{r, echo=FALSE}
+cat(readLines("TesteQuiQuadradoAderencia_Flores.R"), sep = '\n')
+```
+
+Para funcionar, carrega-se a função na memória (com _source()_), lemos o arquivo de interesse [flores.xlsx](flores.xlsx) e chamamos _eiras.quiaderencia()_ duas vezes, indicando as colunas a serem testadas: 
+
+- a coluna 2 da planilha (que tem o número de plantas com cada característica) contra a coluna 3, que testa a hipótese de codominância,
+- a coluna 2 da planilha contra a coluna 4, que testa a hipótese de epistasis.
+
+Este código produz a seguinte saída:
+
+```{r, echo=FALSE}
+source("TesteQuiQuadradoAderencia_Flores.R")
+```
+Neste exemplo buscamos **não** rejeitar $H_0$. Para o habitual $\alpha=0.05$ estes resultados sugerem que a herança das cores das pétalas desta espécie é explicada por epistasis recessiva.
+
+## Teste Qui-quadrado de Pearson para Independência
+
+O teste Qui-quadrado de Pearson permite que se descubra se existe um relacionamento ou efeito de interação entre duas variáveis qualitativas nominais com duas ou mais categorias.
+
+Cada observação da unidade observacional deve ser alocada em apenas uma categoria de cada uma das duas variáveis nominais. 
+
+<div align=right><small>
+SIEGEL, S. & CASTELLAN Jr., N.J. (1988) Nonparametric statistics for the behavioral sciences. 2ª ed. NY: McGraw-Hill, p. 111
+</small></div>
+
+
+
+### Exemplo: capacete e trauma
+
+Considere um estudo que investiga a efetividade dos capacetes de segurança de bicicleta na prevenção de traumas cranianos. Os dados consistem de uma amostra aleatória de 793 indivíduos envolvidos em acidentes ciclísticos durante um certo período. Deseja-se testar, com $\alpha=0.05$, se o uso do capacete tem funcionado como um fator de proteção.
+
+Formulamos as hipóteses nula e alternativa:
+
+$H_0: \text{não existe associação entre uso do capacete e trauma craniano}$
+
+$H_1: \text{existe associação entre uso do capacete e trauma craniano}$
+
+$\alpha = 5\%$
+
+Os dados são:
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/pinoquio.png", dpi=800)
+```
+```{r, comment=NA, echo=TRUE}
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+print (tabela)
+```
+
+Sob a hipótese nula ($H_0$), i.e., se não existe associação entre o uso de capacete e o trauma craniano nos acidentes, os valores esperados são:
+```{r, comment=NA, echo=TRUE}
+chi2 <- chisq.test(tabela)
+print(round(chi2$expected,3))
+```
+É possível transformar em proporções, obtendo:
+```{r, comment=NA, echo=TRUE}
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+tabela_prop <- tabela/sum(tabela)
+print (round(tabela_prop,3))
+```
+
+e, sob $H_0$, os valores esperados são:
+```{r, comment=NA, echo=TRUE, warning=FALSE}
+soma_col1 <- sum(tabela_prop[,1])
+soma_col2 <- sum(tabela_prop[,2])
+soma_lin1 <- sum(tabela_prop[1,])
+soma_lin2 <- sum(tabela_prop[2,])
+tabela_propesp <- tabela_prop
+tabela_propesp[1,1] <- soma_lin1*soma_col1
+tabela_propesp[1,2] <- soma_lin1*soma_col2
+tabela_propesp[2,1] <- soma_lin2*soma_col1
+tabela_propesp[2,2] <- soma_lin2*soma_col2
+print(round(tabela_propesp,3))
+```
+
+Note que o teste em R é feito diretamente com os valores observados (pois o tamanho da amostra importa) e seus resultados foram armazenados, acima, na variável **chi2**. O tipo desta variável é dado por:
+```{r, comment=NA, echo=TRUE}
+str(chi2)
+sapply(chi2, typeof)
+```
+É uma estrutura complexa, da qual muitos valores podem ser extraídos quando quisermos utilizá-los dentro de um _RScript_. A parte em **chi2\$expected**, que já utilizamos, contém a tabela com os valores esperados sob $H_0$.
+
+O resultado principal do teste é exibido pela variável como um todo:
+```{r, comment=NA, echo=TRUE}
+print (chi2)
+```
+
+A estatística de teste tem o valor $X^2=6.7001$, com 1 grau de liberdade ($df=1$), correspondendo ao valor-p de $0.009641$ (que será discutido adiante). Com estes valores podemos decidir pela rejeição ou não-rejeição de $H_0$.
+
+No exemplo de uma tabela 2x2 há somente 1 grau de liberdade. O gráfico da distribuição de qui-quadrado (para melhor visibilidade, computamos $0 \le \chi^2 \le 8$, pois o valor de $\chi^2$ vai de zero a $\infty$, e truncamos o eixo $y$ em 1.2) é:
+```{r, comment=NA, echo=TRUE}
+chi2.valor <- seq(from=0, to=8, by=0.01)
+graus.liberdade <- 1
+p <- dchisq(chi2.valor, df=graus.liberdade)
+plot(chi2.valor, p, type="l", ylim=c(0, 1.2),
+     xlab="Qui-quadrado", ylab="Densidade"
+)
+```
+
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Conceitualmente, o teste Qui-quadrado é um teste de proporções, no qual a estatística de teste (i.e., o valor de $X^2$) é obtida pela diferença quadrática entre as frequências absolutas observadas e esperadas, dada por $$X^2 = \sum{ {(o - e)^2} \over{e} }$$. 
+ou $$X^2 = {{(ad-bd)^2(a+b+c+d)} \over {(a+b)(c+d)(b+d)(a+c)}}$$
+
+Em R, experimente calcular a estatística na "força bruta":
+
+```{r, comment=NA, echo=TRUE}
+qui2 <- 0
+for(i in 1:4)
+{
+  qui2 <- qui2 + ((chi2$observed[i]-chi2$expected[i])^2)/chi2$expected[i]
+}
+cat("O valor do qui-quadrado é ",qui2,"\n",sep="")
+```
+
+O valor de $X^2$ aumenta com a discrepância crescente entre os valores observados e esperados.
+
+Note, porém, que o valor calculado pelo código acima é diferente do que aparece em:
+```{r, comment=NA, echo=TRUE}
+print (chi2)
+```
+Isto acontece por causa da correção para continuidade de Yates, que será comentada adiante. Na "força bruta", a correção pode ser implementada com:
+```{r, comment=NA, echo=TRUE}
+qui2y <- 0
+for(i in 1:4)
+{
+  qui2y <- qui2y + ((abs(chi2$observed[i]-chi2$expected[i])-0.5)^2)/chi2$expected[i]
+}
+cat("O valor do qui-quadrado com a correção de Yates é ",qui2y,"\n",sep="")
+```
+Obviamente, nenhum destes cálculos manuais é necessário. A função _chisq.test()_ já os executa e armazena no objeto que denominamos, neste exemplo, **chi2**.
+</td></tr></table>
+***
+
+Nosso interesse é saber a partir de qual o valor de $X^2$ a discrepância entre os valores observados e esperados é menos provável que o valor de $\alpha$ escolhido. Isto é encontrar o valor que separa a área de $5\%$ sob a curva de distribuição em sua cauda direita. Este valor é chamado de qui-quadrado crítico, $\chi^2_c$. 
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Note que o raciocínio é bicaudal, buscando associação positiva ou negativa, mas a operacionalização do teste só utiliza a cauda superior. Isto acontece porque $chi^2=0$ indica igualdade numérica (e, portanto, também estatística) entre os valores esperados e observados. Consequentemente, procuramos $\alpha=0.05$ somente na cauda direita.
+</td></tr></table>
+***
+
+Em R, podemos encontrar $\chi^2_c$ pelo complemento ($1-\alpha=0.95$) com
+```{r, comment=NA, echo=TRUE}
+chi2.critico <- qchisq(p=0.95, df=1)
+cat("qui-quadrado crítico (df=1, alfa=5%): ", chi2.critico, "\n", sep="")
+```
+pois este é o valor de $\chi^2$ que deixa $95\%$ da área sob a curva à sua esquerda.
+
+Graficamente, podemos hachurar em azul a área correspondente a $\alpha$ e traçar uma linha pontilhada vertical em $\chi^2_c$ com:
+```{r, comment=NA, echo=TRUE}
+source("friendlycolor.R")
+# vetor com valores de 0 a 8
+chi2.valor <- seq(from=0, to=8, by=0.01)
+graus.liberdade <- 1
+# vetor com probabilidades correspondentes
+p <- dchisq(chi2.valor, df=graus.liberdade)
+# exibe o gráfico
+plot(chi2.valor, p, type="l", ylim=c(0, 1.2),
+     xlab="Qui-quadrado", ylab="Densidade")
+# vetor com os valores acima de qui critico 
+chi2.critico <- qchisq(p=0.95, df=1)
+chi2maioralfa <- chi2.valor[chi2.valor>chi2.critico] 
+# probabilidades correspondentes
+pmaioralfa <- dchisq(chi2maioralfa, df=graus.liberdade)
+# hachura sob a curva
+chi2maioralfa <- c(min(chi2maioralfa), chi2maioralfa, max(chi2maioralfa))
+pmaioralfa <- c(0, pmaioralfa, 0)
+polygon(chi2maioralfa, pmaioralfa, col=friendlycolor(10), border = NA)
+# reforca a linha
+lines(chi2maioralfa[2:(length(chi2maioralfa)-1)], 
+      pmaioralfa[2:(length(pmaioralfa)-1)], 
+      col=friendlycolor(10), lwd=2)
+# linha pontilhada, valor critico
+abline(v=chi2.critico, lty=2)
+```
+Esta área hachurada é a região de rejeição de $H_0$.
+
+#### - decisão pela estatística de teste
+A estatística $\chi^2$ é maior quanto maior for a discrepância entre os valores observados e esperados. Para um grau de liberdade e $\alpha=0.05$, computamos $\chi^2_c=$\ `r chi2.critico`. No exemplo de capacete e trauma, acima, rejeitamos $H_0$ porque calculamos $X^2=$\ `r chi2$statistic`, valor maior que o valor crítico.
+
+#### - decisão pelo valor-p 
+À direita do valor calculado $X^2=$\ `r chi2$statistic` define-se uma área, que corresponde ao valor-p. Este valor também foi calculado quando aplicamos o teste e guardamos seu resultado em **chi2**, acima; o valor-p encontra-se acessível em **chi2$p.value**=`r chi2$p.value`. Como $p < \alpha$, concluimos pela rejeição de $H_0$. 
+
+Podemos hachurar em laranja a área correspondente ao valor-$p$ e traçar uma linha pontilhada vertical na altura do $X^2$ calculado, adicione mais linhas ao código anterior, mas precisamos da variável **chi2$statistic** que retorna de _chisq.tes()_. O gráfico, agora, tem muitos elementos e, portanto, também devemos adicionar uma legenda.
+
+O código completo é:
+
+```{r, comment=NA, echo=TRUE}
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+chi2 <- chisq.test(tabela)
+```
+```{r, comment=NA, echo=TRUE}
+source("friendlycolor.R")
+# vetor com valores de 0 a 8
+chi2.valor <- seq(from=0, to=8, by=0.01)
+graus.liberdade <- 1
+# vetor com probabilidades correspondentes
+p <- dchisq(chi2.valor, df=graus.liberdade)
+# exibe o gráfico
+plot(chi2.valor, p, type="l", ylim=c(0, 1.2),
+     xlab="Qui-quadrado", ylab="Densidade")
+# vetor com os valores acima de qui critico 
+chi2.critico <- qchisq(p=0.95, df=1)
+chi2maioralfa <- chi2.valor[chi2.valor>chi2.critico] 
+# probabilidades correspondentes
+pmaioralfa <- dchisq(chi2maioralfa, df=graus.liberdade)
+# hachura sob a curva
+chi2maioralfa <- c(min(chi2maioralfa), chi2maioralfa, max(chi2maioralfa))
+pmaioralfa <- c(0, pmaioralfa, 0)
+polygon(chi2maioralfa, pmaioralfa, col=friendlycolor(10), border = NA)
+# reforca a linha
+lines(chi2maioralfa[2:(length(chi2maioralfa)-1)], 
+      pmaioralfa[2:(length(pmaioralfa)-1)], 
+      col=friendlycolor(10), lwd=2)
+# linha pontilhada, valor critico
+abline(v=chi2.critico, lty=2)
+
+# ########## Area a direita de p ############
+# vetor com os valores acima de qui calculado 
+chi2maiorp <- chi2.valor[chi2.valor>chi2$statistic] 
+# probabilidades correspondentes
+pmaiorp <- dchisq(chi2maiorp, df=graus.liberdade)
+# hachura sob a curva
+chi2maiorp <- c(min(chi2maiorp), chi2maiorp, max(chi2maiorp))
+pmaiorp <- c(0, pmaiorp, 0)
+polygon(chi2maiorp, pmaiorp, col=friendlycolor(20), border = NA)
+# reforca a linha
+lines(chi2maiorp[2:(length(chi2maiorp)-1)], 
+      pmaiorp[2:(length(pmaiorp)-1)], 
+      col=friendlycolor(20), lwd=2)
+# linha pontilhada, valor critico
+abline(v=chi2$statistic, lty=3)
+
+# legenda
+legend("topright",
+       c("Qui^2 crítico","Qui^2 obs.", "alfa", "p"), 
+       col=c("black", "black", friendlycolor(10), friendlycolor(20)),
+       lty=c(2, 3, 1, 1), 
+       lwd=c(1, 1, 5, 5),
+       box.lwd=0, bg="white",
+       cex=0.8)  
+
+
+```
+
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+As duas formas de decisão são igualmente válidas e equivalentes. 
+
+Exibir o valor-p é a forma mais moderna e recomendada atualmente.
+</td></tr></table>
+***
+
+## Teste Qui-quadrado robusto
+
+Repare nas saídas da função _chisq.test()_, cujo cabeçalho indica:
+
+> Pearson's Chi-squared test with Yates' continuity correction
+
+Esta é uma versão tradicional do teste, para a qual a correção de Yates é aplicável por _default_ às tabelas 2x2 (mais detalhes serão vistos adiante). Podemos evitá-la com: 
+
+```{r, comment=NA, echo=TRUE}
+chi2ny <- chisq.test(tabela, correct=FALSE)
+print(chi2ny)
+```
+
+Além disto, há várias condições para a aplicação do teste Qui-quadrado (comentadas adiante) que podem, muitas vezes, restringir seu uso.
+
+Uma alternativa é computar o teste em sua versão robusta. A função _chisq.test()_ consegue simular a distribuição por _bootstrapping_, alterando-se o comando para:
+
+```{r, comment=NA, echo=TRUE}
+chi2.robusto <- chisq.test(tabela, correct=FALSE,
+                   simulate.p.value = TRUE, B=1e6)
+print(chi2.robusto)
+```
+
+Esta versão é simulada com $1e6 = 1 \cdot 10^6 = 1000000$ iterações.
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Como a amostra é grande, os valores de $X^2$ e $p$ não mudam muito entre as diferentes versões. Há um pequeno _bug_ na implementação da versão robusta, que não calcula os graus de liberdade (sabemos que $df=1$). 
+</td></tr></table>
+***
+
+A decisão, neste caso, não mudou, tanto pelo critério do $\chi^2_c$ quanto pelo $p$: rejeita-se $H_0$.
+
+# Riscos relativos
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+<font size=4>_Odds_ e probabilidade</font>
+
+_Odds_ (traduzido habitualmente por chance) e probabilidade são formas equivalentes para expressar possibilidades e relacionadas por:
+
+$\textit{Odds} = {{\text{Probabilidade}} \over{1-\text{Probabilidade}}}$
+
+e
+
+$\text{Probabilidade} = {{\textit{Odds}} \over{1+\textit{Odds}}}$
+
+Por exemplo, uma probabilidade de $80\%$ corresponde a 
+
+$\textit{Odds} = {{0.8} \over {1-0.8}} = {0.8 \over 0.2} = 4$
+
+indicando que dizer "$80\%$ de probabilidade" é equivalente a dizer "4 vezes mais chance de ocorrer do que não ocorrer" um determinado evento.
+
+Resersamente, _Odds_ de 2 é:
+
+$\text{Probabilidade} = {2 \over {1+2}} = {2 \over 3} \approx 66.67\%$
+
+e $\textit{Odds}=1$ resulta em: 
+
+$\text{Probabilidade} = {1 \over {1+1}} = {1 \over 2} = 50\%$
+
+Associa-se o máximo de incerteza com probabilidade de $50\%$; por este motivo, $Odds=1$ será um valor necessário para decisões estatísticas, adiante.
+</td></tr></table>
+***
+
+Há dois tipos principais de risco relativo: _razão de riscos_ (RR, _risk ratio_) e _razão de chances_ (OR, _odds ratio_). 
+
+Vamos considerar a seguinte tabela:
+```{r, comment=NA, echo=FALSE}
+tabela <- as.table(matrix(
+  c("a", "b", "a+b", 
+    "c", "d", "c+d",
+    "a+c", "b+d", "total"
+    ), 
+  nrow = 3, byrow = TRUE))
+colnames(tabela) <- c("Tem efeito", "Não tem efeito", "")
+rownames(tabela) <- c("Tem exposição", "Não tem exposição", "")
+print (tabela)
+```
+
+Esta tabela de contingência genericamente relaciona exposição (e.g., hábito de fumar) com o efeito (e.g., câncer de pulmão). Traz as contagens dos:
+
+* expostos que apresentaram o efeito ($a$), 
+* expostos que não apresentaram o efeito ($b$), 
+* não expostos que apresentaram o efeito ($c$) e 
+* não expostos que não apresentaram o efeito ($d$), 
+
+## _razão de riscos_ (RR, _risk ratio_)
+
+Riscos são probabilidades. A razão de riscos é dada por:
+
+
+$RR = \LARGE{{{{a} \over {a+b}} \over {{{c} \over {c+d}}}}}$
+
+Repare que ${a} \over {a+b}$ é a probabilidade de um indivíduo exposto ter o efeito (e.g., fumante ter câncer); ${c} \over {c+d}$ é a probabilidade de um indivíduo **não** exposto ter o efeito (e.g., não-fumante ter câncer).
+
+RR, portanto, é um _odds_: quantas vezes mais é esperado o efeito (ocorrência de câncer) de quem é exposto (fumante) em comparação com quem não é exposto (não fumante); 
+
+## _razão de chances_ (OR, _odds ratio_)
+
+_Odds ratio_ como diz o nome, é uma razão entre dois _odds_, dada por:
+
+$OR = \LARGE{{ { { {a} \over {a+c}  } \over { {c} \over {a+c} } } \over { { {b} \over {b+d} } \over { {d} \over {b+d} } }  }}$
+
+Considere, agora, que:
+
+* $\LARGE{ { {a} \over {a+c}  } \over { {c} \over {a+c} } }$, entre os doentes, quantas vezes é a maior a chance (_odds_) de ter efeito (câncer) para quem é exposto (fuma).
+* $\LARGE{ { {b} \over {b+d}  } \over { {d} \over {b+d} } }$, entre os não doentes, quantas vezes é a maior a chance (_odds_) de ter efeito (câncer) para quem é exposto (fuma).
+
+Interessante, também, é que (com alguma álgebra) $OR$ reduz-se a:
+
+$OR = \LARGE{ {{a \cdot d} \over {{b \cdot c}} } }$
+
+fácil de lembrar e assim conhecido como "produto cruzado" (com o defeito de ocultar o motivo pelo qual é um _odds ratio_). Por outro lado, como produto cruzado, percebe-se que é uma medida de quanto pesa a:
+
+* diagonal principal, do que é concordante: $\text{efeito entre expostos}~~\text{E}~~\text{não efeito entre não expostos}$
+
+em relação à 
+
+* diagonal secundária, do que é discordante: $\text{efeito entre não expostos}~~\text{E}~~\text{não efeito entre expostos}$.
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Os valores de $RR$ e $OR$ são próximos quando menos que $5\%$ dos não expostos têm efeito.
+</td></tr></table>
+***
+
+Em R, o cálculo de $OR$ aparece no Teste Exato de Fisher. No exemplo de capacete e trauma, temos:
+```{r, comment=NA, echo=TRUE, eval=FALSE}
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+print(tabela)
+ft <- fisher.test(tabela) # Teste de OR robusto
+print(ft)
+```
+```{r, comment=NA, echo=FALSE}
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+print(tabela)
+ft <- fisher.test(tabela) # Teste de OR robusto
+print(ft)
+```
+
+#### - decisão pelo intervalo de confiança
+
+A estimativa pontual de _odds ratio_ está em **ft\$estimate**=`r ft$estimate`, mas para a decisão é obrigatório verificar seu intervalo de confiança 95% ($IC95$), com limites inferior e superior respectivamente guardados em **ft\$conf.int[1]**=`r ft$conf.int[1]` e **ft\$conf.int[2]**=`r ft$conf.int[2]`.
+
+Como a ausência de efeito é dada por $OR=1$ (correspondendo a $H_0$) e este valor unitário está fora do intervalo, rejeita-se $H_0$. Além disto, o $IC95$ é menor que o esperado por $H_0$ e, portanto, o uso de capacete está associado com redução dos traumas cranianos.  
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Caso a tabela fosse construída com as colunas em posições trocadas, obter-se-ia o seguinte:
+```{r, comment=NA, echo=FALSE}
+tabela <- as.table(matrix(c(138, 17, 508, 130), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma -","Trauma +")
+rownames(tabela) <- c("Capacete +","Capacete -")
+print(tabela)
+ft <- fisher.test(tabela) # Teste de OR robusto
+print(ft)
+```
+O _odds ratio_ é agora maior que o valor unitário, o qual está fora do intervalo, rejeitando-se a hipótese nula e a associação é positiva: a conclusão é a mesma, o uso de capacete está associado com o aumento de "Trauma -", portanto é protetor. 
+
+Aliás, observe que
+```{r, comment=NA, echo=TRUE}
+print(1/ft$estimate)
+print(1/ft$conf.int)
+```
+são os mesmos valores obtidos anteriormente.
+</td></tr></table>
+***
+
+## $RR$ e $OR$ em _epitools_
+
+Há outros pacotes em R que calculam _risk ratio_ e _odds ratio_, como por exemplo:
+
+```{r, echo=TRUE, eval=FALSE}
+library(epitools)
+
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+
+epitools::oddsratio(tabela, method="fisher")
+```
+que produz os mesmos valores para a estimativa pontual e intervalo de confiança que o teste exato de Fisher:
+```{r, echo=FALSE}
+library(epitools)
+
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+
+epitools::oddsratio(tabela, method="fisher")
+```
+Há mais três métodos disponíveis, de acordo com a documentação da função.
+
+A library _epitools_ também permite o cálculo de $RR$ com intervalo de confiança. Ainda que não seja adequada para o presente exemplo, verifiquem sua sintaxe. Há três métodos disponíveis, como por exemplo:
+
+```{r, echo=TRUE}
+library(epitools)
+
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+
+epitools::riskratio(tabela, method="wald")
+```
+
+e também uma variante com bootstrapping:
+
+```{r, echo=TRUE}
+library(epitools)
+
+tabela <- as.table(matrix(c(17, 138, 130, 508), nrow = 2, byrow = TRUE))
+colnames(tabela) <- c("Trauma +","Trauma -")
+rownames(tabela) <- c("Capacete +","Capacete -")
+
+epitools::riskratio(tabela, replicates=1e6)
+```
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Lembre-se de nunca decidir a respeito de _risk ratio_ ou _odds ratio_ sem considerar o intervalo de confiança. Por isso, evite fazer o cálculo manualmente: use R!
+</td></tr></table>
+***
+
+
+
+# Dois códigos úteis, com vários dos elementos apresentados neste texto
+<div align=center>
+<table style="border:1; background-color:#F7F056; border-radius: 25px; cellpadding=25"><tr><td  style="text-align:center;">
+<font style="font-size:300%">4</font><br>
+<font style="font-size:200%">Simulação e Gráficos</font>
+</td></tr></table>
+</div>
+
+## 1. <font style="background-color:#F7CB45;">tabelacontingencia2x2_capacetetrauma.R</font>
+
+Em _[tabelacontingencia2x2_capacetetrauma.R](tabelacontingencia2x2_capacetetrauma.R)_, que você pode adaptar para as suas necessidades, processamos o mesmo exemplo (procure a função _sink()_ que desvia o resultado da tela para um arquivo texto). Além da estatística $X^2$, computamos outros valores interessantes. Observe sua saída (tabelacontingencia2x2_capacetetrauma.txt):
+
+```{r, comment=NA, echo=TRUE}
+source("tabelacontingencia2x2_capacetetrauma.R")
+```
+Em _[Qui2.R](Qui2.R)_ também processamos o mesmo exemplo. Esta versão aplica bootstrapping de um jeito mais manual e produz gráficos associados aos conceitos que discutimos. 
+
+Execute com:
+```{r, comment=NA, echo=TRUE, eval=FALSE}
+source("Qui2.R")
+```
+fornecendo:
+<pre>
+**** TABELA DE CONTINGÊNCIA ****
+
+Considere:
+                                               
+              Coluna+      Coluna-             
+ Linha +            a            b Total lin. +
+ Linha -            c            d Total lin. -
+         Total col. + Total col. -  Total geral
+
+
+Informe:
+Nome nas linhas (ate 10 letras): <b>Capacete</b>
+Nome nas colunas (ate 10 letras): <b>Trauma</b>
+Definido:
+                                                                     
+                       Trauma +            Trauma -                  
+ Capacete +                   a                   b Total de Trauma +
+ Capacete -                   c                   d Total de Trauma -
+            Total de Capacete + Total de Capacete -       Total geral
+
+Forneca os valores de a, b, c, d:
+a: <b>17</b>
+b: <b>138</b>
+c: <b>130</b>
+d: <b>508</b>
+
+Defina alfa = prob. erro do tipo I).
+(número entre 0 e 1, default = 0.05).
+alfa: <b>0.05</b>
+
+Quantas iteracoes para simular?
+(entre um numero inteiro; default n=1e4)
+iteracoes: <b>1e4</b>
+
+Exibir tabelas? (exibir lentifica a simulacao)
+0=nao, 1=sim; default eh 0: <b>0</b>
+</pre>
+
+Observe a simulação em andamento na área de _Plots_. Quando terminar, procure os gráficos finalizados. Os principais são:
+
+- as distribuições de $\chi^2$ para a hipótese nula e para o valor observado de $H_1$:
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+O valor de $\beta$ e o poder associados, aqui, são os valores _a posteriori_, portanto inúteis para qualquer decisão</td></tr></table>
+***
+
+```{r, echo=FALSE}
+knitr::include_graphics("./image/qui2_distribuicao.png", dpi=120)
+```
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+**Flashback**:
+
+Recorde a tomada de decisão com a distribuição binomial:
+```{r, echo=FALSE}
+knitr::include_graphics("./image/binomial.png", dpi=120)
+```
+A estatística e o formato das distribuições mudam (em função, também, do tipo de variável), mas as áreas de $\alpha$, $\beta$ e o raciocínio são os mesmos.  
+</td></tr></table>
+***
+
+- a distribuição, com intervalo de confiança, do _odds ratio_ simulado (compare com o obtido acima), indicando a rejeição de $H_0$ (o valor 1, de referência, está fora do intervalo) e que seu efeito está entre mínimo a intermediário:
+```{r, echo=FALSE}
+knitr::include_graphics("./image/qui2_or.png", dpi=120)
+```
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+_Odds ratio_ é uma medida da intensidade de associação entre duas variáveis nominais dicotômicas de exposição e desfecho.
+
+De acordo com SHARPE, D. (2015) Your chi-square test is statistically significant: now what? Practical Assessment, Research & Evaluation,  20(8). É, também, uma medida de tamanho de efeito (não depende do tamanho da amostra, é adimensional e adirecional) e sua intensidade pode ser classificada em:
+
+- OR para categoria de proteção
+    - Grande: $OR < 0,1$
+    - Intermediária: $0,1 \le OR < 0,3$
+    - Pequena: $0,3 \le OR < 0,7$
+    - Mínima: $0,7 \le OR < 1$
+
+- OR para categoria de risco
+    - Mínima: $1 < OR \le 1,5$
+    - Pequena: $1,5 < OR \le 3,5$
+    - Intermediária: $3,5 < OR \le 9$
+    - Grande: $OR > 9$
+</td></tr></table>
+
+***
+
+- a distribuição do tamanho de efeito (V de Cramer), mostrando que o efeito, apesar de significante, está entre mínimo e pequeno:
+```{r, echo=FALSE}
+knitr::include_graphics("./image/qui2_vcramer.png", dpi=120)
+```
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+O programa já indica o tamanho de efeito de acordo com
+```{r, echo=FALSE}
+knitr::include_graphics("./image/book_effectsize.png", dpi=200)
+```
+O V de Cramer é uma medida do grau de correlação absoluta entre duas variáveis nominais:	
+
+* não depende do total de observações independentes 
+* não depende do número de linhas e colunas da TC
+* é adimensional e varia entre 0 (independência) e 1 (dependência)
+
+Tamanho de efeito:
+
+* $0 \le V < 0.1$ :  mínimo 
+* $0.1 \le V < 0.3$ :  pequeno 
+* $0.3 \le V < 0.5$ :  intermediário  
+* $V \ge 0.5$ : grande
+</td></tr></table>
+
+***
+
+- novamente a distribuição de $\chi^2$, mas aqui exibe somente $H_0$ e o valor-p, indicando a rejeição de $H_0$:
+```{r, echo=FALSE}
+knitr::include_graphics("./image/qui2_p.png", dpi=120)
+```
+
+## 2. tabelas LxC
+
+O teste Qui-quadrado opera em tabelas maiores, com $L$ linhas e $C$ colunas. 
+
+Por exemplo, três quimioterápicos foram comparados quanto ao efeito colateral (náusea). Considere $\alpha=0.05$. Há diferença entre as drogas?
+
+Os dados obtidos foram:
+<pre>
+            Nausea   Sem_nausea
+Droga A        3         5
+Droga B        7         2
+Droga C        6         3
+</pre>
+
+Em _[Qui2_LxC.R](Qui2_LxC.R)_ implementamos este exemplo (versão robusta):
+```{r, echo=TRUE}
+source("Qui2_LxC.R")
+```
+Observe que não rejeita-se $H_0$. Os dois critérios são sempre equivalentes:
+
+* o $X^2$ calculado é menor que $\chi^2_c$
+* $p > \alpha$
+
+Abra o código para ver como foi implementado este teste.
+
+# Comentários sobre os métodos tradicionais
+<div align=center>
+<table style="border:1; background-color:#F7F056; border-radius: 25px; cellpadding=25"><tr><td  style="text-align:center;">
+<font style="font-size:300%">5</font><br>
+<font style="font-size:200%">Condições para o teste Qui-quadrado<br>
+(métodos não robustos)</font>
+</td></tr></table>
+</div>
+
+Antes das implementações computacionais e a facilidade do uso do R, a partir de uma tabela 2x2 era necessário construir a tabela dos valores esperados.
+
+* Valores observados:
+<pre>
+           Trauma + Trauma -
+Capacete +       17      138     155
+Capacete -      130      508     638
+                147      646     793
+</pre>
+
+* Valores esperados:
+<pre> 
+           Trauma + Trauma -
+Capacete +     28.7    126.3
+Capacete -    118.3    519.7
+</pre>
+Cada valor esperado é obtido pelo produto das marginais, dividido pelo total geral:
+
+    * $(147 \cdot 155) / 793 \approx 28.7$
+    * $(147 \cdot 638) / 793 \approx 118.3$
+    * $(646 \cdot 155) / 793 \approx 126.3$
+    * $(646 \cdot 638) / 793 \approx 519.7$
+
+Avaliando os dados observados e os valores esperados, era necessário verificar se o teste Qui-quadrado podia ser aplicado. Eram as seguintes condições:
+
+SIEGEL, S. & CASTELLAN Jr., N.J. (1988) Nonparametric statistics for the behavioral sciences. 2ª ed. NY: McGraw-Hill, p. 123:
+
+* O teste exato de Fisher para testar independência é adequado apenas para tabela de contingência 2×2 se N < 20 
+* Se N entre 20 e 40, o teste Qui-quadrado de Pearson pode ser usado se todas as frequências esperadas são maiores que 5.
+* Se N > 40, o teste Qui-quadrado de Pearson com correção de Yates pode ser usado.
+
+COCHAN, W.G. (1954) Some Methods for Strengthening the Common $\chi^2$ Tests. Biometrics: 10(4): 417-451:
+
+* Um valor esperado mínimo de 1 em alguma célula é permitido, desde que não mais que 20% das células tenham valor abaixo de 5
+
+Então, o valor de $X^2$ era dado por
+
+$$X^2 = \sum{ ({\text{observado}-\text{esperado}})^2 \over {\text{observado}}  }$$
+
+neste exemplo calculado por:
+
+$X^2 = { {{(17-28.7)^2} \over {28.7}} + {{(138-126.3)^2} \over {126.3}} + {{(130-118.3)^2} \over {118.3}} + {{(508-519.7)^2} \over {519.7}} } \approx 7.31$
+
+ou, em tabelas 2x2, era recomendado usar a correção de continuidade de Yates, dada por:
+
+$$X^2 = \sum{ (|{\text{observado}-\text{esperado}}|-0.5)^2 \over {\text{observado}}  }$$
+
+Neste exemplo:
+
+$X^2 = { {{(|17-28.7|-0.5)^2} \over {28.7}} + {{(|138-126.3|-0.5)^2} \over {126.3}} + {{(|130-118.3|-0.5)^2} \over {118.3}} + {{(|508-519.7|-0.5)^2} \over {519.7}} } \approx 6.7$
+
+Então, era necessário consultar uma tabela com os valores críticos de $\chi^2_c$ previamente calculados para a tomada de decisão (sem obter, portanto, o valor-$p$). A tabela permitia escolher o valor de $\alpha$ e, sabendo-se os graus de liberdade (neste caso $\nu = 1$), localizar $\chi^2_c$ (neste exmeplo igual a $3.841$):
+```{r, echo=FALSE}
+knitr::include_graphics("./image/chi2tabela.png", dpi=120)
+```
+
+Caso $\chi^2$ não atendesse as exigências para ser aplicado, a alternativa (se fosse tabela 2x2) era o Teste Exato de Fisher. Este envolve calcular o valor-$p$ por fatoriais de tabelas progressivamente mais extremas. Por exemplo:
+```{r, echo=FALSE}
+knitr::include_graphics("./image/exatofisher01.png", dpi=120)
+```
+```{r, echo=FALSE}
+knitr::include_graphics("./image/exatofisher02.png", dpi=120)
+```
+Neste caso o valor exato de $p$ era calculado e comparado diretamente com $\alpha$ para a tomada de decisão.
+
+## O que diz a literatura mais recente sobre estes métodos tradicionais e não robustos?
+```{r, echo=FALSE}
+knitr::include_graphics("./image/fim_literatura.png", dpi=100)
+```
+
+# Métodos avançados
+
+## Análise _post hoc_
+
+Esta análise permite, quando se rejeita $H_0$, localizar quais células da tabela de contingência mais contribuíram para esta rejeição. 
+
+### exemplo: etilismo e tabagismo
+Para descobrir se existe uma relação entre tabagismo e etilismo a partir de um estudo realizado com 100 estudantes universitários, encontrou-se:
+
+<table id="t01" class="center">
+<tr><td></td><th>Tabagista</th><th>Não tabagista</th></tr>
+<tr><th>Etilista</th><td>50</td><td>15</td></tr>
+<tr><th>Não etilista</th><td>20</td><td>25</td></tr>
+</table>
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+A manipulação de dados em R é poderosa, mas nem sempre fácil. Para a entrada de dados na forma de uma matriz 2x2 o seguinte código funciona:
+
+```{r, echo=TRUE, eval=FALSE}
+Tabela <- ("
+ TC2x2       Tabagista NaoTabagista
+ Etilista    50        15
+ NaoEtilista 20        25  
+")
+TC <- as.matrix(read.table(textConnection(Tabela), 
+                               header=TRUE, row.names=1))
+print(TC)
+```
+Obtendo-se:
+```{r, echo=FALSE}
+Tabela <- ("
+ TC2x2       Tabagista NaoTabagista
+ Etilista    50        15
+ NaoEtilista 20        25  
+")
+TC <- as.matrix(read.table(textConnection(Tabela), 
+                               header=TRUE, row.names=1))
+print(TC)
+```
+
+O problema está na entrada de dados. Somente espaços em branco podem ser usados para a montagem da tabela. O alinhamento é visual, mas não necessário para o R. Funciona igualmente
+
+```{r, echo=TRUE}
+Tabela <- ("
+Tabagista NaoTabagista
+Etilista 50 15
+NaoEtilista 20  25  
+")
+TC <- as.matrix(read.table(textConnection(Tabela), 
+                                 header=TRUE, row.names=1))
+print(TC)
+```
+Portanto, pode ser ruim a visualização de sua entrada.
+
+Uma opção mais "limpa" é sempre colocar os dados em planilhas no formato .xls ou .xlsx e usar a função _readxl::read_excel()_ para utilizá-los em R:
+```{r, echo=FALSE}
+knitr::include_graphics("./image/tabagismo_etilismo_xls.png", dpi=100)
+```
+Esta planilha é [tabagismo_e_etilismo_2x2.xlsx](tabagismo_e_etilismo_2x2.xlsx), lida por
+```{r, echo=TRUE}
+TCnew <- read_excel("tabagismo_e_etilismo_2x2.xlsx")
+print(TCnew)
+```
+A função _read_excel()_ avisa que teve que suprir um nome (por causa da célula A1 que está vazia), mas esta célula será desprezada adiante. 
+
+No entanto, temos um problema a resolver. A função _read_excel()_ produz um _data frame_ e a função _chisq.test()_ precisa de uma matriz para sua entrada:
+```{r, echo=TRUE}
+is.data.frame(TCnew)
+is.matrix(TCnew)
+```
+Temos, portanto, que converter **TCnew** para a representação em _matrix_. Existe uma função para isto:
+
+```{r, echo=TRUE}
+TCmatrix <- data.matrix(TCnew)
+is.matrix(TCmatrix)
+print(TCmatrix)
+```
+Ainda não é o desejado. **TCmatrix** tem 2 linhas mas 3 colunas, além de ter perdido os nomes das linhas que **TCnew** trazia em sua primeira coluna:
+```{r, echo=TRUE}
+nrow(TCmatrix)
+ncol(TCmatrix)
+rownames(TCmatrix)
+print(TCnew[,1])
+```
+
+A solução, portanto, é transferir o conteúdo de **TCnew** como nomes das linhas de **TCmatrix** e, então, deletar a coluna 1 de **TCmatrix** que contém valores _NA_.
+```{r, echo=TRUE}
+rownames(TCmatrix) <-as.character(unlist(TCnew[1:2,1]))
+TCmatrix <- TCmatrix[,-1]
+print(TCmatrix)
+```
+
+Colocando tudo junto, para terminar com uma matriz chamada **TC** (como era originalmente), podemos ler a planilha em uma variável (e.g., **TCtmp**), reorganizar seu conteúdo em **TC** e remover **TCtmp** da memória com a função _remove()_. O código enxuto é:
+
+```{r, echo=TRUE}
+TCtmp <- read_excel("tabagismo_e_etilismo_2x2.xlsx")
+TC <- data.matrix(TCtmp)
+rownames(TC) <-as.character(unlist(TCtmp[1:2,1]))
+TC <- TC[,-1]
+remove(TCtmp)
+print(TC)
+```
+Uma mensagem:
+
+<code>
+Warning in data.matrix(TCnew): NAs introduced by coercion
+</code>
+
+apareceu aqui. _Warnings_ são avisos do R que não impedem o funcionamento do programa (avalie, caso a caso, se precisa corrigir algo; aqui não é necessário). Adiante mostramos como é removê-la.
+
+</td></tr></table>
+***
+
+Neste exemplo, o objetivo é executar o teste Qui-quadrado mas, no caso de rejeitar-se $H_0$, executar uma análise post hoc. Observe o código de [TabelaContingencia2x2_TabagismoEtilismo.R](TabelaContingencia2x2_TabagismoEtilismo.R) que pega os dados da planilha [tabagismo_e_etilismo_2x2.xlsx](tabagismo_e_etilismo_2x2.xlsx):
+```{r, echo=FALSE}
+cat(readLines("TabelaContingencia2x2_TabagismoEtilismo.R"), sep = '\n')
+```
+que produz a seguinte saída:
+```{r, echo=FALSE}
+source("TabelaContingencia2x2_TabagismoEtilismo.R")
+```
+
+A novidade está na sessão **Residuos ajustados standardizados corrigidos por momento (MCSTARs)**. Analise pelos valores positivos acima do valor assinalado como **[MCSTAR critico]**: são escores $z$ relativos a quanto cada célula contribuiu para o qui-quadrado estimado. Neste exemplo, a diagonal principal é a responsável pela rejeição de $H_0$, indicando associação concordante entre etilismo e tabagismo.
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+A única "sujeira" deste código é:
+
+<code>
+New names:<br>
+* `` -> ...1<br>
+</code>
+
+Isto desaparece se colocarmos algo, que será desprezado, na célula A1 da planilha. Experimente rodar o código com a planilha [tabagismo_e_etilismo_2x2_v2.xlsx](tabagismo_e_etilismo_2x2_v2.xlsx). 
+
+Note, também, o uso das linhas:
+
+<code>
+options(warn=-1)<br>
+[...]<br>
+options(warn=0)<br>
+</code>
+
+que são as responsáveis por inibir os _warnings_ do código (só as use depois que seu código estiver correto; _warnings_ são importantes para evitar erros enquanto desenvolve um _script_).
+</td></tr></table>
+***
+
+## Qui-quadrado mínimo
+
+```{r, echo=FALSE}
+knitr::include_graphics("./image/Serra2018.png", dpi=100)
+```
+<div align=right><small>
+https://ebph.it/article/view/12949
+</small></div>
+
+Segundo este autor, a correção de Yates não deve ser usada:
+```{r, echo=FALSE}
+knitr::include_graphics("./image/Serra2018abstract.png", dpi=100)
+```
+
+***
+
+```{r, echo=FALSE}
+knitr::include_graphics("./image/Serra2018text.png", dpi=100)
+```
+
+***
+
+Note a relação entre esta forma de calcular o qui-quadrado e o _odds-ratio_:
+```{r, echo=FALSE}
+knitr::include_graphics("./image/Serra2018equation.png", dpi=100)
+```
+
+## Qui-quadrado para variáveis ordinais
+
+O teste qui-quadrado tradicional trata os dois fatores com categorias nominais. Há muitos casos, porém, em que estes fatores são ordinais. Embora não seja incorreto utilizar o qui-quadrado (toda variável ordinal é também nominal), alguma informação está sendo perdida. 
+
+Existe uma medida, o Gama de Goodman-Kruskal, que considera ambas as variáveis como categóricas ordinais, potencialmente melhorando o resultado do teste. É uma estatistica nao-parametrica que mede a força de associação em dados cruzados em tabela, com as hipóteses:
+
+$$H_o: \gamma = 0$$ 
+$$H_o: \gamma \ne 0$$ 
+
+Neste estudo, Goodman (1979) desenvolve a análise com variáveis ordinais.
+```{r, echo=FALSE}
+knitr::include_graphics("./image/Goodman1979.png", dpi=100)
+```
+```{r, echo=FALSE}
+knitr::include_graphics("./image/Goodman1979_tab3.png", dpi=100)
+```
+
+Os dados desta tabela são, originalmente, de:
+
+Duncan, O.D. (1979), How Destination Depends on Origin in the
+Occupational Mobility Table. American Journal of Sociology,
+84, 793-803.
+
+As categorias são as seguintes:
+
+1. (I) Professional and high administrative
+2. (II) Managerial and executive
+3. (III) Inspectional, supervisory, and other nonmanuar (high grade)
+4. (IV) Inspectional, supervisory, and other nonmanual (lower grade)
+5. (V)(a) Routine grades of nonmanual
+6. (V)(b) Skilled manual
+7. (VI) Semiskilled manual
+8. (VII) Unskilled manual
+
+Portanto, a variável de status ocupacional é, claramente, qualitativa ordinal.
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+O repositório do R tem mais que pacotes. Há vários bancos de dados armazenados nele, para uso em exemplos. Aqui usaremos os dados deste estudo, disponíveis no pacote "dataset".
+</td></tr></table>
+***
+
+Implementado em [TCrXc_StatusOcupacional.R](TCrXc_StatusOcupacional.R):
+```{r, echo=FALSE}
+cat(readLines("TCrXc_StatusOcupacional.R"), sep = '\n')
+```
+A saída é:
+```{r, echo=FALSE}
+source("TCrXc_StatusOcupacional.R")
+```
+É praticamente o mesmo código utilizado para o exemplo de tabagismo e etilismo, com algumas diferenças:
+
+- adicionamos uma função, _eiras.show.MCSTAR()_ para exibir a matrix resultante de MCSTAR com menor número de casas decimais e símbolos adicionais ("#") para que os valores acima de $z$ crítico sejam mais facilmente localizados. 
+- em uma tabela com `r nrow(tcrxc)` linhas e  `r ncol(tcrxc)` colunas não existe definição para o _odds ratio_. No lugar deste, aparece o gama de Godman-Kruskal e um cálculo de OR generalizado. 
+
+Apenas para comparação, o teste qui-quadrado comum produziria o seguinte:
+```{r, echo=TRUE}
+source("TCrXc_StatusOcupacional.R")
+```
+
+***
+```{r fig.align="left", echo=FALSE}
+knitr::include_graphics("./image/coruja.png", dpi=150)
+```
+<table style="border:1; background-color:#CAE0AB"><tr><td>
+Especificamente para tabelas 2x2 existe o $Q$ de Yule, dado por
+$$Q = {{ad-bc} \over {ad+bc}}$$
+Assim como o Gama de Goodman-Kruskal, varia de $-1$ a $+1$, mas como se aplica a tabelas 2x2, relaciona-se com o _odds-ratio_:
+$$Q = {{OR-1} \over {OR+1}}$$
+<div align=right><small>
+https://en.wikipedia.org/wiki/Goodman_and_Kruskal
+</small></div>
+
+Uma função está implementada em _psych::Yule(x, Y=FALSE)_, que devolve o $Q$ de Yule quando $x$ é uma tabela de frequências absolutas 2x2.  
+</td></tr></table>
+***
+
+
+## Qui-quadrado para tendência de Cochran-Armitage
+
+Para situações em que uma variável é ordinal e a outra é nominal, por exemplo quando há um modelo de dose-resposta com um desfecho dicotômico associado a uma exposição que tem mais que dois níveis, é preferível utilizar o teste conhecido como _Cochran-Armitage test for trend_.
+
+
+<table id="t02" class="center">
+<tr><td>
+```{r, echo=FALSE}
+knitr::include_graphics("./image/Biostatistics_cover.png", dpi=100)
+```
+</td><td>
+```{r, echo=FALSE}
+knitr::include_graphics("./image/Biostatistics_txt.png", dpi=100)
+```
+</td></tr>
+</table>
+
+### exemplo: espessura da dobra cutânea e menarca
+
+Os pesquisadores Beckles et al. (1985) estudaram a associação entre a variável de a faixa etária da menarca ($<$ 12 anos e $\ge$12 anos) e o fator a espessura da dobra cutânea do tríceps (pequena, intermediária e grande). 
+<div align=right><small>
+Beckles et al. (1985) International Journal of Obesity 9:127-35, apud Kirkwood & Sterne (2003): Chapter 17: Chi-squared tests for 2x2 and larger contingency tables. </small></div>
+
+<table id="t02" class="center">
+<tr><td>
+```{r, echo=FALSE}
+knitr::include_graphics("./image/dobracutanea_table.png", dpi=100)
+```
+</td><td>
+```{r, echo=FALSE}
+knitr::include_graphics("./image/dobracutanea_image.png", dpi=100)
+```
+</td></tr>
+</table>
+
+***
+
+Caso ambas as variáveis sejam consideradas nominais, o teste adequado é o qui-quadrado de Pearson. Caso a variável considerada como exposição seja ordinal e o desfecho seja dicotômico (tabela $K$x$2$), o teste qui-quadrado de Cochran Armitage pode ser usado.
+
+Para comparação, ambos os testes são executados em [Teste qui-quadrado de Cochran-Armitage.R](Teste qui-quadrado de Cochran-Armitage.R):
+```{r, echo=FALSE}
+cat(readLines("Teste qui-quadrado de Cochran-Armitage.R"), sep = '\n')
+```
+que produz:
+```{r, echo=FALSE}
+source("Teste qui-quadrado de Cochran-Armitage.R")
+```
+
+Compare os valores $p$ de ambos os testes. Cochran-Armitage, ao considerar a espessura da prega cutânea como "dose", ordinal, indica significância estatística onde o teste convencional não detectava.
+
+### Cochran-Armitage generalizado
+
+Para desfecho com três ou mais categorias (os desfechos são tratados como variáveis nominais) existe função no pacote _coin::chisq.test_
+
+Um exemplo está em [Teste qui-quadrado de Cochran-Armitage generalizado.R](Teste qui-quadrado de Cochran-Armitage generalizado.R):
+```{r, echo=FALSE}
+cat(readLines("Teste qui-quadrado de Cochran-Armitage generalizado.R"), sep = '\n')
+```
+que produz:
+```{r, echo=FALSE}
+source("Teste qui-quadrado de Cochran-Armitage generalizado.R")
+```
+
+## Qui-quadrado de Mantel-Haenszel
+
+Este teste utiliza uma tabela tridimensional. Neste exemplo temos a contagem de mortes entre fumantes e não fumantes estratificadas por faixa etária. Esta versão de Qui-quadrado faz o teste global e, depois, estratifica pela terceira variável (faixa etária, neste exemplo).
+
+<table id="t01" class="center">
+<tr><td></td><th>Faixa Etária</th><td>18-24</td><td>25-34</td><td>35-44</td><td>45-54</td><td>55-64</td><td>65-74</td><td>75</td></tr>
+<tr><th>Tabagista</th><th>Desfecho</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Sim</td><td>Morta</td><td>2</td><td>3</td><td>14</td><td>27</td><td>51</td><td>29</td><td>13</td></tr>
+<tr><td></td><td>Viva</td><td>53</td><td>121</td><td>95</td><td>103</td><td>64</td><td>7</td><td>0</td></tr>
+<tr><td>Não</td><td>Morta</td><td>1</td><td>5</td><td>7</td><td>12</td><td>40</td><td>101</td><td>64</td></tr>
+<tr><td></td><td>Viva</td><td>61</td><td>152</td><td>114</td><td>66</td><td>81</td><td>28</td><td>0</td></tr>
+</table>
+
+Os dados precisam ser reorganizados para que construamos uma tabela tridimensional requerida pela funções relacionadas a este teste. Veja como os dados foram acomodados na planila [fumo_e_faixaetaria.xlsx](fumo_e_faixaetaria.xlsx).
+
+Implementamos o teste em [Teste Qui-quadrado de Mantel-Haenszel.R](Teste Qui-quadrado de Mantel-Haenszel.R):
+```{r, echo=FALSE}
+cat(readLines("Teste Qui-quadrado de Mantel-Haenszel.R"), sep = '\n')
+```
+que gera a seguinte saída:
+```{r, echo=FALSE}
+source("Teste Qui-quadrado de Mantel-Haenszel.R")
+```
+

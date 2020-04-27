@@ -1,0 +1,79 @@
+
+------------------------------
+Testes qui-quadrado de Pearson
+------------------------------
+
+Fator de exposicao:  Uso do capacete 
+    Trauma Nao_trauma
+Sim     17        138
+Nao    130        508
+
+X^2 critico de 95% = 3.841459 
+
+----------
+Teste qui-quadrado assintotico sem correcao de Yates
+
+	Pearson's Chi-squared test
+
+data:  TC
+X-squared = 7.3099, df = 1, p-value = 0.006858
+
+
+----------
+Teste qui-quadrado assintotico com correcao de Yates
+
+	Pearson's Chi-squared test with Yates' continuity correction
+
+data:  TC
+X-squared = 6.7001, df = 1, p-value = 0.009641
+
+
+----------
+Teste qui-quadrado exato (robusto)
+
+	Pearson's Chi-squared test with simulated p-value (based on 1e+06
+	replicates)
+
+data:  TC
+X-squared = 7.3099, df = NA, p-value = 0.007755
+
+
+----------
+Residuos ajustados standarizados corrigidos por momento (MCSTARs)
+       Trauma Nao_trauma
+Sim -5.407359   5.407359
+Nao  5.407359  -5.407359
+|MCSTAR critico| (alfaBonferroni=5%/ 1 ) = 1.959964 
+
+V de Cramer = 0.09601047 
+Poder observado = 0.7714772 
+
+Teste de razao de chances (OR) robusto
+
+	Fisher's Exact Test for Count Data
+
+data:  TC
+p-value = 0.005688
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.2630993 0.8357342
+sample estimates:
+odds ratio 
+ 0.4817645 
+
+Razao de chances (OR) = 0.4817645 
+Razao de riscos (RR) a partir de OR
+( 0.05 de prevalencia do desfecho na populacao nao-exposta)
+ RR = 0.4945799 
+abs(d de Cohen) = 0.4034806 
+abs(correl) = 0.1977562 
+
+Gama de Goodman-Kruskal = -0.3500903 
+OR generalizado = (1+ -0.3500903 )/(1- -0.3500903 ) = 0.4813824 
+ln(OR generalizado) = -0.7310933 
+Razao de riscos generalizada (RRg) a partir de ORg
+ (ZHANG and YU,1998)
+ ( 0.05 de prevalencia do desfecho na populacao nao-exposta)
+ RRg = 0.4941974 
+abs(d de Cohen) = 0.403919 
+abs(correl) = 0.1979626 
