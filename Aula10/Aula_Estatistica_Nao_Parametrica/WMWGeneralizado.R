@@ -1,0 +1,7 @@
+library(lawstat)
+A <- c(1,2,2,2,2,3,3,3,3,3,3,4)
+B <- c(2,3,3,3,3,3,4,4,4,5)
+lawstat::brunner.munzel.test(A, B)
+wilcox.test(A, B, exact = FALSE)
+dif <- median(B) - median(A)
+cat("Diferenca das medianas (Sim-Nao) = ",dif,sep="")
